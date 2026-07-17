@@ -45,7 +45,7 @@
     display:flex; align-items:center; justify-content:center;
     opacity:0; visibility:hidden;
     transition:opacity .6s var(--ease), visibility 0s linear .6s;
-    padding:64px 96px 84px 128px;
+    padding:64px 96px 84px 96px;
   }
   .step.active{ opacity:1; visibility:visible; transition:opacity .6s var(--ease), visibility 0s; }
   .step-inner{ width:100%; max-width:1680px; height:100%; position:relative; display:flex; flex-direction:column; justify-content:center; }
@@ -72,26 +72,20 @@
 
   /* ---------- left chapter rail (light) ---------- */
   #rail{
-    position:fixed; left:0; top:0; bottom:0; width:72px; z-index:40;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px;
+    position:fixed; left:0; top:0; bottom:0; width:44px; z-index:40;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
     background:transparent;
     opacity:0; pointer-events:none; transition:opacity .7s var(--ease);
   }
   #rail.show{ opacity:1; pointer-events:auto; }
-  #rail::before{
-    content:''; position:absolute; left:50%; top:14%; bottom:14%; width:1px; transform:translateX(-50%);
-    background:linear-gradient(180deg, transparent, var(--gray-line) 12%, var(--gray-line) 88%, transparent);
-  }
-  .rail-ch{ position:relative; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .rail-ch{ position:relative; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:6px; }
   .rail-ch .nd{
-    width:26px; height:26px; border-radius:50%; flex:none; position:relative; z-index:1;
-    border:1.5px solid var(--gray-line); background:#fff;
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Poppins',sans-serif; font-weight:700; font-size:10px; letter-spacing:.02em; color:var(--gray-text);
-    transition:border-color .3s, background .3s, color .3s;
+    width:9px; height:9px; border-radius:50%; flex:none;
+    background:var(--gray-line);
+    transition:background .3s, transform .3s;
   }
-  .rail-ch.active .nd{ border-color:var(--maroon); background:rgba(152,0,0,.07); color:var(--maroon); }
-  .rail-ch.done .nd{ border-color:var(--cyan); color:var(--cyan); }
+  .rail-ch.active .nd{ background:var(--maroon); transform:scale(1.35); }
+  .rail-ch.done .nd{ background:var(--cyan); }
   .rail-ch .tip{
     position:absolute; left:calc(100% + 16px); top:50%; transform:translateY(-50%) translateX(-6px);
     background:var(--ink); color:#fff; font-family:'Poppins',sans-serif; font-weight:600; font-size:12px;
@@ -104,8 +98,8 @@
     border:5px solid transparent; border-right-color:var(--ink);
   }
   .rail-ch:hover .tip{ opacity:1; transform:translateY(-50%) translateX(0); }
-  #rail.on-dark-ctx .rail-ch .nd{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.25); color:rgba(255,255,255,.55); }
-  #rail.on-dark-ctx .rail-ch.active .nd{ color:#fff; }
+  #rail.on-dark-ctx .rail-ch .nd{ background:rgba(255,255,255,.3); }
+  #rail.on-dark-ctx .rail-ch.active .nd{ background:#fff; }
   #rail.on-dark-ctx .rail-ch .tip{ background:#fff; color:var(--ink); }
   #rail.on-dark-ctx .rail-ch .tip::after{ border-right-color:#fff; }
 
@@ -454,8 +448,8 @@
   .rm-count{ position:absolute; bottom:36px; right:36px; color:#bbb; font-size:11px; letter-spacing:.12em; }
 
   @media (max-width:1180px){
-    .step{ padding:56px 40px 80px 100px; }
-    #rail{ width:56px; }
+    .step{ padding:56px 40px 80px 70px; }
+    #rail{ width:36px; }
     h1.hero{ font-size:30px; }
     .stat-grid{ grid-template-columns:repeat(2,1fr); }
     .journey-wrap, .eco-wrap, .phil-wrap, .circuit-wrap, .occ-wrap, .mat-wrap, .plan-wrap{ grid-template-columns:1fr; gap:26px; }
@@ -969,7 +963,7 @@
   CHAPTERS.forEach(function(ch){
     var el = document.createElement('div');
     el.className = 'rail-ch'; el.setAttribute('data-ch', ch.key);
-    el.innerHTML = '<div class="nd">'+ch.num+'</div><div class="tip">'+ch.label+'</div>';
+    el.innerHTML = '<div class="nd"></div><div class="tip">'+ch.label+'</div>';
     el.addEventListener('click', function(){ goTo(chIndex[ch.key][0]); });
     rail.appendChild(el);
   });
