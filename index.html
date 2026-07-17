@@ -1,0 +1,1530 @@
+<meta charset="UTF-8" />
+<title>Sidvin Outotec — Workplace Design Journey</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     SIDVIN OUTOTEC — guided journey, restrained corporate register.
+     Colors and type are the deck's own — nothing invented:
+       maroon #980000, cyan #5FC9E6, navy #0F162F, charcoal #252525,
+       white / paper #F3F3F3. Headings Poppins, body Arial.
+     Page background is white throughout, exactly like the source
+     deck. The two/three moments the deck itself goes dark (Vision &
+     Mission, the tagline interlude, the Philosophy card) stay dark —
+     everything else stays on paper, the way it reads in the PDF.
+     ============================================================ */
+  :root{
+    --ink:#000000;
+    --charcoal:#252525;
+    --navy:#0F162F;
+    --maroon:#980000;
+    --cyan:#5FC9E6;
+    --white:#FFFFFF;
+    --paper:#F3F3F3;
+    --gray-line:#e4e4e4;
+    --gray-text:#6b6b6b;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%; overflow:hidden; background:var(--white);}
+  body{
+    font-family:Arial, Helvetica, sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+  }
+  .disp{ font-family:'Poppins', Arial, sans-serif; }
+  img{ user-select:none; -webkit-user-drag:none; }
+
+  /* ---------- shell / steps ---------- */
+  #journey{ position:relative; z-index:2; width:100%; height:100vh; background:var(--white); }
+  .step{
+    position:absolute; inset:0; background:var(--white);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden;
+    transition:opacity .6s var(--ease), visibility 0s linear .6s;
+    padding:64px 96px 84px 168px;
+  }
+  .step.active{ opacity:1; visibility:visible; transition:opacity .6s var(--ease), visibility 0s; }
+  .step-inner{ width:100%; max-width:1680px; height:100%; position:relative; display:flex; flex-direction:column; justify-content:center; }
+  .step.on-paper{ background:var(--paper); }
+  .step.on-dark{ background:var(--navy); }
+
+  .rv{ opacity:0; transform:translateY(16px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+  .step.active .rv{ opacity:1; transform:none; }
+  .rv.d1{ transition-delay:.10s; } .rv.d2{ transition-delay:.20s; } .rv.d3{ transition-delay:.30s; }
+  .rv.d4{ transition-delay:.40s; } .rv.d5{ transition-delay:.50s; } .rv.d6{ transition-delay:.60s; }
+
+  .kicker{ position:relative; font-size:15px; margin-bottom:6px; }
+  .kicker .k1{ font-weight:700; font-size:19px; color:var(--ink); }
+  .kicker .k2{ font-size:17px; color:var(--ink); margin-top:2px; }
+  .on-dark .kicker .k1, .on-dark .kicker .k2{ color:#fff; }
+  .accent-dash{ width:46px; height:4px; background:var(--cyan); margin:14px 0 20px; }
+
+  h1.hero{ font-family:'Poppins',sans-serif; font-weight:700; font-size:44px; line-height:1.22; color:var(--navy); max-width:1240px; }
+  h2.title{ font-family:'Poppins',sans-serif; font-weight:800; font-size:48px; color:var(--maroon); line-height:1.1; }
+  h2.title.dark-h{ color:var(--maroon); }
+  p.lede{ font-size:16px; line-height:1.7; color:var(--ink); max-width:760px; }
+  p.lede b{ font-weight:700; }
+  .on-dark p.lede{ color:#f2f2f2; }
+
+  /* ---------- left chapter rail (light) ---------- */
+  #rail{
+    position:fixed; left:0; top:0; bottom:0; width:132px; z-index:40;
+    display:flex; flex-direction:column; justify-content:center; gap:6px;
+    padding-left:36px; background:transparent;
+    opacity:0; pointer-events:none; transition:opacity .7s var(--ease);
+  }
+  #rail.show{ opacity:1; pointer-events:auto; }
+  #rail::before{
+    content:''; position:absolute; left:47px; top:14%; bottom:14%; width:1px;
+    background:linear-gradient(180deg, transparent, var(--gray-line) 12%, var(--gray-line) 88%, transparent);
+  }
+  .rail-ch{ position:relative; display:flex; align-items:center; gap:14px; padding:9px 0; cursor:pointer; }
+  .rail-ch .nd{
+    width:21px; height:21px; border-radius:50%; flex:none; position:relative; z-index:1;
+    border:1.5px solid var(--gray-line); background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    transition:border-color .35s, background .35s;
+  }
+  .rail-ch .nd::after{
+    content:''; width:6px; height:6px; border-radius:50%;
+    background:var(--gray-text); opacity:.4; transition:all .35s;
+  }
+  .rail-ch .meta{ display:flex; flex-direction:column; line-height:1.2; }
+  .rail-ch .num{ font-family:'Poppins',sans-serif; font-weight:700; font-size:10px; letter-spacing:.16em; color:var(--gray-text); transition:color .35s; }
+  .rail-ch .lbl{ font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px; color:var(--gray-text); transition:color .35s; }
+  .rail-ch:hover .lbl{ color:var(--ink); }
+  .rail-ch.active .nd{ border-color:var(--maroon); }
+  .rail-ch.active .nd::after{ background:var(--maroon); opacity:1; }
+  .rail-ch.active .num{ color:var(--maroon); }
+  .rail-ch.active .lbl{ color:var(--ink); }
+  .rail-ch.done .nd::after{ background:var(--cyan); opacity:.9; }
+  .rail-steps{ display:flex; gap:5px; margin:2px 0 4px 55px; height:4px; }
+  .rail-steps i{ width:14px; height:2px; background:var(--gray-line); transition:background .35s; }
+  .rail-steps i.on{ background:var(--maroon); }
+  #rail.on-dark-ctx .rail-ch .nd{ background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.25); }
+  #rail.on-dark-ctx .rail-ch .num, #rail.on-dark-ctx .rail-ch .lbl{ color:rgba(255,255,255,.55); }
+  #rail.on-dark-ctx .rail-ch.active .lbl{ color:#fff; }
+
+  /* ---------- bottom chrome ---------- */
+  #chrome-foot{
+    position:fixed; left:168px; right:96px; bottom:26px; z-index:40;
+    display:flex; justify-content:space-between; align-items:center; pointer-events:none;
+    opacity:0; transition:opacity .7s var(--ease);
+  }
+  #chrome-foot.show{ opacity:1; }
+  .foot-copy{ font-size:10px; letter-spacing:.03em; color:#9a9a9a; text-transform:uppercase; }
+  .foot-logos{ display:flex; align-items:center; gap:10px; height:16px; }
+  .foot-logos img{ height:100%; width:auto; display:block; }
+  .foot-logos img.ob{ height:15px; }
+  .foot-logos .sep{ width:1px; height:14px; background:#ccc; }
+  #chrome-foot.on-dark-ctx .foot-copy{ color:rgba(255,255,255,.5); }
+  #chrome-foot.on-dark-ctx .foot-logos img{ filter:brightness(0) invert(1); }
+  #chrome-foot.on-dark-ctx .foot-logos .sep{ background:rgba(255,255,255,.3); }
+
+  #nav-hint{
+    position:fixed; right:96px; bottom:64px; z-index:40;
+    display:flex; align-items:center; gap:16px;
+    opacity:0; transition:opacity .7s var(--ease); pointer-events:none;
+  }
+  #nav-hint.show{ opacity:1; pointer-events:auto; }
+  .nav-btn{
+    width:44px; height:44px; border-radius:50%; border:1px solid var(--gray-line);
+    background:rgba(255,255,255,.92);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition:background .25s, border-color .25s; box-shadow:0 2px 10px rgba(0,0,0,.06);
+  }
+  .nav-btn svg{ width:15px; height:15px; stroke:var(--ink); stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; transition:stroke .25s; }
+  .nav-btn:hover{ background:var(--maroon); border-color:var(--maroon); }
+  .nav-btn:hover svg{ stroke:#fff; }
+  .nav-btn.dim{ opacity:.25; pointer-events:none; }
+  #step-count{ font-family:'Poppins',sans-serif; font-size:10.5px; letter-spacing:.2em; color:var(--gray-text); }
+  #nav-hint.on-dark-ctx .nav-btn{ background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.3); }
+  #nav-hint.on-dark-ctx .nav-btn svg{ stroke:#fff; }
+  #nav-hint.on-dark-ctx #step-count{ color:rgba(255,255,255,.55); }
+
+  /* ---------- chapter interstitial (matches the deck's own divider style) ---------- */
+  #interstitial{
+    position:fixed; inset:0; z-index:60; display:flex; align-items:center; justify-content:center;
+    background:var(--white);
+    opacity:0; visibility:hidden; transition:opacity .45s var(--ease), visibility 0s linear .45s;
+    cursor:pointer;
+  }
+  #interstitial.open{ opacity:1; visibility:visible; transition:opacity .3s var(--ease), visibility 0s; }
+  .int-wrap{ text-align:center; position:relative; margin-left:-4vw; }
+  .int-num{
+    font-family:'Poppins',sans-serif; font-weight:700; font-size:180px; line-height:1; color:var(--charcoal);
+    opacity:0; transform:translateY(20px); transition:opacity .6s var(--ease), transform .6s var(--ease);
+  }
+  .int-title{
+    font-family:'Poppins',sans-serif; font-weight:700; font-size:38px; color:var(--maroon); margin-top:-30px;
+    opacity:0; transform:translateY(14px); transition:opacity .6s var(--ease) .12s, transform .6s var(--ease) .12s;
+  }
+  .int-line{ width:0; height:3px; background:var(--cyan); margin:22px auto 0; transition:width .8s var(--ease) .2s; }
+  #interstitial.open .int-num{ opacity:1; transform:none; }
+  #interstitial.open .int-title{ opacity:1; transform:none; }
+  #interstitial.open .int-line{ width:110px; }
+
+  /* ---------- ENTER (the deck's own opening: video plays clear/unblurred, no duplicate text — just a CTA) ---------- */
+  #st-enter{ padding:0; background:#000; }
+  .landing-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .landing-scrim{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.32) 100%); }
+  .enter-center{ position:relative; z-index:2; text-align:center; width:100%; }
+  #begin-btn{
+    display:inline-flex; align-items:center; gap:12px;
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px; letter-spacing:.24em; text-indent:.24em; text-transform:uppercase;
+    color:#fff; background:var(--maroon); border:1.5px solid var(--maroon); border-radius:40px;
+    padding:16px 36px; cursor:pointer; transition:background .3s, border-color .3s; box-shadow:0 4px 22px rgba(0,0,0,.28);
+  }
+  #begin-btn:hover{ background:#7a0000; border-color:#7a0000; }
+  #begin-btn .arr{ transition:transform .3s var(--ease); }
+  #begin-btn:hover .arr{ transform:translateX(5px); }
+
+  /* ---------- ABOUT: stats ---------- */
+  .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:2px; margin-top:34px; max-width:1240px; background:var(--gray-line); }
+  .stat-cell{
+    background:#fff; padding:32px 30px 28px;
+    opacity:0; transform:translateY(16px); transition:opacity .6s var(--ease), transform .6s var(--ease);
+  }
+  .stat-cell.on{ opacity:1; transform:none; }
+  .stat-cell .num{ font-family:'Poppins',sans-serif; font-weight:800; font-size:44px; color:var(--cyan); line-height:1; }
+  .stat-cell .lbl{ font-size:13.5px; color:var(--ink); margin-top:10px; }
+  .pillars{ display:flex; gap:44px; margin-top:34px; }
+  .pillars span{
+    font-family:'Poppins',sans-serif; font-weight:800; font-size:24px; letter-spacing:.02em; text-transform:uppercase;
+    color:#dfe9ec;
+  }
+
+  /* ---------- ABOUT: journey ---------- */
+  .journey-wrap{ display:grid; grid-template-columns:1.05fr .9fr; gap:56px; align-items:center; max-width:1500px; }
+  .quote-card{ background:#fff; border:1px solid var(--gray-line); border-left:3px solid var(--maroon); padding:38px 42px; }
+  .quote-card .q{ font-size:16px; line-height:1.8; color:var(--ink); }
+  .quote-card .attr{ margin-top:20px; display:flex; align-items:center; gap:12px; font-style:italic; font-size:13.5px; color:var(--gray-text); }
+  .quote-card .attr img{ height:16px; width:auto; }
+  .quote-card .note{ font-size:12px; color:var(--gray-text); margin-top:6px; font-style:italic; }
+  .mile-list{ display:flex; flex-direction:column; gap:2px; }
+  .mile{ display:flex; align-items:center; gap:20px; padding:18px 22px; background:#fff; border:1px solid var(--gray-line); }
+  .mile .thumb{ width:84px; height:58px; flex:none; overflow:hidden; }
+  .mile .thumb img{ width:100%; height:100%; object-fit:cover; }
+  .mile .tx{ font-family:'Poppins',sans-serif; font-weight:600; font-size:15px; color:var(--ink); line-height:1.4; }
+  .mile .ix{ font-family:'Poppins',sans-serif; font-weight:700; font-size:20px; color:var(--maroon); }
+
+  /* ---------- ABOUT: vision & mission — the deck's own dark slide ---------- */
+  .vm-scene{ padding:0; }
+  .vm-bg{ position:absolute; inset:0; }
+  .vm-bg img{ width:100%; height:100%; object-fit:cover; }
+  .vm-bg::after{ content:''; position:absolute; inset:0; background:rgba(0,0,0,.42); }
+  .vm-content{ position:relative; z-index:2; width:100%; max-width:1720px; margin:0 auto; padding:60px 64px 60px 168px; display:grid; grid-template-columns:.62fr 1fr; gap:40px; align-items:center; }
+  .vm-icons{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px 20px; }
+  .vm-icon{ text-align:center; }
+  .vm-icon .circ{ width:84px; height:84px; border-radius:50%; background:var(--cyan); display:flex; align-items:center; justify-content:center; margin:0 auto 10px; }
+  .vm-icon .circ img{ width:40px; height:40px; object-fit:contain; }
+  .vm-icon .lbl{ font-size:13px; font-weight:400; color:#fff; }
+  .vm-icon .lbl b{ display:block; font-weight:700; }
+  .vm-right{ border-left:1px dashed rgba(255,255,255,.5); padding-left:44px; }
+  .vm-right h2{ font-family:'Poppins',sans-serif; font-weight:800; font-size:34px; color:var(--cyan); margin-bottom:10px; }
+  .vm-right p{ font-size:16px; color:#fff; line-height:1.55; max-width:640px; }
+  .vm-right .block{ margin-bottom:32px; }
+
+  /* ---------- ABOUT: clients ---------- */
+  .logo-wall{ display:grid; grid-template-columns:repeat(9,1fr); gap:1px; margin-top:30px; max-width:1500px; background:var(--gray-line); }
+  .logo-cell{ background:var(--paper); aspect-ratio:190/135; display:flex; align-items:center; justify-content:center; padding:16px; opacity:0; transform:scale(.96); transition:opacity .45s var(--ease), transform .45s var(--ease); }
+  .logo-cell.on{ opacity:1; transform:none; }
+  .logo-cell img{ max-width:100%; max-height:100%; object-fit:contain; }
+
+  /* ---------- BRAND: cards ---------- */
+  .who-cards{ display:flex; gap:6px; height:52vh; max-height:520px; margin-top:32px; }
+  .who-card{ position:relative; flex:1; overflow:hidden; cursor:pointer; transition:flex .8s var(--ease); }
+  .who-card img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform 1.1s var(--ease); }
+  .who-card:hover{ flex:2.3; }
+  .who-card:hover img{ transform:scale(1.04); }
+  .who-card .veil{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.04) 45%, rgba(0,0,0,.82) 100%); }
+  .who-card .cap{ position:absolute; left:22px; right:22px; bottom:20px; }
+  .who-card .cap .nm{ font-family:'Poppins',sans-serif; font-weight:700; font-size:20px; color:#fff; font-style:italic; }
+  .who-card .cap .df{ font-size:13px; line-height:1.6; color:#e9e9e9; margin-top:8px; max-width:320px; opacity:0; transform:translateY(8px); transition:opacity .5s var(--ease) .1s, transform .5s var(--ease) .1s; }
+  .who-card:hover .cap .df{ opacity:1; transform:none; }
+
+  /* ---------- BRAND: tagline — the deck's own dark interlude ---------- */
+  .tagline-step h1{ font-family:'Poppins',sans-serif; font-weight:400; font-size:44px; line-height:1.3; color:#fff; max-width:1300px; }
+  .tagline-step h1 b{ font-weight:700; }
+  .tagline-step h1 .mr{ font-weight:700; color:var(--maroon); }
+
+  /* ---------- USERS: ecosystem ---------- */
+  .eco-wrap{ display:grid; grid-template-columns:1fr 1.15fr; gap:56px; align-items:center; max-width:1560px; }
+  .eco-stack{ display:flex; flex-direction:column; gap:2px; }
+  .eco-row{ display:flex; align-items:center; gap:18px; padding:18px 22px; border:1px solid var(--gray-line); background:#fff; cursor:pointer; transition:border-color .3s, background .3s; }
+  .eco-row .dot{ width:9px; height:9px; border-radius:50%; background:var(--gray-text); opacity:.4; flex:none; transition:all .3s; }
+  .eco-row .nm{ font-family:'Poppins',sans-serif; font-weight:600; font-size:16.5px; color:var(--gray-text); transition:color .3s; }
+  .eco-row .ct{ margin-left:auto; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--gray-text); opacity:.6; }
+  .eco-row:hover{ border-color:#c9c9c9; }
+  .eco-row.active{ border-color:var(--maroon); background:#fbeceb; }
+  .eco-row.active .dot{ background:var(--maroon); opacity:1; }
+  .eco-row.active .nm{ color:var(--ink); }
+  .eco-detail{ position:relative; min-height:420px; }
+  .eco-photo{ position:absolute; top:0; right:0; width:58%; aspect-ratio:4/4.6; overflow:hidden; }
+  .eco-photo img{ width:100%; height:100%; object-fit:cover; }
+  .eco-needs{ position:absolute; left:0; bottom:6%; width:56%; background:#fff; border:1px solid var(--gray-line); box-shadow:0 18px 50px rgba(0,0,0,.10); padding:28px 32px; }
+  .eco-needs h4{ font-family:'Poppins',sans-serif; font-weight:700; font-size:11.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--maroon); margin-bottom:14px; }
+  .need-chip{ display:flex; align-items:center; gap:12px; padding:8px 0; font-size:14px; color:var(--ink); opacity:0; transform:translateX(-10px); transition:opacity .45s var(--ease), transform .45s var(--ease); }
+  .need-chip::before{ content:''; width:14px; height:1px; background:var(--maroon); flex:none; }
+  .need-chip.on{ opacity:1; transform:none; }
+
+  /* ---------- USERS: generations ---------- */
+  .gen-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:32px; max-width:1400px; }
+  .gen-cell{ position:relative; aspect-ratio:3/3.4; overflow:hidden; }
+  .gen-cell img{ width:100%; height:100%; object-fit:cover; transition:transform .8s var(--ease); }
+  .gen-cell:hover img{ transform:scale(1.03); }
+  .gen-cell .veil{ position:absolute; inset:0; background:linear-gradient(180deg, transparent 55%, rgba(0,0,0,.75) 100%); }
+  .gen-cell .cap{ position:absolute; left:16px; bottom:14px; font-family:'Poppins',sans-serif; font-weight:700; font-size:16px; color:#fff; font-style:italic; }
+  .gen-cell .yr{ position:absolute; left:16px; bottom:40px; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:#cfe9f2; }
+
+  /* ---------- CONCEPT: philosophy — the deck's own dark card ---------- */
+  .phil-card{ background:var(--charcoal); padding:52px 60px; }
+  .phil-wrap{ display:grid; grid-template-columns:1fr 460px; gap:36px; align-items:center; max-width:1560px; width:100%; }
+  #orbit-stage{ position:relative; height:46vh; max-height:460px; display:flex; align-items:center; justify-content:center; }
+  #orbit-core{ position:absolute; width:220px; height:220px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; border:1.5px dashed rgba(255,255,255,.3); padding:28px; z-index:3; }
+  #orbit-core .t{ font-family:'Poppins',sans-serif; font-weight:700; font-size:17px; color:#fff; line-height:1.3; }
+  #orbit-core .s{ font-size:11px; line-height:1.55; color:#bcbcbc; margin-top:8px; }
+  .orbit-ring{ position:absolute; border-radius:50%; border:1px dashed rgba(255,255,255,.15); }
+  #orbit-rot{ position:absolute; width:100%; height:100%; animation:orbitSpin 70s linear infinite; }
+  #orbit-stage.paused #orbit-rot{ animation-play-state:paused; }
+  .orb{ position:absolute; width:112px; height:112px; margin:-56px 0 0 -56px; border-radius:50%; overflow:hidden; cursor:pointer; border:1.5px dashed rgba(255,255,255,.4); transition:transform .45s var(--ease), border-color .45s; animation:orbitCounter 70s linear infinite; }
+  #orbit-stage.paused .orb{ animation-play-state:paused; }
+  .orb img{ width:100%; height:100%; object-fit:cover; }
+  .orb .nm{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; font-family:'Poppins',sans-serif; font-weight:700; font-size:13.5px; color:#fff; background:rgba(0,0,0,.22); padding:8px; line-height:1.25; }
+  .orb:hover, .orb.hot{ transform:scale(1.1); border-color:var(--cyan); }
+  @keyframes orbitSpin{ from{transform:rotate(0);} to{transform:rotate(360deg);} }
+  @keyframes orbitCounter{ from{transform:rotate(0);} to{transform:rotate(-360deg);} }
+  .phil-copy .big{ font-family:'Poppins',sans-serif; font-weight:700; font-size:30px; color:#fff; line-height:1.25; }
+  .phil-copy .big .mr{ color:var(--maroon); }
+  .phil-copy p.lede{ color:#d8d8d8; margin-top:14px; }
+  .phil-rule{ width:44px; height:3px; background:var(--cyan); margin:18px 0; }
+
+  /* ---------- CONCEPT: circuit ---------- */
+  #st-circuit{ padding-right:64px; }
+  .circuit-wrap{ display:grid; grid-template-columns:1fr 320px; gap:40px; align-items:center; width:100%; max-width:1720px; }
+  .axo-stage{ position:relative; }
+  .axo-stage img{ width:100%; height:auto; display:block; }
+  #axo-svg{ position:absolute; inset:0; width:100%; height:100%; }
+  #axo-svg .hotpoly{ fill:rgba(152,0,0,0); stroke:rgba(152,0,0,0); stroke-width:2; cursor:pointer; pointer-events:fill; transition:fill .3s, stroke .3s; }
+  #axo-svg .hotpoly:hover{ fill:rgba(152,0,0,.14); stroke:rgba(152,0,0,.55); }
+  #axo-svg .hotpoly.sel{ fill:rgba(152,0,0,.18); stroke:rgba(152,0,0,.85); }
+  #axo-svg .trace{ fill:none; stroke:var(--cyan); stroke-width:3; opacity:0; }
+  #axo-svg .trace.lit{ opacity:.95; stroke-dasharray:var(--len); stroke-dashoffset:var(--len); animation:traceDraw 1.3s var(--ease) forwards; }
+  @keyframes traceDraw{ to{ stroke-dashoffset:0; } }
+  #axo-svg .node{ cursor:pointer; }
+  #axo-svg .node circle.core{ fill:var(--maroon); stroke:#fff; stroke-width:2; }
+  #axo-svg .node.dim{ opacity:.35; }
+  #axo-svg .node.sel circle.core{ fill:var(--cyan); }
+  #axo-svg .node circle.pulse{ fill:none; stroke:rgba(152,0,0,.5); stroke-width:2; }
+  #axo-svg .node text{ font-family:Arial; font-size:22px; fill:var(--ink); paint-order:stroke; stroke:#fff; stroke-width:5px; opacity:0; transition:opacity .3s; pointer-events:none; }
+  #axo-svg .node:hover text, #axo-svg .node.sel text{ opacity:1; }
+  .circuit-side .it{ font-style:italic; font-size:13.5px; color:var(--gray-text); }
+  .circuit-side .ttl{ font-family:'Poppins',sans-serif; font-weight:800; font-size:36px; color:var(--maroon); margin:6px 0 4px; }
+  .circuit-side p.lede{ font-size:13.5px; margin-top:14px; }
+  .cir-list{ margin-top:22px; display:flex; flex-direction:column; }
+  .cir-item{ display:flex; align-items:center; gap:12px; padding:10px 4px; cursor:pointer; border-bottom:1px solid var(--gray-line); transition:padding-left .3s var(--ease); }
+  .cir-item .sq{ width:7px; height:7px; background:var(--gray-text); opacity:.5; transform:rotate(45deg); transition:all .3s; }
+  .cir-item .nm{ font-family:'Poppins',sans-serif; font-weight:600; font-size:13.5px; color:var(--gray-text); transition:color .3s; }
+  .cir-item .go{ margin-left:auto; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--maroon); opacity:0; transition:opacity .3s; }
+  .cir-item:hover{ padding-left:8px; }
+  .cir-item:hover .nm{ color:var(--ink); }
+  .cir-item.active{ padding-left:8px; }
+  .cir-item.active .sq{ background:var(--maroon); opacity:1; }
+  .cir-item.active .nm{ color:var(--ink); }
+  .cir-item.active .go{ opacity:1; }
+  .cir-narr{ margin-top:16px; min-height:50px; font-size:12.5px; line-height:1.7; color:var(--charcoal); border-left:2px solid var(--cyan); padding-left:14px; opacity:0; transition:opacity .45s; }
+  .cir-narr.on{ opacity:1; }
+
+  /* ---------- PLANNING: brief ---------- */
+  .brief-title{ font-family:'Poppins',sans-serif; font-weight:800; font-style:italic; font-size:44px; color:var(--maroon); margin-bottom:36px; }
+  .req-grid{ display:grid; grid-template-columns:repeat(8,1fr); gap:14px 8px; max-width:1560px; }
+  .req-cell{ text-align:center; opacity:0; transform:translateY(12px); transition:opacity .5s var(--ease), transform .5s var(--ease); }
+  .req-cell.on{ opacity:1; transform:none; }
+  .req-cell .ic{ width:60px; height:60px; margin:0 auto 12px; border-radius:50%; border:1.5px dotted var(--maroon); display:flex; align-items:center; justify-content:center; }
+  .req-cell .ic img{ width:24px; height:24px; object-fit:contain; }
+  .req-cell .nm{ font-family:'Poppins',sans-serif; font-weight:700; font-size:11px; letter-spacing:.02em; color:var(--ink); line-height:1.35; text-transform:uppercase; }
+  .req-cell .sub{ font-size:10.5px; color:var(--gray-text); margin-top:3px; }
+
+  /* ---------- PLANNING: layers ---------- */
+  #st-plan{ padding-right:64px; padding-left:150px; }
+  .plan-wrap{ display:grid; grid-template-columns:220px 1fr; gap:32px; align-items:center; width:100%; max-width:1780px; }
+  .layer-tabs{ display:flex; flex-direction:column; gap:2px; }
+  .ltab{ display:flex; align-items:center; gap:14px; padding:11px 8px; cursor:pointer; border-bottom:1px solid var(--gray-line); }
+  .ltab .nd{ width:19px; height:19px; flex:none; border-radius:50%; border:1.5px solid var(--gray-line); background:#fff; transition:border-color .3s; }
+  .ltab .lb{ font-family:'Poppins',sans-serif; font-weight:600; font-size:13px; color:var(--gray-text); transition:color .3s; }
+  .ltab .ct{ font-size:9.5px; color:var(--gray-text); opacity:.75; margin-left:auto; letter-spacing:.06em; }
+  .ltab:hover .lb{ color:var(--ink); }
+  .ltab.active .nd{ border-color:var(--maroon); background:var(--maroon); }
+  .ltab.active .lb{ color:var(--ink); }
+  .plan-stage{ position:relative; width:100%; aspect-ratio:4096/1611; background:#EDEBE6; border:1px solid var(--gray-line); overflow:hidden; }
+  .plan-stage img{ position:absolute; inset:0; width:100%; height:100%; object-fit:fill; transition:opacity .8s var(--ease); }
+  #plan-line{ opacity:1; }
+  #plan-color{ opacity:0; }
+  #plan-veil{ position:absolute; inset:0; width:100%; height:100%; }
+  #plan-veil .veil-rect{ fill:rgba(255,255,255,.68); opacity:0; transition:opacity .6s var(--ease); }
+  #plan-veil.zoned .veil-rect{ opacity:1; }
+  #plan-veil .zpoly{ fill:rgba(152,0,0,.001); stroke:var(--maroon); stroke-width:4; opacity:0; transition:opacity .5s var(--ease); }
+  #plan-veil.zoned .zpoly{ opacity:1; }
+  #plan-veil .zlbl{ font-family:Arial; font-size:30px; font-weight:bold; fill:var(--ink); paint-order:stroke; stroke:#fff; stroke-width:8px; opacity:0; transition:opacity .5s .15s; }
+  #plan-veil.zoned .zlbl{ opacity:1; }
+  .plan-side{ position:absolute; right:20px; top:20px; width:260px; max-height:calc(100% - 40px); overflow:auto; background:rgba(255,255,255,.94); border:1px solid var(--gray-line); box-shadow:0 12px 40px rgba(0,0,0,.10); padding:20px 22px; }
+  .plan-side h5{ font-family:'Poppins',sans-serif; font-weight:700; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--maroon); margin-bottom:12px; }
+  .pl-row{ display:flex; justify-content:space-between; gap:14px; font-size:12px; color:var(--ink); padding:5px 0; border-bottom:1px solid var(--gray-line); }
+  .pl-row .v{ font-weight:700; }
+  .pl-note{ font-size:11.5px; line-height:1.6; color:var(--gray-text); padding:5px 0; }
+  .pl-note::before{ content:'· '; color:var(--maroon); }
+  .pl-foot{ font-size:10.5px; font-style:italic; color:var(--gray-text); margin-top:10px; }
+
+  /* ---------- PLANNING: occupancy ---------- */
+  .occ-wrap{ display:grid; grid-template-columns:390px 1fr; gap:48px; align-items:start; width:100%; max-width:1560px; }
+  .occ-cards{ display:flex; flex-direction:column; gap:2px; }
+  .occ-card{ display:flex; align-items:center; gap:16px; padding:15px 20px; cursor:pointer; border:1px solid var(--gray-line); background:#fff; transition:border-color .3s, background .3s; }
+  .occ-card .ic{ width:36px; height:36px; flex:none; border-radius:50%; border:1px solid var(--gray-line); display:flex; align-items:center; justify-content:center; }
+  .occ-card .ic img{ width:16px; height:16px; opacity:.8; }
+  .occ-card .nm{ font-family:'Poppins',sans-serif; font-weight:600; font-size:14px; color:var(--gray-text); transition:color .3s; }
+  .occ-card .sub{ font-size:10.5px; color:var(--gray-text); opacity:.75; margin-top:2px; }
+  .occ-card .n{ margin-left:auto; font-family:'Poppins',sans-serif; font-weight:700; font-size:19px; color:var(--gray-text); transition:color .3s; }
+  .occ-card:hover{ border-color:#c9c9c9; }
+  .occ-card.active{ border-color:var(--maroon); background:#fbeceb; }
+  .occ-card.active .nm{ color:var(--ink); }
+  .occ-card.active .n{ color:var(--maroon); }
+  .occ-detail{ border:1px solid var(--gray-line); background:#fff; padding:34px 40px; min-height:420px; }
+  .occ-detail h4{ font-family:'Poppins',sans-serif; font-weight:800; font-size:22px; color:var(--maroon); margin-bottom:4px; }
+  .occ-detail .opt{ font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--gray-text); margin-bottom:22px; }
+  .od-head{ display:grid; grid-template-columns:1fr 130px 150px; gap:18px; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--gray-text); padding-bottom:9px; border-bottom:1.5px solid var(--ink); }
+  .od-row{ display:grid; grid-template-columns:1fr 130px 150px; gap:18px; align-items:center; padding:10px 0; border-bottom:1px solid var(--gray-line); opacity:0; transform:translateY(6px); transition:opacity .4s var(--ease), transform .4s var(--ease); }
+  .od-row.on{ opacity:1; transform:none; }
+  .od-row .a{ font-size:13.5px; color:var(--ink); }
+  .od-row .r{ font-size:13px; color:var(--gray-text); }
+  .od-row .v{ font-family:'Poppins',sans-serif; font-weight:700; font-size:14px; color:var(--ink); }
+  .od-row .v.win{ color:var(--maroon); }
+
+  /* ---------- SPACES: materials ---------- */
+  .mat-wrap{ display:grid; grid-template-columns:.72fr 1fr; gap:60px; align-items:center; max-width:1640px; }
+  .mat-board{ background:#fff; padding:18px; border:1px solid var(--gray-line); box-shadow:0 20px 60px rgba(0,0,0,.14); }
+  .mat-board img{ width:100%; height:auto; display:block; }
+
+  /* ---------- SPACES: gallery ---------- */
+  #st-gallery{ padding:0; }
+  .gal-stage{ position:absolute; inset:0; overflow:hidden; background:#000; }
+  .gal-slide{ position:absolute; inset:0; opacity:0; transition:opacity 1s var(--ease); }
+  .gal-slide img{ width:100%; height:100%; object-fit:cover; transform:scale(1.0); }
+  .gal-slide.show{ opacity:1; }
+  .gal-slide.show img{ animation:kenburns 16s var(--ease) forwards; }
+  @keyframes kenburns{ from{ transform:scale(1.0); } to{ transform:scale(1.06); } }
+  .gal-scrim{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.32) 0%, transparent 30%, transparent 58%, rgba(0,0,0,.72) 100%); pointer-events:none; }
+  .gal-name{ position:absolute; left:168px; bottom:74px; z-index:5; }
+  .gal-name .k{ font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--cyan); margin-bottom:10px; }
+  .gal-name .n{ font-family:'Poppins',sans-serif; font-weight:700; font-size:42px; color:#fff; line-height:1; }
+  .gal-name .ix{ font-family:'Poppins',sans-serif; font-weight:400; font-size:12.5px; letter-spacing:.18em; color:#cfcfcf; margin-top:10px; }
+  .gal-nav{ position:absolute; right:96px; bottom:150px; z-index:5; display:flex; flex-direction:column; gap:8px; text-align:right; }
+  .gal-nav .gi{ font-family:'Poppins',sans-serif; font-weight:500; font-size:13px; color:rgba(255,255,255,.55); cursor:pointer; transition:color .3s; }
+  .gal-nav .gi:hover{ color:#fff; }
+  .gal-nav .gi.active{ color:#fff; letter-spacing:.06em; }
+  .gal-nav .gi.active::after{ content:''; display:inline-block; width:16px; height:1px; background:var(--maroon); margin-left:10px; vertical-align:middle; }
+
+  /* ---------- THANKS ---------- */
+  .thanks-wrap{ text-align:center; }
+  .thanks-wrap h1{ font-family:'Poppins',sans-serif; font-weight:700; font-size:72px; color:var(--ink); }
+  .thanks-wrap h1 b{ font-weight:700; color:var(--maroon); }
+  .thanks-logos{ display:flex; align-items:center; justify-content:center; gap:14px; margin-top:40px; height:16px; }
+  .thanks-logos img{ height:100%; width:auto; }
+  .thanks-logos .sep{ width:1px; height:14px; background:#ccc; }
+  .again{ margin-top:46px; display:inline-flex; align-items:center; gap:10px; font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--gray-text); border:none; background:none; cursor:pointer; transition:color .3s; }
+  .again:hover{ color:var(--maroon); }
+
+  /* ---------- render modal ---------- */
+  .rmodal{ position:fixed; inset:0; z-index:80; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.92); opacity:0; visibility:hidden; transition:opacity .3s var(--ease), visibility 0s linear .3s; }
+  .rmodal.open{ opacity:1; visibility:visible; transition:opacity .3s var(--ease), visibility 0s; }
+  .rm-title{ position:absolute; top:32px; left:64px; }
+  .rm-title .ey{ font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--cyan); margin-bottom:8px; }
+  .rm-title .tx{ font-family:'Poppins',sans-serif; font-weight:700; font-size:23px; color:#fff; }
+  .rm-close{ position:absolute; top:28px; right:32px; width:44px; height:44px; border-radius:50%; background:transparent; border:1px solid rgba(255,255,255,.4); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .25s, border-color .25s; }
+  .rm-close:hover{ background:var(--maroon); border-color:var(--maroon); }
+  .rm-close svg{ width:16px; height:16px; stroke:#fff; stroke-width:2.2; }
+  .rm-stage{ max-width:84vw; max-height:70vh; }
+  .rm-stage img{ max-width:84vw; max-height:70vh; object-fit:contain; display:block; box-shadow:0 20px 80px rgba(0,0,0,.6); }
+  .rm-thumbs{ position:absolute; bottom:26px; left:50%; transform:translateX(-50%); display:flex; gap:10px; }
+  .rm-thumbs img{ height:54px; cursor:pointer; opacity:.45; border:1px solid transparent; transition:opacity .25s, border-color .25s; }
+  .rm-thumbs img.active{ opacity:1; border-color:#fff; }
+  .rm-count{ position:absolute; bottom:36px; right:36px; color:#bbb; font-size:11px; letter-spacing:.12em; }
+
+  @media (max-width:1180px){
+    .step{ padding:56px 40px 80px 120px; }
+    #rail{ padding-left:16px; width:100px; }
+    h1.hero{ font-size:30px; }
+    .stat-grid{ grid-template-columns:repeat(2,1fr); }
+    .journey-wrap, .eco-wrap, .phil-wrap, .circuit-wrap, .occ-wrap, .mat-wrap, .plan-wrap{ grid-template-columns:1fr; gap:26px; }
+    .vm-content{ grid-template-columns:1fr; padding-left:40px; }
+    .req-grid{ grid-template-columns:repeat(4,1fr); }
+    .logo-wall{ grid-template-columns:repeat(5,1fr); }
+    .who-cards{ flex-direction:column; height:auto; }
+    .who-card{ min-height:110px; }
+    .gal-name{ left:40px; }
+  }
+</style>
+
+<div id="journey">
+
+  <!-- ================= ENTER ================= -->
+  <section class="step active" id="st-enter" data-chapter="enter">
+    <video class="landing-video" autoplay muted loop playsinline id="hero-video">
+      <source src="assets/videos/hero.mp4" type="video/mp4">
+    </video>
+    <div class="landing-scrim"></div>
+    <div class="enter-center">
+      <button id="begin-btn">Begin Journey <span class="arr">→</span></button>
+    </div>
+  </section>
+
+  <!-- ================= 01 ABOUT ================= -->
+  <section class="step" data-chapter="about" data-title="A brief introduction">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Company Profile</div><div class="k2">Overview</div></div>
+      <h1 class="hero rv d1">Environments engineered to help people<br><b>solve complex industrial challenges.</b></h1>
+      <div class="accent-dash rv d2"></div>
+      <p class="lede rv d3">Officebanao — the design &amp; build partner behind this proposal.</p>
+    </div>
+  </section>
+
+  <section class="step" data-chapter="about">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Company Profile</div><div class="k2">Overview</div></div>
+      <h2 class="title rv d1" style="margin-top:10px;">About us</h2>
+      <div class="stat-grid">
+        <div class="stat-cell" data-count="400" data-suffix="+"><div class="num"><span class="cnt">0</span><span class="u">+</span></div><div class="lbl">Offices built</div></div>
+        <div class="stat-cell" data-count="18" data-suffix="M+"><div class="num"><span class="cnt">0</span><span class="u">M+</span></div><div class="lbl">Sq ft office area delivered</div></div>
+        <div class="stat-cell" data-count="400" data-suffix="+"><div class="num"><span class="cnt">0</span><span class="u">+</span></div><div class="lbl">Experienced employees</div></div>
+        <div class="stat-cell" data-count="235" data-suffix="+Cr"><div class="num"><span class="cnt">0</span><span class="u">+Cr</span></div><div class="lbl">Turnover</div></div>
+      </div>
+      <p class="lede rv d4" style="margin-top:30px;"><b>15+ years</b> of experience; <b>100+</b> satisfied customers &amp; <b>20 million sq.ft</b> of office space delivered.</p>
+      <div class="pillars rv d5"><span>Technology</span><span>Design</span><span>Quality</span></div>
+    </div>
+  </section>
+
+  <section class="step" data-chapter="about">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Company Profile</div><div class="k2">Our Journey — crafting exceptional workspaces with expertise &amp; innovation</div></div>
+      <div class="journey-wrap" style="margin-top:10px;">
+        <div class="quote-card rv d1">
+          <div class="q">"Office Banao is a mission driven company, committed to making a meaningful difference in how workspaces are developed in India. We are delighted to partner with them and are excited to see how they transform this market. With depth of experience and supplier network, the team is best placed to disrupt the existing opaque and sub-par experience that plagues the industry today."</div>
+          <div class="attr">— Rahul Taneja, Partner <img src="assets/final/lightspeed-logo.jpg" alt="Lightspeed"></div>
+          <div class="note">We are backed by US based leading multi-stage venture capital fund</div>
+        </div>
+        <div class="mile-list">
+          <div class="mile rv d2"><span class="ix">01</span><div class="thumb"><img src="assets/final/journey-founded.jpg" alt=""></div><div class="tx">Founded on expertise</div></div>
+          <div class="mile rv d3"><span class="ix">02</span><div class="thumb"><img src="assets/final/journey-onestop.jpg" alt=""></div><div class="tx">One-stop solution powered by technology</div></div>
+          <div class="mile rv d4"><span class="ix">03</span><div class="thumb"><img src="assets/final/journey-designed.jpg" alt=""></div><div class="tx">Designed &amp; delivered millions of square feet</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step vm-scene" data-chapter="about">
+    <div class="vm-bg"><img src="assets/final/vision-bg.jpg" alt="Workspace"></div>
+    <div class="vm-content">
+      <div class="vm-icons rv d1">
+        <div class="vm-icon"><div class="circ"><img src="assets/final/icon-customer-centric.png" alt=""></div><div class="lbl">Customer<b>Centric</b></div></div>
+        <div class="vm-icon"><div class="circ"><img src="assets/final/icon-collaboration.png" alt=""></div><div class="lbl">Collaboration<b>Unleashed</b></div></div>
+        <div class="vm-icon"><div class="circ"><img src="assets/final/icon-quality.png" alt=""></div><div class="lbl">Quality<b>Craftsmanship</b></div></div>
+        <div class="vm-icon"><div class="circ"><img src="assets/final/icon-sustainability.png" alt=""></div><div class="lbl">Sustainability<b>Matters</b></div></div>
+        <div class="vm-icon"><div class="circ"><img src="assets/final/icon-accountability.png" alt=""></div><div class="lbl">Accountability<b>Guaranteed</b></div></div>
+      </div>
+      <div class="vm-right rv d2">
+        <div class="block"><h2>Vision</h2><p>To revolutionise office creation and management with technology.</p></div>
+        <div class="block"><h2>Mission</h2><p>Transforming office interiors by uniting designers, architects, suppliers, and contractors on a tech platform, and empowering them with tools and support to redefine the office experience for clients.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" data-chapter="about">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Company Profile</div><div class="k2">Clients</div></div>
+      <h2 class="title rv d1" style="margin-top:10px;">They <span style="color:var(--ink)">trust</span> us</h2>
+      <div class="logo-wall" id="logo-wall"></div>
+    </div>
+  </section>
+
+  <!-- ================= 02 BRAND ================= -->
+  <section class="step" data-chapter="brand" data-title="Understanding the brand">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Brand Understanding</div></div>
+      <h2 class="title rv d1" style="margin-top:10px;">The Who</h2>
+      <p class="lede rv d2" style="max-width:1150px; margin-top:12px;">Sidvin Outotec Engineering is a multidisciplinary engineering partner that delivers end-to-end solutions for industrial and process sectors worldwide. Through expertise in plant engineering, product development, project execution, and digital solutions, they transform complex engineering challenges into efficient, sustainable outcomes.</p>
+      <div class="who-cards rv d3">
+        <div class="who-card"><img src="assets/final/who-committed.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Committed</div><div class="df">End-to-end ownership — from first concept to final commissioning, seen through with discipline.</div></div>
+        </div>
+        <div class="who-card"><img src="assets/final/who-adaptable.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Adaptable</div><div class="df">Solutions shaped to every sector, site, and system — never one template for all.</div></div>
+        </div>
+        <div class="who-card"><img src="assets/final/who-speed.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Speed</div><div class="df">Momentum without compromise — fast, precise delivery across global projects.</div></div>
+        </div>
+        <div class="who-card"><img src="assets/final/who-pragmatic.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Pragmatic</div><div class="df">Grounded engineering judgement — decisions driven by what demonstrably works.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step tagline-step on-dark" data-chapter="brand">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1" style="color:#fff;">02</div><div class="k2" style="color:#cfcfcf;">Brand</div></div>
+      <h1 class="rv d1">Where Trust <b>Connects</b>, <span class="mr">People Lead</span> &amp;<br><b>Adaptability</b> Drives <b>Progress</b>.</h1>
+    </div>
+  </section>
+
+  <!-- ================= 03 USERS ================= -->
+  <section class="step" data-chapter="users" data-title="Identifying the users">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Identifying the Users</div></div>
+      <div class="eco-wrap" style="margin-top:10px;">
+        <div>
+          <h2 class="title rv d1" style="margin-bottom:26px;">The User</h2>
+          <div class="eco-stack rv d2" id="eco-stack"></div>
+        </div>
+        <div class="eco-detail rv d3">
+          <div class="eco-photo"><img id="eco-img" src="assets/final/user-leadership.jpg" alt=""></div>
+          <div class="eco-needs">
+            <h4 id="eco-needs-title">Workplace needs</h4>
+            <div id="eco-needs-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" data-chapter="users">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">A multi-generational workforce</div></div>
+      <h2 class="title rv d1" style="margin-top:10px;">Four generations, <span style="color:var(--ink)">one connected workplace</span></h2>
+      <div class="gen-strip rv d2">
+        <div class="gen-cell"><img src="assets/final/gen-boomers.jpg" alt=""><div class="veil"></div><div class="yr">Est. experience</div><div class="cap">Boomers</div></div>
+        <div class="gen-cell"><img src="assets/final/gen-genx.jpg" alt=""><div class="veil"></div><div class="yr">Steady judgement</div><div class="cap">Gen X</div></div>
+        <div class="gen-cell"><img src="assets/final/gen-millennial.jpg" alt=""><div class="veil"></div><div class="yr">Digital fluency</div><div class="cap">Millennial</div></div>
+        <div class="gen-cell"><img src="assets/final/gen-genz.jpg" alt=""><div class="veil"></div><div class="yr">Native adaptability</div><div class="cap">Gen Z</div></div>
+      </div>
+      <p class="lede rv d3" style="max-width:1150px; margin-top:26px;">The workplace is designed for a connected, multi-generational workforce, enabling seamless movement between focus, collaboration, and knowledge sharing. Through diverse work settings, hospitality-inspired experiences, and integrated technology, it creates an inclusive, adaptable, and future-ready environment.</p>
+    </div>
+  </section>
+
+  <!-- ================= 04 CONCEPT ================= -->
+  <section class="step" data-chapter="concept" data-title="Defining your new workplace">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Defining Your New Workplace</div></div>
+      <div class="phil-card rv d1" style="margin-top:14px;">
+        <div class="phil-wrap">
+          <div id="orbit-stage">
+            <div class="orbit-ring" style="width:380px;height:380px;"></div>
+            <div class="orbit-ring" style="width:490px;height:490px; opacity:.6;"></div>
+            <div id="orbit-core">
+              <div class="t" id="core-t">Defining your <span style="color:var(--maroon)">New Workplace</span>…</div>
+              <div class="s" id="core-s">Hover a value to see how the workplace responds.</div>
+            </div>
+            <div id="orbit-rot">
+              <div class="orb" data-mode="trust" style="left:50%; top:11.6%;"><img src="assets/final/workplace-trust.jpg" alt=""><div class="nm">Trust</div></div>
+              <div class="orb" data-mode="agility" style="left:16.7%; top:69.2%;"><img src="assets/final/workplace-agility.jpg" alt=""><div class="nm">Agility</div></div>
+              <div class="orb" data-mode="quiet" style="left:83.3%; top:69.2%;"><img src="assets/final/workplace-quietconfidence.jpg" alt=""><div class="nm">Quiet Confidence</div></div>
+            </div>
+          </div>
+          <div class="phil-copy">
+            <div class="big">An intelligent circuit connecting <span class="mr">people, processes, and ideas.</span></div>
+            <div class="phil-rule"></div>
+            <p class="lede">…to create a workplace of quiet confidence, trusted collaboration, and agile innovation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" id="st-circuit" data-chapter="concept">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Axonometric View</div></div>
+      <div class="circuit-wrap" style="margin-top:10px;">
+        <div class="axo-stage rv d1">
+          <img src="assets/final/axonometric.jpg" alt="Axonometric view" id="axo-img">
+          <svg id="axo-svg" viewBox="0 0 1916 821" preserveAspectRatio="none"></svg>
+        </div>
+        <div class="circuit-side rv d2">
+          <div class="it">A Workplace Built on Trust, Designed with Precision.</div>
+          <div class="ttl">THE CIRCUIT</div>
+          <p class="lede">Just like <b>circuits</b>, every <b>person</b>, every <b>discipline</b>, and every <b>idea</b> carries <b>energy through the organization</b>. The <b>Workplace becomes a living circuit</b>, where information <b>flows</b>, expertise <b>connects</b>, and <b>People Adapt</b>.</p>
+          <div class="cir-list" id="cir-list"></div>
+          <div class="cir-narr" id="cir-narr"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 05 PLANNING ================= -->
+  <section class="step" data-chapter="planning" data-title="Space strategy">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Requirements</div></div>
+      <div class="brief-title rv d1" style="margin-top:10px;">We heard you…</div>
+      <div class="req-grid" id="req-grid"></div>
+    </div>
+  </section>
+
+  <section class="step" id="st-plan" data-chapter="planning">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Space Planning</div><div class="k2">Proposed Layout</div></div>
+      <div class="plan-wrap" style="margin-top:10px;">
+        <div class="layer-tabs rv d1" id="layer-tabs"></div>
+        <div class="plan-stage rv d2">
+          <img id="plan-line" src="assets/final/plan-line-full.jpg" alt="Structural plan">
+          <img id="plan-color" src="assets/final/plan-color-full.jpg" alt="Proposed layout">
+          <svg id="plan-veil" viewBox="0 0 4096 1611" preserveAspectRatio="none"></svg>
+          <div class="plan-side" id="plan-side"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" data-chapter="planning">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Space Planning</div><div class="k2">Occupancy</div></div>
+      <h2 class="title rv d1" style="margin:10px 0 30px;">Every requirement, <span style="color:var(--ink)">accounted for</span></h2>
+      <div class="occ-wrap">
+        <div class="occ-cards rv d2" id="occ-cards"></div>
+        <div class="occ-detail rv d3">
+          <h4 id="od-title">Workhall</h4>
+          <div class="opt">Option 1 · requirement vs achieved</div>
+          <div class="od-head"><span>Area</span><span>Required</span><span>Achieved</span></div>
+          <div id="od-rows"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 06 SPACES ================= -->
+  <section class="step" data-chapter="spaces" data-title="Visual direction">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Visual Direction</div><div class="k2">Space Inspiration</div></div>
+      <div class="mat-wrap" style="margin-top:10px;">
+        <div>
+          <h2 class="title rv d1">Space <span style="color:var(--ink)">Inspiration</span>…</h2>
+          <div class="accent-dash rv d2"></div>
+          <p class="lede rv d3">A harmonious blend of <b>warm timber, textured stone, graphite metal, soft grey surfaces, and subtle burgundy accents</b> creates a sophisticated workplace that reflects Sidvin's engineering excellence. The palette balances warmth with functionality, <b>delivering a premium, durable, and hospitality-inspired environment</b> that supports focus, collaboration, and employee well-being.</p>
+        </div>
+        <div class="mat-board rv d2"><img src="assets/final/material-board.jpg" alt="Material board"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" id="st-gallery" data-chapter="spaces">
+    <div class="gal-stage" id="gal-stage"></div>
+    <div class="gal-scrim"></div>
+    <div class="gal-name">
+      <div class="k">Visual Direction</div>
+      <div class="n" id="gal-name">Reception</div>
+      <div class="ix" id="gal-ix">01 / 05</div>
+    </div>
+    <div class="gal-nav" id="gal-nav"></div>
+  </section>
+
+  <!-- ================= THANKS ================= -->
+  <section class="step" data-chapter="thanks">
+    <div class="step-inner">
+      <div class="thanks-wrap">
+        <h1 class="rv">Thank <b>You.</b></h1>
+        <div class="thanks-logos rv d2">
+          <img src="assets/final/footer-sidvin-outotec.png" alt="Sidvin Outotec" style="height:15px;">
+          <div class="sep"></div>
+          <img src="assets/final/footer-officebanao.png" alt="Officebanao" style="height:17px;">
+        </div>
+        <br>
+        <button class="again rv d3" id="again-btn">↺ &nbsp;Begin again</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- chapter interstitial -->
+<div id="interstitial">
+  <div class="int-wrap">
+    <div class="int-num" id="int-num">01</div>
+    <div class="int-title" id="int-title">About</div>
+    <div class="int-line"></div>
+  </div>
+</div>
+
+<!-- fixed chrome -->
+<div id="rail"></div>
+<div id="chrome-foot">
+  <div class="foot-copy">Copyright © 2026 Officebanao Pvt Ltd. All rights reserved</div>
+  <div class="foot-logos">
+    <img src="assets/final/footer-sidvin-outotec.png" alt="Sidvin Outotec">
+    <div class="sep"></div>
+    <img class="ob" src="assets/final/footer-officebanao.png" alt="Officebanao">
+  </div>
+</div>
+<div id="nav-hint">
+  <span id="step-count"></span>
+  <div class="nav-btn" id="btn-prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></div>
+  <div class="nav-btn" id="btn-next"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+</div>
+
+<!-- render modal -->
+<div class="rmodal" id="rmodal">
+  <div class="rm-title"><div class="ey">Visual Direction</div><div class="tx" id="rm-title-tx"></div></div>
+  <button class="rm-close" id="rm-close"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  <div class="rm-stage"><img id="rm-img" src="" alt=""></div>
+  <div class="rm-thumbs" id="rm-thumbs"></div>
+  <div class="rm-count" id="rm-count"></div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ==================================================================
+     DATA — all figures transcribed from the 20.07.26 source deck (PDF)
+     ================================================================== */
+
+  var USERS = [
+    { key:'leadership', name:'Leadership', img:'assets/final/user-leadership.jpg',
+      needs:['Strategic focus','Trusted collaboration','Client representation','Quiet confidence'] },
+    { key:'engineering', name:'Engineering & Technical Experts', img:'assets/final/user-engineering.jpg',
+      needs:['Deep focus','Technical reviews','Collaboration','Knowledge sharing'] },
+    { key:'delivery', name:'Project Delivery & Business Enablement', img:'assets/final/user-project-delivery.jpg',
+      needs:['Agile coordination','Cross-team huddles','Quick connectivity','Process flow'] },
+    { key:'visitors', name:'Clients & Visitors', img:'assets/final/user-clients.jpg',
+      needs:['First impressions','Hospitality-inspired arrival','Seamless wayfinding','Confidence in the brand'] }
+  ];
+
+  var REQS = [
+    ['icon-reception.png','Reception Area',''],
+    ['icon-workstation.png','Workstation','282 Pax · 162 + 120'],
+    ['icon-manager-cubicles.png','Manager Cubicles','24 out of 282'],
+    ['icon-cabins.png','Cabins','6 no.s · 1+2 seating'],
+    ['icon-meeting-rooms.png','Meeting Rooms','11 nos. · 4, 6, 8 & 10 Pax'],
+    ['icon-board-room.png','Board Room','20+10 Pax'],
+    ['icon-training-room.png','Training Room','25 Pax · 1 no.'],
+    ['icon-medical.png','Medical Rooms','2 no.s'],
+    ['icon-discussion-tables.png','Discussion Tables',''],
+    ['icon-cafeteria.png','Cafeteria','81 Pax'],
+    ['icon-gym.png','Gym & Recreational Area',''],
+    ['icon-library.png','Library','1 no.'],
+    ['icon-phonebooth.png','Phone Booths','7 no.s'],
+    ['icon-storage.png','Storage',''],
+    ['icon-display-unit.png','Display Unit',''],
+    ['icon-paga.png','PAGA System','']
+  ];
+
+  var OCC = [
+    { key:'public', name:'Public Zone', icon:'icon-reception.png', headline:'2',
+      rows:[['Reception','1','1',1],['Waiting Lounge','1','1',1]] },
+    { key:'workhall', name:'Workhall', icon:'icon-workstation.png', headline:'282',
+      rows:[['Total no. Workstations','280','282',1],['Workstations','256','162 (120° WS)',0],
+            ['Manager Cubicles','24','120 (L type)',0],['Discussion Table','—','5',1],
+            ['Library','—','1',1],['Finance Team','5','6',1],['HR Team','5','6',1]],
+      foot:'*Height adjustable — 42 out of 162 (120°) · *Manager cubicles — 24 out of 282' },
+    { key:'meeting', name:'Meeting Rooms', icon:'icon-meeting-rooms.png', headline:'11',
+      rows:[['Board room','28–30','20 + 10 (bench seat)',1],['Meeting room · 4 Pax','—','4',1],
+            ['Meeting room · 6 Pax','—','3',1],['Meeting room · 8 Pax','—','2',1],
+            ['Meeting room · 10 Pax','1','2',1],['Total meeting rooms','11','11',1],
+            ['Phone booth · 1 Pax','—','5',1],['Phone booth · 2 Pax','—','2',1]] },
+    { key:'cabins', name:'Cabins', icon:'icon-cabins.png', headline:'3+',
+      rows:[['MD Cabin','1','1',1],['Head of Engineering','1','1',1],['Head of Operation','1','1',1]] },
+    { key:'training', name:'Training Room', icon:'icon-training-room.png', headline:'1',
+      rows:[['Training Room · 25 Pax','2','1',0]] },
+    { key:'wellness', name:'Recreational & Wellness', icon:'icon-gym.png', headline:'4',
+      rows:[['Cafeteria','1 (80 Pax)','1 (81 Pax)',1],['Medical Room','2','2',1],['Gym','1','1',1]] }
+  ];
+
+  var PLAN_LAYERS = [
+    { key:'structure', label:'Structure', count:'the floor plate',
+      side:{ title:'Structure', notes:['The base floor plate — cores, corridors, and the 1500&nbsp;mm wide circulation spine that everything connects to.'] } },
+    { key:'layout', label:'Full Layout', count:'seating achieved',
+      side:{ title:'Proposed Layout', rows:[['Workstation (120°)','162'],['Workstation (L type)','120'],['Meeting Rooms','11'],['Cabins','6'],['Cafeteria','81 Pax']],
+        notes:['MD Cabin located in the South-West zone as per vastu.','MD desk facing the North-East direction.','Cafeteria placed in the South-East zone.','Storage and display shelves distributed across the floor plate.'] } },
+    { key:'work', label:'Work Zones', count:'282 seats',
+      side:{ title:'Work Zones', rows:[['Workstation (120°)','162'],['Workstation (L type)','120'],['HR Team','06 Pax'],['Finance Team','06 Pax']],
+        notes:['Height adjustable — 42 out of 162 (120°).','Manager cubicles — 24 out of 282.'] } },
+    { key:'collab', label:'Collaboration', count:'11 rooms + 7 booths',
+      side:{ title:'Collaboration', rows:[['Board Room (20+10 Pax)','01'],['Meeting Rooms (4,6,8 & 10)','11'],['Phone Booth (01 Pax)','05'],['Phone Booth (02 Pax)','02'],['Discussion Tables','05']] } },
+    { key:'lead', label:'Leadership', count:'6 cabins',
+      side:{ title:'Leadership', rows:[['Cabins','06']],
+        notes:['MD Cabin in the South-West zone as per vastu, desk facing North-East.','Heads of Engineering, Operations, HR & Finance — 1+2 seating cabins.'] } },
+    { key:'amen', label:'Amenities', count:'wellness + arrival',
+      side:{ title:'Amenities & Arrival', rows:[['Reception','01'],['Cafeteria (81 Pax)','01'],['Gym','01'],['Recreational Area','01'],['Training Room (25 Pax)','01'],['Medical Room','02'],['Library','01'],['IT, Admin, Housekeeping','03'],['Server, UPS / Battery, Hub','03']] } }
+  ];
+
+  var PLAN_ZONES = {
+    work:  [ {key:'ws-ltype-nw', label:'L-type', points:'4.5,26 25,26 25,58 4.5,58'},
+             {key:'ws-120-central', label:'120° clusters', points:'26,38 61,38 61,93 26,93'},
+             {key:'ws-120-sw', label:'120°', points:'6,60 24,60 24,95 6,95'},
+             {key:'ws-ltype-ne', label:'L-type', points:'64,29 85,29 85,60 64,60'},
+             {key:'hr-finance', label:'HR · Finance', points:'8,74 19,74 19,95 8,95'} ],
+    collab:[ {key:'boardroom', label:'Board Room', points:'54,39 64,39 64,57 54,57'},
+             {key:'meeting-south', label:'Meeting Rooms', points:'31,79 61,79 61,96 31,96'},
+             {key:'meeting-east', label:'Meeting Rooms', points:'62,36 69,36 69,64 62,64'},
+             {key:'meeting-west', label:'Meeting · Hub', points:'25,46 31,46 31,70 25,70'} ],
+    lead:  [ {key:'md-cabin', label:'MD Cabin', points:'0.5,76 6,76 6,96 0.5,96'},
+             {key:'cabin-strip-west', label:'Cabins', points:'0.5,36 6.5,36 6.5,75 0.5,75'} ],
+    amen:  [ {key:'reception', label:'Reception', points:'42,39 52,39 52,61 42,61'},
+             {key:'cafeteria', label:'Cafeteria', points:'62,56 80,56 80,95 62,95'},
+             {key:'recreation-gym', label:'Recreation · Gym', points:'78,56 88,56 88,95 78,95'},
+             {key:'training', label:'Training', points:'88,55 99,55 99,90 88,90'},
+             {key:'medical', label:'Medical', points:'11,12 16,12 16,25 11,25'},
+             {key:'library', label:'Library', points:'84,28 88,28 88,50 84,50'} ]
+  };
+
+  var AXO_NODES = {
+    'reception':      { x:53.0, y:49.0, label:'Reception' },
+    'board-room':     { x:62.0, y:38.0, label:'Board Room' },
+    'md-cabin':       { x:13.5, y:82.0, label:'MD Cabin' },
+    'cafe':           { x:78.0, y:40.0, label:'Cafe & Recreation' },
+    'workhall-central':{ x:33.0, y:60.0, label:'Workhall' },
+    'workhall-west':  { x:12.0, y:50.0, label:'Workhall West' },
+    'library':        { x:70.0, y:52.0, label:'Library' },
+    'training':       { x:90.0, y:38.0, label:'Training' },
+    'recreation':     { x:84.0, y:42.0, label:'Recreation' },
+    'meeting-east':   { x:57.0, y:44.0, label:'Meeting Rooms' },
+    'discussion':     { x:44.0, y:52.0, label:'Discussion' }
+  };
+
+  var AXO_SPACES = {
+    'workhall': { title:'Workhall & Collab', node:'workhall-central',
+      path:['workhall-west','workhall-central','discussion','meeting-east','library'],
+      narr:'The engineering workflow — deep focus at the workstations, quick alignment at discussion tables, formal review in meeting rooms, knowledge captured in the library.',
+      points:'2.30,47.26 13.67,38.98 15.66,51.64 32.36,55.05 47.08,45.31 51.93,54.81 45.82,72.72 19.42,86.72 15.66,71.25 8.56,71.86',
+      images:['assets/images/s32_image119.png','assets/images/s32_image93.png','assets/images/s32_image107.png','assets/images/s32_image105.jpg'] },
+    'md-cabin': { title:'MD Cabin', node:'md-cabin',
+      path:['md-cabin','board-room'],
+      narr:'The leadership path — quiet confidence, from the MD cabin to the board room where decisions land.',
+      points:'9.55,69.91 13.41,71.25 15.66,79.78 16.54,85.26 17.54,90.38 17.17,93.06 14.14,95.25',
+      images:['assets/images/s33_image103.png','assets/images/s33_image108.jpg','assets/images/s33_image104.jpg','assets/images/s33_image100.jpg'] },
+    'reception': { title:'Reception & Waiting Lounge', node:'reception',
+      path:['reception','board-room','md-cabin'],
+      narr:'The arrival sequence — first impressions at reception, straight to executive collaboration.',
+      points:'49.95,46.65 55.53,43.61 56.26,46.16 54.91,49.82 53.24,54.45 50.10,54.32',
+      images:['assets/final/render-reception.jpg','assets/images/s30_image90.png','assets/images/s30_image88.jpg','assets/images/s30_image91.jpg'] },
+    'board-room': { title:'Board Room & Executive Dining', node:'board-room',
+      path:['reception','board-room','meeting-east'],
+      narr:'The executive collaboration path — clients arrive, decisions are made, teams align.',
+      points:'56.05,35.57 64.87,30.94 67.90,35.20 67.90,36.91 67.12,36.18 67.12,42.14 59.13,46.29 56.05,42.63',
+      images:['assets/final/render-boardroom.jpg','assets/images/s31_image92.png','assets/images/s31_image99.png','assets/images/s31_image110.jpg'] },
+    'cafe': { title:'Cafe & Recreation', node:'cafe',
+      path:['cafe','recreation','workhall-central'],
+      narr:'The culture loop — recharge over food and games, then back into the flow of work.',
+      points:'68.68,38.73 73.80,36.78 84.86,31.79 86.53,37.39 88.31,43.48 76.10,48.36 74.11,48.60 68.37,46.65',
+      images:['assets/final/render-cafeteria.jpg','assets/images/s34_image111.png','assets/images/s34_image116.jpg','assets/images/s34_image109.jpg'] },
+    'library': { title:'Library', node:'library',
+      path:['library','workhall-central','training'],
+      narr:'The knowledge loop — expertise captured in the library, shared across the workhall, formalised in training.',
+      points:null, images:null }
+  };
+
+  var GALLERY = [
+    { name:'Reception', img:'assets/final/render-reception.jpg' },
+    { name:'Board Room', img:'assets/final/render-boardroom.jpg' },
+    { name:'Workhall', img:'assets/images/s32_image119.png' },
+    { name:'MD Cabin', img:'assets/images/s33_image103.png' },
+    { name:'Cafeteria', img:'assets/final/render-cafeteria.jpg' }
+  ];
+
+  var LOGOS = ["s07_image6.png","s07_image7.png","s07_image9.png","s07_image10.png","s07_image11.png","s07_image12.png",
+    "s07_image16.png","s07_image17.png","s07_image18.png","s07_image19.png","s07_image23.png","s07_image24.png",
+    "s07_image27.png","s07_image28.png","s07_image29.png","s07_image31.png","s07_image32.png","s07_image33.png",
+    "s07_image34.png","s07_image35.png","s07_image36.png","s07_image37.png","s07_image38.png","s07_image39.png",
+    "s07_image40.png","s07_image41.png","s07_image42.png","s07_image43.png","s07_image47.png","s07_image48.png",
+    "s07_image49.png","s07_image51.png","s07_image56.png","s07_image61.png","s07_image70.png","s07_image120.png"];
+
+  var CHAPTERS = [
+    { key:'about',    num:'01', label:'About' },
+    { key:'brand',    num:'02', label:'Brand' },
+    { key:'users',    num:'03', label:'Users' },
+    { key:'concept',  num:'04', label:'Concept' },
+    { key:'planning', num:'05', label:'Planning' },
+    { key:'spaces',   num:'06', label:'Spaces' }
+  ];
+  var CH_TITLES = { about:'About', brand:'Understanding the Brand', users:'Understanding the Users',
+    concept:'The Design Philosophy', planning:'Space Strategy', spaces:'Visual Direction' };
+  var DARK_CHAPTER_STEPS = null; // computed at boot: steps whose bg is dark (vm-scene, tagline-step)
+
+  /* ==================================================================
+     ROUTER — steps, chapters, rail, interstitials
+     ================================================================== */
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
+  var cur = 0, transLock = false;
+  var rail = document.getElementById('rail');
+  var chromeFoot = document.getElementById('chrome-foot');
+  var navHint = document.getElementById('nav-hint');
+  var interEl = document.getElementById('interstitial');
+  var interTimer = null;
+
+  var chIndex = {};
+  steps.forEach(function(s,i){
+    var ch = s.getAttribute('data-chapter');
+    (chIndex[ch] = chIndex[ch] || []).push(i);
+  });
+
+  CHAPTERS.forEach(function(ch){
+    var el = document.createElement('div');
+    el.className = 'rail-ch'; el.setAttribute('data-ch', ch.key);
+    el.innerHTML = '<div class="nd"></div><div class="meta"><span class="num">'+ch.num+'</span><span class="lbl">'+ch.label+'</span></div>';
+    el.addEventListener('click', function(){ goTo(chIndex[ch.key][0]); });
+    rail.appendChild(el);
+    var ticks = document.createElement('div');
+    ticks.className = 'rail-steps'; ticks.setAttribute('data-ch', ch.key);
+    chIndex[ch.key].forEach(function(){ ticks.appendChild(document.createElement('i')); });
+    rail.appendChild(ticks);
+  });
+
+  function chapterOf(i){ return steps[i].getAttribute('data-chapter'); }
+  function isDarkStep(i){ return steps[i].classList.contains('on-dark') || steps[i].classList.contains('vm-scene'); }
+
+  function render(){
+    var ch = chapterOf(cur);
+    steps.forEach(function(s,i){ s.classList.toggle('active', i===cur); });
+    var order = CHAPTERS.map(function(c){ return c.key; });
+    var chPos = order.indexOf(ch);
+    Array.prototype.forEach.call(rail.querySelectorAll('.rail-ch'), function(el){
+      var k = el.getAttribute('data-ch'), pos = order.indexOf(k);
+      el.classList.toggle('active', k===ch);
+      el.classList.toggle('done', chPos>-1 && pos>-1 && pos<chPos);
+    });
+    Array.prototype.forEach.call(rail.querySelectorAll('.rail-steps'), function(el){
+      var k = el.getAttribute('data-ch');
+      var list = chIndex[k], pos = list.indexOf(cur);
+      Array.prototype.forEach.call(el.children, function(t,j){ t.classList.toggle('on', k===ch && j<=pos); });
+    });
+    var chromeOn = ch!=='enter';
+    var darkCtx = isDarkStep(cur);
+    [rail, chromeFoot, navHint].forEach(function(el){ el.classList.toggle('on-dark-ctx', darkCtx); });
+    rail.classList.toggle('show', chromeOn && ch!=='thanks');
+    chromeFoot.classList.toggle('show', chromeOn);
+    navHint.classList.toggle('show', chromeOn);
+    document.getElementById('btn-prev').classList.toggle('dim', cur===0);
+    document.getElementById('btn-next').classList.toggle('dim', cur===steps.length-1);
+    document.getElementById('step-count').textContent =
+      ('0'+(cur)).slice(-2) + ' — ' + ('0'+(steps.length-1)).slice(-2);
+    stepHooks(cur);
+  }
+
+  function showInterstitial(ch, then){
+    var meta = CHAPTERS.filter(function(c){ return c.key===ch; })[0];
+    if(!meta){ then(); return; }
+    document.getElementById('int-num').textContent = meta.num;
+    document.getElementById('int-title').textContent = CH_TITLES[ch] || meta.label;
+    interEl.classList.add('open');
+    transLock = true;
+    interTimer = setTimeout(function(){ hideInterstitial(then); }, 1400);
+    interEl.onclick = function(){ clearTimeout(interTimer); hideInterstitial(then); };
+  }
+  function hideInterstitial(then){
+    interEl.classList.remove('open');
+    transLock = false;
+    then();
+  }
+
+  function goTo(i, skipInter){
+    if(transLock) return;
+    if(i<0 || i>steps.length-1 || i===cur) return;
+    var prevCh = chapterOf(cur), nextCh = chapterOf(i);
+    var crossing = nextCh!==prevCh && nextCh!=='enter' && nextCh!=='thanks' && i>cur;
+    cur = i;
+    if(crossing && !skipInter){
+      showInterstitial(nextCh, function(){ render(); });
+      render();
+    } else {
+      render();
+    }
+  }
+  function next(){ goTo(cur+1); }
+  function prev(){ goTo(cur-1, true); }
+
+  document.getElementById('btn-next').addEventListener('click', next);
+  document.getElementById('btn-prev').addEventListener('click', prev);
+  document.getElementById('begin-btn').addEventListener('click', function(){ goTo(1); });
+  document.getElementById('again-btn').addEventListener('click', function(){ goTo(0, true); });
+
+  document.addEventListener('keydown', function(e){
+    if(document.getElementById('rmodal').classList.contains('open')){
+      if(e.key==='Escape') closeRM();
+      else if(e.key==='ArrowRight') rmShow(rmIdx+1);
+      else if(e.key==='ArrowLeft') rmShow(rmIdx-1);
+      return;
+    }
+    if(e.key==='ArrowRight' || e.key===' ' || e.key==='PageDown'){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft' || e.key==='PageUp'){ e.preventDefault(); prev(); }
+    else if(e.key==='Escape' && interEl.classList.contains('open')){ clearTimeout(interTimer); hideInterstitial(function(){}); }
+  });
+
+  var touchStartX = null;
+  document.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', function(e){
+    if(touchStartX===null) { touchStartX = null; return; }
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if(dx > 60) prev(); else if(dx < -60) next();
+    touchStartX = null;
+  });
+
+  /* ==================================================================
+     STEP HOOKS
+     ================================================================== */
+  function stepHooks(i){
+    var s = steps[i];
+    if(s.querySelector('.stat-grid')) runCounters(s);
+    if(s.id==='st-gallery') galEnter();
+    if(s.querySelector('#req-grid')) revealGrid('#req-grid .req-cell', 65);
+    if(s.querySelector('#logo-wall')) revealGrid('#logo-wall .logo-cell', 26);
+    if(s.id==='st-plan') planEnter();
+  }
+
+  function revealGrid(sel, stagger){
+    var cells = document.querySelectorAll(sel);
+    Array.prototype.forEach.call(cells, function(c,j){
+      c.classList.remove('on');
+      setTimeout(function(){ c.classList.add('on'); }, 300 + j*stagger);
+    });
+  }
+
+  function runCounters(scope){
+    var cells = scope.querySelectorAll('.stat-cell');
+    Array.prototype.forEach.call(cells, function(c){ c.classList.remove('on'); c.querySelector('.cnt').textContent = '0'; });
+    Array.prototype.forEach.call(cells, function(c, j){
+      setTimeout(function(){
+        c.classList.add('on');
+        var target = parseInt(c.getAttribute('data-count'),10);
+        var t0 = performance.now(), dur = 1000;
+        (function anim(t){
+          var k = Math.max(0, Math.min(1,(t-t0)/dur));
+          k = 1-Math.pow(1-k,3);
+          c.querySelector('.cnt').textContent = Math.round(target*k);
+          if(k<1) requestAnimationFrame(anim);
+        })(t0);
+      }, 450 + j*600);
+    });
+  }
+
+  /* ==================================================================
+     ABOUT — clients wall
+     ================================================================== */
+  (function(){
+    var wall = document.getElementById('logo-wall');
+    LOGOS.forEach(function(name){
+      var cell = document.createElement('div');
+      cell.className = 'logo-cell';
+      var img = document.createElement('img');
+      img.src = 'assets/images/'+name;
+      img.onerror = function(){ cell.style.display='none'; };
+      cell.appendChild(img);
+      wall.appendChild(cell);
+    });
+  })();
+
+  /* ==================================================================
+     USERS — ecosystem
+     ================================================================== */
+  (function(){
+    var stack = document.getElementById('eco-stack');
+    USERS.forEach(function(u, i){
+      var row = document.createElement('div');
+      row.className = 'eco-row' + (i===0?' active':'');
+      row.innerHTML = '<div class="dot"></div><div class="nm">'+u.name+'</div><div class="ct">0'+(i+1)+'</div>';
+      row.addEventListener('click', function(){ selectUser(i); });
+      stack.appendChild(row);
+    });
+    function selectUser(i){
+      var rows = stack.querySelectorAll('.eco-row');
+      Array.prototype.forEach.call(rows, function(r,j){ r.classList.toggle('active', j===i); });
+      var u = USERS[i];
+      var img = document.getElementById('eco-img');
+      img.style.transition = 'opacity .5s';
+      img.style.opacity = 0;
+      setTimeout(function(){ img.src = u.img; img.style.opacity = 1; }, 220);
+      var list = document.getElementById('eco-needs-list');
+      list.innerHTML = '';
+      u.needs.forEach(function(n, j){
+        var chip = document.createElement('div');
+        chip.className = 'need-chip';
+        chip.textContent = n;
+        list.appendChild(chip);
+        setTimeout(function(){ chip.classList.add('on'); }, 180 + j*130);
+      });
+    }
+    selectUser(0);
+  })();
+
+  /* ==================================================================
+     CONCEPT — philosophy orbit
+     ================================================================== */
+  (function(){
+    var stage = document.getElementById('orbit-stage');
+    var coreT = document.getElementById('core-t'), coreS = document.getElementById('core-s');
+    var COPY = {
+      trust: ['Trust', 'Lines connect people — openness, shared sightlines, spaces that invite collaboration without asking.'],
+      agility: ['Agility', 'Connections rearrange — settings shift from focus to huddle to review as the work demands.'],
+      quiet: ['Quiet Confidence', 'Motion slows, the background softens — a workplace that never needs to raise its voice.']
+    };
+    Array.prototype.forEach.call(stage.querySelectorAll('.orb'), function(orb){
+      orb.addEventListener('mouseenter', function(){
+        var m = orb.getAttribute('data-mode');
+        stage.classList.add('paused');
+        orb.classList.add('hot');
+        coreT.innerHTML = COPY[m][0];
+        coreS.textContent = COPY[m][1];
+      });
+      orb.addEventListener('mouseleave', function(){
+        stage.classList.remove('paused');
+        orb.classList.remove('hot');
+        coreT.innerHTML = 'Defining your <span style="color:var(--maroon)">New Workplace</span>…';
+        coreS.textContent = 'Hover a value to see how the workplace responds.';
+      });
+    });
+  })();
+
+  /* ==================================================================
+     CONCEPT — the circuit
+     ================================================================== */
+  var AXW = 1916, AXH = 821;
+  function nx(k){ return AXO_NODES[k].x/100*AXW; }
+  function ny(k){ return AXO_NODES[k].y/100*AXH; }
+
+  (function(){
+    var svg = document.getElementById('axo-svg');
+    var NS = 'http://www.w3.org/2000/svg';
+    var selected = null;
+
+    Object.keys(AXO_SPACES).forEach(function(key){
+      var sp = AXO_SPACES[key];
+      if(!sp.points) return;
+      var poly = document.createElementNS(NS,'polygon');
+      var pts = sp.points.split(' ').map(function(pair){
+        var xy = pair.split(',');
+        return (parseFloat(xy[0])/100*AXW)+','+(parseFloat(xy[1])/100*AXH);
+      }).join(' ');
+      poly.setAttribute('points', pts);
+      poly.setAttribute('class','hotpoly');
+      poly.setAttribute('data-key', key);
+      poly.addEventListener('click', function(e){ e.stopPropagation(); selectSpace(key); });
+      svg.appendChild(poly);
+    });
+
+    var traceEl = document.createElementNS(NS,'path');
+    traceEl.setAttribute('class','trace');
+    svg.appendChild(traceEl);
+
+    Object.keys(AXO_NODES).forEach(function(k){
+      var g = document.createElementNS(NS,'g');
+      g.setAttribute('class','node'); g.setAttribute('data-node',k);
+      var pulse = document.createElementNS(NS,'circle');
+      pulse.setAttribute('cx',nx(k)); pulse.setAttribute('cy',ny(k)); pulse.setAttribute('r','9');
+      pulse.setAttribute('class','pulse');
+      var an = document.createElementNS(NS,'animate');
+      an.setAttribute('attributeName','r'); an.setAttribute('values','9;20;9');
+      an.setAttribute('dur','3.4s'); an.setAttribute('repeatCount','indefinite');
+      var an2 = document.createElementNS(NS,'animate');
+      an2.setAttribute('attributeName','opacity'); an2.setAttribute('values','.6;0;.6');
+      an2.setAttribute('dur','3.4s'); an2.setAttribute('repeatCount','indefinite');
+      pulse.appendChild(an); pulse.appendChild(an2);
+      var core = document.createElementNS(NS,'circle');
+      core.setAttribute('cx',nx(k)); core.setAttribute('cy',ny(k)); core.setAttribute('r','7');
+      core.setAttribute('class','core');
+      var tx = document.createElementNS(NS,'text');
+      tx.setAttribute('x',nx(k)+16); tx.setAttribute('y',ny(k)-14);
+      tx.textContent = AXO_NODES[k].label;
+      g.appendChild(pulse); g.appendChild(core); g.appendChild(tx);
+      var spKey = spaceForNode(k);
+      if(spKey){ g.addEventListener('click', function(e){ e.stopPropagation(); selectSpace(spKey); }); }
+      svg.appendChild(g);
+    });
+
+    function spaceForNode(nodeKey){
+      var found = null;
+      Object.keys(AXO_SPACES).forEach(function(sk){
+        if(AXO_SPACES[sk].node===nodeKey) found = sk;
+      });
+      return found;
+    }
+
+    function route(a, b){
+      var x1=nx(a), y1=ny(a), x2=nx(b), y2=ny(b);
+      var dx=x2-x1, dy=y2-y1;
+      var adx=Math.abs(dx), ady=Math.abs(dy);
+      var mx, my;
+      if(adx>ady){ mx = x1 + Math.sign(dx)*(adx-ady); my = y1; return 'L'+mx+','+my+' L'+x2+','+y2; }
+      else{ mx = x1; my = y1 + Math.sign(dy)*(ady-adx); return 'L'+mx+','+my+' L'+x2+','+y2; }
+    }
+
+    var list = document.getElementById('cir-list');
+    Object.keys(AXO_SPACES).forEach(function(key){
+      var sp = AXO_SPACES[key];
+      var item = document.createElement('div');
+      item.className = 'cir-item'; item.setAttribute('data-key', key);
+      item.innerHTML = '<div class="sq"></div><div class="nm">'+sp.title+'</div>' +
+        (sp.images ? '<div class="go">Renders →</div>' : '');
+      item.addEventListener('click', function(){
+        if(selected===key && sp.images){ openRM(key); return; }
+        selectSpace(key);
+      });
+      list.appendChild(item);
+    });
+
+    window.selectSpace = function(key){
+      selected = key;
+      var sp = AXO_SPACES[key];
+      Array.prototype.forEach.call(list.querySelectorAll('.cir-item'), function(el){
+        el.classList.toggle('active', el.getAttribute('data-key')===key);
+      });
+      Array.prototype.forEach.call(svg.querySelectorAll('.hotpoly'), function(el){
+        el.classList.toggle('sel', el.getAttribute('data-key')===key);
+      });
+      var pathNodes = sp.path || [];
+      Array.prototype.forEach.call(svg.querySelectorAll('.node'), function(el){
+        var nk = el.getAttribute('data-node');
+        el.classList.toggle('sel', pathNodes.indexOf(nk)!==-1);
+        el.classList.toggle('dim', pathNodes.indexOf(nk)===-1);
+      });
+      if(pathNodes.length>1){
+        var d = 'M'+nx(pathNodes[0])+','+ny(pathNodes[0]);
+        for(var i=1;i<pathNodes.length;i++) d += ' ' + route(pathNodes[i-1], pathNodes[i]);
+        traceEl.setAttribute('d', d);
+        traceEl.classList.remove('lit');
+        void traceEl.getBoundingClientRect();
+        var len = traceEl.getTotalLength();
+        traceEl.style.setProperty('--len', len);
+        traceEl.classList.add('lit');
+      }
+      var narr = document.getElementById('cir-narr');
+      narr.classList.remove('on');
+      setTimeout(function(){
+        narr.innerHTML = sp.narr + (sp.images ? ' &nbsp;<span style="color:var(--gray-text)">(click again for renders)</span>' : '');
+        narr.classList.add('on');
+      }, 200);
+    };
+  })();
+
+  /* ==================================================================
+     RENDER MODAL
+     ================================================================== */
+  var rmKey = null, rmIdx = 0;
+  var rmodal = document.getElementById('rmodal');
+  window.openRM = function(key){
+    rmKey = key;
+    var sp = AXO_SPACES[key];
+    if(!sp.images) return;
+    document.getElementById('rm-title-tx').textContent = sp.title;
+    var th = document.getElementById('rm-thumbs');
+    th.innerHTML = '';
+    sp.images.forEach(function(src, i){
+      var t = document.createElement('img');
+      t.src = src;
+      t.addEventListener('click', function(e){ e.stopPropagation(); rmShow(i); });
+      th.appendChild(t);
+    });
+    rmShow(0);
+    rmodal.classList.add('open');
+  };
+  window.rmShow = function(i){
+    var sp = AXO_SPACES[rmKey]; if(!sp) return;
+    rmIdx = (i + sp.images.length) % sp.images.length;
+    document.getElementById('rm-img').src = sp.images[rmIdx];
+    document.getElementById('rm-count').textContent = (rmIdx+1)+' / '+sp.images.length;
+    Array.prototype.forEach.call(document.getElementById('rm-thumbs').children, function(t,j){
+      t.classList.toggle('active', j===rmIdx);
+    });
+  };
+  window.closeRM = function(){ rmodal.classList.remove('open'); rmKey = null; };
+  document.getElementById('rm-close').addEventListener('click', closeRM);
+  rmodal.addEventListener('click', function(e){ if(e.target===rmodal) closeRM(); });
+
+  /* ==================================================================
+     PLANNING — brief grid
+     ================================================================== */
+  (function(){
+    var grid = document.getElementById('req-grid');
+    REQS.forEach(function(r){
+      var cell = document.createElement('div');
+      cell.className = 'req-cell';
+      cell.innerHTML = '<div class="ic"><img src="assets/final/'+r[0]+'" alt=""></div>' +
+        '<div class="nm">'+r[1]+'</div>' + (r[2] ? '<div class="sub">'+r[2]+'</div>' : '');
+      grid.appendChild(cell);
+    });
+  })();
+
+  /* ==================================================================
+     PLANNING — layered plan
+     ================================================================== */
+  var planBuilt = false, planLayer = 'structure', planAutoTimer = null;
+  function buildPlan(){
+    if(planBuilt) return; planBuilt = true;
+    var tabs = document.getElementById('layer-tabs');
+    PLAN_LAYERS.forEach(function(L){
+      var t = document.createElement('div');
+      t.className = 'ltab'; t.setAttribute('data-layer', L.key);
+      t.innerHTML = '<div class="nd"></div><div class="lb">'+L.label+'</div><div class="ct">'+L.count+'</div>';
+      t.addEventListener('click', function(){ clearTimeout(planAutoTimer); setLayer(L.key); });
+      tabs.appendChild(t);
+    });
+    var svg = document.getElementById('plan-veil');
+    var NS = 'http://www.w3.org/2000/svg';
+    var PW = 4096, PH = 1611;
+    var defs = document.createElementNS(NS,'defs');
+    var mask = document.createElementNS(NS,'mask');
+    mask.setAttribute('id','zmask');
+    var mr = document.createElementNS(NS,'rect');
+    mr.setAttribute('x',0); mr.setAttribute('y',0); mr.setAttribute('width',PW); mr.setAttribute('height',PH);
+    mr.setAttribute('fill','white');
+    mask.appendChild(mr);
+    defs.appendChild(mask); svg.appendChild(defs);
+    var veil = document.createElementNS(NS,'rect');
+    veil.setAttribute('x',0); veil.setAttribute('y',0); veil.setAttribute('width',PW); veil.setAttribute('height',PH);
+    veil.setAttribute('class','veil-rect');
+    veil.setAttribute('mask','url(#zmask)');
+    svg.appendChild(veil);
+    svg._mask = mask; svg._NS = NS; svg._PW = PW; svg._PH = PH;
+  }
+
+  function setLayer(key){
+    planLayer = key;
+    var svg = document.getElementById('plan-veil');
+    var NS = svg._NS, PW = svg._PW, PH = svg._PH;
+    Array.prototype.forEach.call(document.querySelectorAll('.ltab'), function(t){
+      t.classList.toggle('active', t.getAttribute('data-layer')===key);
+    });
+    var colorOn = key!=='structure';
+    document.getElementById('plan-color').style.opacity = colorOn ? 1 : 0;
+    Array.prototype.forEach.call(svg.querySelectorAll('.zpoly, .zlbl'), function(el){ el.remove(); });
+    Array.prototype.forEach.call(svg._mask.querySelectorAll('polygon'), function(el){ el.remove(); });
+    var zones = PLAN_ZONES[key];
+    if(zones){
+      svg.classList.add('zoned');
+      zones.forEach(function(z){
+        var ptsArr = z.points.split(' ').map(function(pair){
+          var xy = pair.split(',');
+          return [parseFloat(xy[0])/100*PW, parseFloat(xy[1])/100*PH];
+        });
+        var pts = ptsArr.map(function(p){ return p[0]+','+p[1]; }).join(' ');
+        var hole = document.createElementNS(NS,'polygon');
+        hole.setAttribute('points', pts); hole.setAttribute('fill','black');
+        svg._mask.appendChild(hole);
+        var oly = document.createElementNS(NS,'polygon');
+        oly.setAttribute('points', pts); oly.setAttribute('class','zpoly');
+        svg.appendChild(oly);
+        var cx0=0, cy0=1e9;
+        ptsArr.forEach(function(p){ cx0+=p[0]; if(p[1]<cy0) cy0=p[1]; });
+        cx0/=ptsArr.length;
+        var lbl = document.createElementNS(NS,'text');
+        lbl.setAttribute('x',cx0); lbl.setAttribute('y',Math.max(40, cy0-18));
+        lbl.setAttribute('text-anchor','middle'); lbl.setAttribute('class','zlbl');
+        lbl.textContent = z.label;
+        svg.appendChild(lbl);
+      });
+    } else {
+      svg.classList.remove('zoned');
+    }
+    var L = PLAN_LAYERS.filter(function(l){ return l.key===key; })[0];
+    var side = document.getElementById('plan-side');
+    var html = '<h5>'+L.side.title+'</h5>';
+    (L.side.rows||[]).forEach(function(r){ html += '<div class="pl-row"><span>'+r[0]+'</span><span class="v">'+r[1]+'</span></div>'; });
+    (L.side.notes||[]).forEach(function(n){ html += '<div class="pl-note">'+n+'</div>'; });
+    side.innerHTML = html;
+  }
+
+  function planEnter(){
+    buildPlan();
+    setLayer('structure');
+    clearTimeout(planAutoTimer);
+    planAutoTimer = setTimeout(function(){ if(planLayer==='structure') setLayer('layout'); }, 1500);
+  }
+
+  /* ==================================================================
+     PLANNING — occupancy
+     ================================================================== */
+  (function(){
+    var cards = document.getElementById('occ-cards');
+    OCC.forEach(function(z, i){
+      var c = document.createElement('div');
+      c.className = 'occ-card' + (i===1?' active':'');
+      c.innerHTML = '<div class="ic"><img src="assets/final/'+z.icon+'" alt=""></div>' +
+        '<div><div class="nm">'+z.name+'</div><div class="sub">'+z.rows.length+' line items</div></div>' +
+        '<div class="n">'+z.headline+'</div>';
+      c.addEventListener('click', function(){ selectZone(i); });
+      cards.appendChild(c);
+    });
+    function selectZone(i){
+      Array.prototype.forEach.call(cards.children, function(el,j){ el.classList.toggle('active', j===i); });
+      var z = OCC[i];
+      document.getElementById('od-title').textContent = z.name;
+      var box = document.getElementById('od-rows');
+      box.innerHTML = '';
+      z.rows.forEach(function(r, j){
+        var row = document.createElement('div');
+        row.className = 'od-row';
+        row.innerHTML = '<span class="a">'+r[0]+'</span><span class="r">'+r[1]+'</span>' +
+          '<span class="v'+(r[3]?' win':'')+'">'+r[2]+'</span>';
+        box.appendChild(row);
+        setTimeout(function(){ row.classList.add('on'); }, 110 + j*85);
+      });
+      if(z.foot){
+        var f = document.createElement('div');
+        f.className = 'pl-foot'; f.textContent = z.foot;
+        box.appendChild(f);
+      }
+    }
+    selectZone(1);
+  })();
+
+  /* ==================================================================
+     SPACES — gallery
+     ================================================================== */
+  var galBuilt = false, galIdx = 0;
+  function galEnter(){
+    if(!galBuilt){
+      galBuilt = true;
+      var stage = document.getElementById('gal-stage');
+      var nav = document.getElementById('gal-nav');
+      GALLERY.forEach(function(g, i){
+        var slide = document.createElement('div');
+        slide.className = 'gal-slide';
+        slide.innerHTML = '<img src="'+g.img+'" alt="'+g.name+'">';
+        stage.appendChild(slide);
+        var gi = document.createElement('div');
+        gi.className = 'gi'; gi.textContent = g.name;
+        gi.addEventListener('click', function(){ galShow(i); });
+        nav.appendChild(gi);
+      });
+    }
+    galShow(0);
+  }
+  function galShow(i){
+    galIdx = (i + GALLERY.length) % GALLERY.length;
+    var slides = document.querySelectorAll('.gal-slide');
+    Array.prototype.forEach.call(slides, function(s,j){ s.classList.toggle('show', j===galIdx); });
+    Array.prototype.forEach.call(document.querySelectorAll('.gal-nav .gi'), function(g,j){ g.classList.toggle('active', j===galIdx); });
+    document.getElementById('gal-name').textContent = GALLERY[galIdx].name;
+    document.getElementById('gal-ix').textContent = ('0'+(galIdx+1)).slice(-2)+' / '+('0'+GALLERY.length).slice(-2);
+  }
+
+  /* ==================================================================
+     boot: preload heavies, deep links
+     ================================================================== */
+  ['assets/final/plan-line-full.jpg','assets/final/plan-color-full.jpg',
+   'assets/final/axonometric.jpg','assets/final/render-reception.jpg',
+   'assets/final/render-boardroom.jpg','assets/final/render-cafeteria.jpg',
+   'assets/final/material-board.jpg'].forEach(function(src){
+    var im = new Image(); im.src = src;
+  });
+
+  var params = new URLSearchParams(location.search);
+  if(params.get('nofx')==='1'){
+    var nofx = document.createElement('style');
+    nofx.textContent = '*{transition:none!important; animation:none!important;} .rv{opacity:1!important; transform:none!important;} .stat-cell,.req-cell,.logo-cell,.od-row,.need-chip{opacity:1!important; transform:none!important;} .cir-narr{opacity:1!important;}';
+    document.head.appendChild(nofx);
+  }
+  var startStep = parseInt(params.get('step'),10);
+  var startCh = params.get('chapter');
+  if(!isNaN(startStep)){ cur = Math.max(0, Math.min(steps.length-1, startStep)); }
+  else if(startCh && chIndex[startCh]){ cur = chIndex[startCh][0]; }
+  render();
+})();
+</script>
