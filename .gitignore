@@ -4,5 +4,20 @@ keynote/
 classic.html
 corporate.html
 premium.html
+premium2.html
 workplace-strategy.html
+explorer.html
+explorer-layers.html
+index2.html
 serve.py
+
+# superseded draft renders and assets only used by excluded variants
+assets/final/render-boardroom-v2.jpg
+assets/final/render-cafeteria-v2.jpg
+assets/final/render-reception-v2.jpg
+assets/final/render-training-v2.jpg
+assets/final/render-workhall-v2.jpg
+assets/final/site-analysis-real.png
+assets/final/zoning-concept-real.png
+assets/videos/hero-v2.mp4
+assets/pdf2/

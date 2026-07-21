@@ -7,13 +7,9 @@
 <style>
   /* ============================================================
      SIDVIN OUTOTEC — guided journey, restrained corporate register.
-     Colors and type are the deck's own — nothing invented:
+     22.07.26 revision (index2). Colors and type are the deck's own:
        maroon #980000, cyan #5FC9E6, navy #0F162F, charcoal #252525,
        white / paper #F3F3F3. Headings Poppins, body Arial.
-     Page background is white throughout, exactly like the source
-     deck. The two/three moments the deck itself goes dark (Vision &
-     Mission, the tagline interlude, the Philosophy card) stay dark —
-     everything else stays on paper, the way it reads in the PDF.
      ============================================================ */
   :root{
     --ink:#000000;
@@ -27,7 +23,7 @@
     --ease:cubic-bezier(.22,.61,.36,1);
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html,body{height:100%; overflow:hidden; background:var(--white);}
+  html,body{height:100%; overflow:hidden; background:var(--paper);}
   body{
     font-family:Arial, Helvetica, sans-serif;
     color:var(--ink);
@@ -38,18 +34,20 @@
   img{ user-select:none; -webkit-user-drag:none; }
 
   /* ---------- shell / steps ---------- */
-  #journey{ position:relative; z-index:2; width:100%; height:100vh; background:var(--white); }
+  #journey{ position:relative; z-index:2; width:100%; height:100vh; background:var(--paper); }
   .step{
-    position:absolute; inset:0; background:var(--white);
+    position:absolute; inset:0; background:var(--paper);
     display:flex; align-items:center; justify-content:center;
     opacity:0; visibility:hidden;
     transition:opacity .6s var(--ease), visibility 0s linear .6s;
     padding:64px 96px 84px 96px;
   }
   .step.active{ opacity:1; visibility:visible; transition:opacity .6s var(--ease), visibility 0s; }
+  .step[data-evo="1"]{ transition:opacity 1s var(--ease), visibility 0s linear 1s; }
+  .step[data-evo="1"].active{ transition:opacity 1s var(--ease), visibility 0s; }
   .step-inner{ width:100%; max-width:1680px; height:100%; position:relative; display:flex; flex-direction:column; justify-content:center; }
   .step.on-paper{ background:var(--paper); }
-  .step.on-dark{ background:var(--navy); }
+  .step.on-dark{ background:var(--charcoal); }
 
   .rv{ opacity:0; transform:translateY(16px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
   .step.active .rv{ opacity:1; transform:none; }
@@ -69,21 +67,21 @@
   p.lede b{ font-weight:700; }
   .on-dark p.lede{ color:#f2f2f2; }
 
-  /* ---------- left chapter rail (light) ---------- */
+  /* ---------- top-left chapter rail (light) ---------- */
   #rail{
-    position:fixed; left:0; top:0; bottom:0; width:44px; z-index:40;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+    position:fixed; left:44px; top:64px; width:44px; z-index:40;
+    display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start; gap:14px;
     background:transparent;
     opacity:0; pointer-events:none; transition:opacity .7s var(--ease);
   }
   #rail.show{ opacity:1; pointer-events:auto; }
-  .rail-ch{ position:relative; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:6px; }
+  .rail-ch{ position:relative; display:flex; align-items:center; cursor:pointer; padding:6px 0; }
   .rail-ch .nd{
-    width:9px; height:9px; border-radius:50%; flex:none;
+    width:18px; height:1px; border-radius:0; flex:none;
     background:var(--gray-line);
-    transition:background .3s, transform .3s;
+    transition:background .3s, width .3s;
   }
-  .rail-ch.active .nd{ background:var(--maroon); transform:scale(1.35); }
+  .rail-ch.active .nd{ background:var(--maroon); width:26px; }
   .rail-ch.done .nd{ background:var(--charcoal); }
   .rail-ch .tip{
     position:absolute; left:calc(100% + 16px); top:50%; transform:translateY(-50%) translateX(-6px);
@@ -139,10 +137,10 @@
   #nav-hint.on-dark-ctx .nav-btn svg{ stroke:#fff; }
   #nav-hint.on-dark-ctx #step-count{ color:rgba(255,255,255,.55); }
 
-  /* ---------- chapter interstitial (matches the deck's own divider style) ---------- */
+  /* ---------- chapter interstitial ---------- */
   #interstitial{
     position:fixed; inset:0; z-index:60; display:flex; align-items:center; justify-content:center;
-    background:var(--white);
+    background:var(--paper);
     opacity:0; visibility:hidden; transition:opacity .45s var(--ease), visibility 0s linear .45s;
     cursor:pointer;
   }
@@ -161,18 +159,19 @@
   #interstitial.open .int-title{ opacity:1; transform:none; }
   #interstitial.open .int-line{ width:110px; }
 
-  /* ---------- ENTER (the deck's own opening: video plays clear/unblurred, no duplicate text — just a CTA) ---------- */
+  /* ---------- ENTER (video hero — 22.07.26 revision video, baked title/CTA) ---------- */
   #st-enter{ padding:0; background:#000; }
   .landing-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
   .landing-scrim{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.32) 100%); }
   .enter-center{ position:relative; z-index:2; text-align:center; width:100%; }
+  .enter-center{ position:absolute; left:75.5%; top:72.8%; width:auto; text-align:left; z-index:2; }
   #begin-btn{
     display:inline-flex; align-items:center; gap:12px;
-    font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px; letter-spacing:.24em; text-indent:.24em; text-transform:uppercase;
-    color:#fff; background:var(--maroon); border:1.5px solid var(--maroon); border-radius:40px;
-    padding:16px 36px; cursor:pointer; transition:background .3s, border-color .3s; box-shadow:0 4px 22px rgba(0,0,0,.28);
+    font-family:'Poppins',sans-serif; font-weight:500; font-size:12.5px; letter-spacing:.2em; text-indent:.2em; text-transform:uppercase;
+    color:#fff; background:rgba(13,15,15,.28); border:1px solid rgba(255,255,255,.4); border-radius:2px;
+    padding:16px 34px; cursor:pointer; transition:background .3s, border-color .3s; backdrop-filter:blur(1px);
   }
-  #begin-btn:hover{ background:#7a0000; border-color:#7a0000; }
+  #begin-btn:hover{ background:rgba(13,15,15,.5); border-color:#fff; }
   #begin-btn .arr{ transition:transform .3s var(--ease); }
   #begin-btn:hover .arr{ transform:translateX(5px); }
 
@@ -205,7 +204,7 @@
   .mile .tx{ font-family:'Poppins',sans-serif; font-weight:600; font-size:15px; color:var(--ink); line-height:1.4; }
   .mile .ix{ font-family:'Poppins',sans-serif; font-weight:700; font-size:20px; color:var(--maroon); }
 
-  /* ---------- ABOUT: vision & mission — the deck's own dark slide ---------- */
+  /* ---------- ABOUT: vision & mission ---------- */
   .vm-scene{ padding:0; }
   .vm-bg{ position:absolute; inset:0; }
   .vm-bg img{ width:100%; height:100%; object-fit:cover; }
@@ -239,42 +238,21 @@
   .who-card .cap .nm{ font-family:'Poppins',sans-serif; font-weight:700; font-size:20px; color:#fff; font-style:italic; }
   .who-card .cap .df{ font-size:13px; line-height:1.6; color:#e9e9e9; margin-top:8px; max-width:320px; opacity:0; transform:translateY(8px); transition:opacity .5s var(--ease) .1s, transform .5s var(--ease) .1s; }
   .who-card:hover .cap .df{ opacity:1; transform:none; }
+  .who-card .cap .needs-mini{ margin-top:10px; max-width:320px; opacity:0; transform:translateY(8px); transition:opacity .5s var(--ease) .1s, transform .5s var(--ease) .1s; }
+  .who-card:hover .cap .needs-mini{ opacity:1; transform:none; }
+  .who-card .cap .needs-mini div{ display:flex; align-items:center; gap:10px; font-size:12px; line-height:1.9; color:#e9e9e9; }
+  .who-card .cap .needs-mini div::before{ content:''; width:12px; height:1px; background:var(--maroon); flex:none; }
 
-  /* ---------- BRAND: tagline — the deck's own dark interlude ---------- */
+  /* ---------- BRAND: tagline ---------- */
   .tagline-step h1{ font-family:'Poppins',sans-serif; font-weight:400; font-size:44px; line-height:1.3; color:#fff; max-width:1300px; }
   .tagline-step h1 b{ font-weight:700; }
   .tagline-step h1 .mr{ font-weight:700; color:var(--maroon); }
 
-  /* ---------- USERS: ecosystem ---------- */
-  .eco-wrap{ display:grid; grid-template-columns:1fr 1.15fr; gap:56px; align-items:center; max-width:1560px; }
-  .eco-stack{ display:flex; flex-direction:column; gap:2px; }
-  .eco-row{ display:flex; align-items:center; gap:18px; padding:18px 22px; border:1px solid var(--gray-line); background:#fff; cursor:pointer; transition:border-color .3s, background .3s; }
-  .eco-row .dot{ width:9px; height:9px; border-radius:50%; background:var(--gray-text); opacity:.4; flex:none; transition:all .3s; }
-  .eco-row .nm{ font-family:'Poppins',sans-serif; font-weight:600; font-size:16.5px; color:var(--gray-text); transition:color .3s; }
-  .eco-row .ct{ margin-left:auto; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--gray-text); opacity:.6; }
-  .eco-row:hover{ border-color:#c9c9c9; }
-  .eco-row.active{ border-color:var(--maroon); background:#fbeceb; }
-  .eco-row.active .dot{ background:var(--maroon); opacity:1; }
-  .eco-row.active .nm{ color:var(--ink); }
-  .eco-detail{ position:relative; min-height:420px; }
-  .eco-photo{ position:absolute; top:0; right:0; width:58%; aspect-ratio:4/4.6; overflow:hidden; }
-  .eco-photo img{ width:100%; height:100%; object-fit:cover; }
-  .eco-needs{ position:absolute; left:0; bottom:6%; width:56%; background:#fff; border:1px solid var(--gray-line); box-shadow:0 18px 50px rgba(0,0,0,.10); padding:28px 32px; }
-  .eco-needs h4{ font-family:'Poppins',sans-serif; font-weight:700; font-size:11.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--maroon); margin-bottom:14px; }
-  .need-chip{ display:flex; align-items:center; gap:12px; padding:8px 0; font-size:14px; color:var(--ink); opacity:0; transform:translateX(-10px); transition:opacity .45s var(--ease), transform .45s var(--ease); }
-  .need-chip::before{ content:''; width:14px; height:1px; background:var(--maroon); flex:none; }
-  .need-chip.on{ opacity:1; transform:none; }
+  /* ---------- USERS: The User (reuses .who-card, see BRAND) ---------- */
 
   /* ---------- USERS: generations ---------- */
-  .gen-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:32px; max-width:1400px; }
-  .gen-cell{ position:relative; aspect-ratio:3/3.4; overflow:hidden; }
-  .gen-cell img{ width:100%; height:100%; object-fit:cover; transition:transform .8s var(--ease); }
-  .gen-cell:hover img{ transform:scale(1.03); }
-  .gen-cell .veil{ position:absolute; inset:0; background:linear-gradient(180deg, transparent 55%, rgba(0,0,0,.75) 100%); }
-  .gen-cell .cap{ position:absolute; left:16px; bottom:14px; font-family:'Poppins',sans-serif; font-weight:700; font-size:16px; color:#fff; font-style:italic; }
-  .gen-cell .yr{ position:absolute; left:16px; bottom:40px; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:#cfe9f2; }
 
-  /* ---------- CONCEPT: philosophy — the deck's own dark card ---------- */
+  /* ---------- CONCEPT: philosophy ---------- */
   .phil-card{ background:var(--charcoal); padding:52px 60px; }
   .phil-wrap{ display:grid; grid-template-columns:1fr 460px; gap:36px; align-items:center; max-width:1560px; width:100%; }
   #orbit-stage{ position:relative; height:46vh; max-height:460px; display:flex; align-items:center; justify-content:center; }
@@ -296,11 +274,19 @@
   .phil-copy p.lede{ color:#d8d8d8; margin-top:14px; }
   .phil-rule{ width:44px; height:3px; background:var(--charcoal); margin:18px 0; }
 
+  /* ---------- EVOLVING STAGE — one shared frame across Site Check -> Requirements -> Zoning -> Layout -> Occupancy -> Axo ---------- */
+  .evo-frame{ position:relative; width:100%; aspect-ratio:1916/821; background:#EDEBE6; border:1px solid var(--gray-line); overflow:hidden; }
+  .evo-frame img{ position:absolute; inset:0; width:100%; height:100%; object-fit:fill; display:block; }
+  .evo-frame.kb img{ animation:kenburns 15s var(--ease) forwards; }
+  .evo-tilt-out{ animation:evoTiltOut .85s var(--ease) forwards; }
+  .evo-tilt-in{ animation:evoTiltIn .85s var(--ease) forwards; }
+  @keyframes evoTiltOut{ from{ transform:rotateX(0deg); opacity:1; } to{ transform:rotateX(-16deg); opacity:0; } }
+  @keyframes evoTiltIn{ from{ transform:rotateX(16deg); opacity:0; } to{ transform:rotateX(0deg); opacity:1; } }
+
   /* ---------- CONCEPT: circuit ---------- */
   #st-circuit{ padding-right:64px; }
-  .circuit-wrap{ display:grid; grid-template-columns:1fr 320px; gap:40px; align-items:center; width:100%; max-width:1720px; }
-  .axo-stage{ position:relative; }
-  .axo-stage img{ width:100%; height:auto; display:block; }
+  .circuit-wrap{ display:grid; grid-template-columns:1fr 320px; gap:40px; align-items:center; width:100%; max-width:1720px; perspective:1400px; }
+  .axo-stage{ transform-style:preserve-3d; }
   #axo-svg{ position:absolute; inset:0; width:100%; height:100%; }
   #axo-svg .hotpoly{ fill:rgba(152,0,0,0); stroke:rgba(152,0,0,0); stroke-width:2; cursor:pointer; pointer-events:fill; transition:fill .3s, stroke .3s; }
   #axo-svg .hotpoly:hover{ fill:rgba(152,0,0,.14); stroke:rgba(152,0,0,.55); }
@@ -342,9 +328,79 @@
   .req-cell .nm{ font-family:'Poppins',sans-serif; font-weight:700; font-size:11px; letter-spacing:.02em; color:var(--ink); line-height:1.35; text-transform:uppercase; }
   .req-cell .sub{ font-size:10.5px; color:var(--gray-text); margin-top:3px; }
 
+  /* ---------- PLANNING: Site Due Diligence (sequential reveal) ---------- */
+  #st-sitecheck{ padding-right:64px; }
+  .site-wrap{ display:grid; grid-template-columns:1fr 320px; gap:40px; align-items:center; width:100%; max-width:1720px; }
+  .site-stage{ opacity:0; filter:blur(6px); transform:scale(1.01); transition:opacity 1.1s var(--ease), filter 1.1s var(--ease), transform 1.1s var(--ease); }
+  .site-stage.in{ opacity:1; filter:none; transform:none; }
+  .site-tag{
+    position:absolute; left:16px; top:14px; z-index:4; opacity:0; transition:opacity .6s var(--ease);
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink);
+    background:rgba(255,255,255,.85); padding:6px 12px; border:1px solid var(--gray-line);
+  }
+  .site-tag.on{ opacity:1; }
+  .site-dot{ position:absolute; width:11px; height:11px; margin:-5.5px 0 0 -5.5px; border-radius:50%; background:var(--maroon);
+    box-shadow:0 0 0 0 rgba(152,0,0,.5); opacity:0; transform:scale(.4); transition:opacity .35s var(--ease), transform .35s var(--ease); }
+  .site-dot.on{ opacity:1; transform:scale(1); animation:sitePulse 1.8s var(--ease) .1s 2; }
+  @keyframes sitePulse{ 0%{ box-shadow:0 0 0 0 rgba(152,0,0,.5);} 70%{ box-shadow:0 0 0 14px rgba(152,0,0,0);} 100%{ box-shadow:0 0 0 0 rgba(152,0,0,0);} }
+  .site-label{ position:absolute; z-index:4; pointer-events:none; opacity:0; transition:opacity .3s var(--ease);
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:12px; color:var(--ink); white-space:nowrap; }
+  .site-label.on{ opacity:1; }
+  .site-label .ln{ display:inline-block; width:22px; height:2px; background:var(--maroon); vertical-align:middle; margin-right:8px; }
+  .site-side .it{ font-style:italic; font-size:13.5px; color:var(--gray-text); }
+  .site-side .ttl{ font-family:'Poppins',sans-serif; font-weight:800; font-size:36px; color:var(--maroon); margin:6px 0 4px; }
+  .site-side p.lede{ font-size:13.5px; margin-top:14px; }
+  .site-list{ margin-top:22px; display:flex; flex-direction:column; }
+  .site-item{ display:flex; align-items:center; gap:12px; padding:9px 4px; border-bottom:1px solid var(--gray-line); opacity:.35; transition:opacity .4s var(--ease); }
+  .site-item.on{ opacity:1; }
+  .site-item .sq{ width:7px; height:7px; background:var(--gray-text); opacity:.5; transform:rotate(45deg); flex:none; transition:all .3s; }
+  .site-item.on .sq{ background:var(--maroon); opacity:1; }
+  .site-item .nm{ font-family:'Poppins',sans-serif; font-weight:600; font-size:13.5px; color:var(--ink); }
+  .site-narr{ margin-top:16px; min-height:46px; font-size:12.5px; line-height:1.7; color:var(--charcoal); border-left:2px solid var(--charcoal); padding-left:14px; opacity:0; transition:opacity .45s; }
+  .site-narr.on{ opacity:1; }
+  .site-replay{ margin-top:20px; display:inline-flex; align-items:center; gap:9px; font-family:'Poppins',sans-serif; font-weight:600; font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--gray-text);
+    background:none; border:1px solid var(--gray-line); padding:9px 16px; cursor:pointer; transition:color .3s, border-color .3s; }
+  .site-replay:hover{ color:var(--maroon); border-color:var(--maroon); }
+  .site-addr{ margin-top:20px; font-size:12px; line-height:1.7; color:var(--gray-text); border-top:1px solid var(--gray-line); padding-top:14px; }
+  .site-addr b{ color:var(--ink); }
+
+
+  /* ---------- PLANNING: Finished Layout / Axonometric tab merge ---------- */
+  .plan-tabs{ display:flex; gap:8px; margin-top:6px; }
+  .plan-tab{ font-family:'Poppins',sans-serif; font-weight:600; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--gray-text);
+    background:#fff; border:1px solid var(--gray-line); padding:9px 20px; cursor:pointer; transition:color .3s, border-color .3s, background .3s; }
+  .plan-tab.active{ color:#fff; background:var(--maroon); border-color:var(--maroon); }
+  .plan-view{ display:none; }
+  .plan-view.active{ display:block; }
+  #plan-hotspot-svg{ position:absolute; inset:0; width:100%; height:100%; }
+  .plan-hotspot{ fill:rgba(152,0,0,0); stroke:none; cursor:pointer; pointer-events:fill; transition:fill .25s; }
+  .plan-hotspot:hover{ fill:rgba(152,0,0,.16); }
+  .plan-hotspot-pulse{ fill:none; stroke:rgba(152,0,0,.5); stroke-width:.4; opacity:.7; }
+  .plan-info, .axo-info{ display:none; }
+  .plan-info.active, .axo-info.active{ display:block; }
+
+  /* ---------- PLANNING: collapsible glass overlay (floats on the layout/axo image) ---------- */
+  .plan-overlay{
+    position:absolute; top:-47px; right:16px; width:300px; z-index:5; padding:16px 34px 16px 18px;
+    background:rgba(255,255,255,.55); border:1px solid rgba(255,255,255,.65); border-radius:10px;
+    box-shadow:0 16px 44px rgba(0,0,0,.16); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    max-height:calc(100% - 32px); overflow:hidden;
+  }
+  .overlay-toggle{
+    position:absolute; top:14px; right:14px; width:26px; height:26px; border-radius:50%; z-index:2;
+    border:1px solid var(--gray-line); background:rgba(255,255,255,.8); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:background .25s;
+  }
+  .overlay-toggle:hover{ background:#fff; }
+  .overlay-toggle svg{ width:11px; height:11px; stroke:var(--ink); stroke-width:2; fill:none; transition:transform .35s var(--ease); }
+  .plan-overlay.collapsed .overlay-toggle svg{ transform:rotate(180deg); }
+  .overlay-body{ overflow:hidden; max-height:420px; opacity:1; margin-top:16px; transition:max-height .4s var(--ease), opacity .3s var(--ease), margin-top .4s var(--ease); }
+  .plan-overlay.collapsed .overlay-body{ max-height:0; opacity:0; margin-top:0; }
+
   /* ---------- PLANNING: layers ---------- */
-  #st-plan{ padding-right:64px; padding-left:150px; }
-  .plan-wrap{ display:grid; grid-template-columns:220px 1fr; gap:32px; align-items:center; width:100%; max-width:1780px; }
+  #st-plan{ padding-right:64px; }
+  .plan-wrap{ width:100%; max-width:1720px; }
+  .plan-stage-wrap{ position:relative; perspective:1400px; }
   .layer-tabs{ display:flex; flex-direction:column; gap:2px; }
   .ltab{ display:flex; align-items:center; gap:14px; padding:11px 8px; cursor:pointer; border-bottom:1px solid var(--gray-line); }
   .ltab .nd{ width:19px; height:19px; flex:none; border-radius:50%; border:1.5px solid var(--gray-line); background:#fff; transition:border-color .3s; }
@@ -353,24 +409,15 @@
   .ltab:hover .lb{ color:var(--ink); }
   .ltab.active .nd{ border-color:var(--maroon); background:var(--maroon); }
   .ltab.active .lb{ color:var(--ink); }
-  .plan-stage{ position:relative; width:100%; aspect-ratio:4096/1611; background:#EDEBE6; border:1px solid var(--gray-line); overflow:hidden; }
-  .plan-stage img{ position:absolute; inset:0; width:100%; height:100%; object-fit:fill; transition:opacity .8s var(--ease); }
-  #plan-line{ opacity:1; }
-  #plan-color{ opacity:0; }
-  #plan-veil{ position:absolute; inset:0; width:100%; height:100%; }
-  #plan-veil .veil-rect{ fill:rgba(255,255,255,.68); opacity:0; transition:opacity .6s var(--ease); }
-  #plan-veil.zoned .veil-rect{ opacity:1; }
-  #plan-veil .zpoly{ fill:rgba(152,0,0,.001); stroke:var(--maroon); stroke-width:4; opacity:0; transition:opacity .5s var(--ease); }
-  #plan-veil.zoned .zpoly{ opacity:1; }
-  #plan-veil .zlbl{ font-family:Arial; font-size:30px; font-weight:bold; fill:var(--ink); paint-order:stroke; stroke:#fff; stroke-width:8px; opacity:0; transition:opacity .5s .15s; }
-  #plan-veil.zoned .zlbl{ opacity:1; }
-  .plan-side{ position:absolute; right:20px; top:20px; width:260px; max-height:calc(100% - 40px); overflow:auto; background:rgba(255,255,255,.94); border:1px solid var(--gray-line); box-shadow:0 12px 40px rgba(0,0,0,.10); padding:20px 22px; }
+  .plan-stage{ transform-style:preserve-3d; }
+  .plan-stage img{ opacity:0; transition:opacity .8s var(--ease); }
+  .plan-stage img.on{ opacity:1; }
+  .plan-side-static{ margin-top:16px; max-height:340px; overflow:auto; background:rgba(255,255,255,.94); border:1px solid var(--gray-line); box-shadow:0 12px 40px rgba(0,0,0,.10); padding:20px 22px; }
   .plan-side h5{ font-family:'Poppins',sans-serif; font-weight:700; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--maroon); margin-bottom:12px; }
   .pl-row{ display:flex; justify-content:space-between; gap:14px; font-size:12px; color:var(--ink); padding:5px 0; border-bottom:1px solid var(--gray-line); }
   .pl-row .v{ font-weight:700; }
   .pl-note{ font-size:11.5px; line-height:1.6; color:var(--gray-text); padding:5px 0; }
   .pl-note::before{ content:'· '; color:var(--maroon); }
-  .pl-foot{ font-size:10.5px; font-style:italic; color:var(--gray-text); margin-top:10px; }
 
   /* ---------- PLANNING: occupancy ---------- */
   .occ-wrap{ display:grid; grid-template-columns:390px 1fr; gap:48px; align-items:start; width:100%; max-width:1560px; }
@@ -395,6 +442,7 @@
   .od-row .r{ font-size:13px; color:var(--gray-text); }
   .od-row .v{ font-family:'Poppins',sans-serif; font-weight:700; font-size:14px; color:var(--ink); }
   .od-row .v.win{ color:var(--maroon); }
+  .pl-foot{ font-size:10.5px; font-style:italic; color:var(--gray-text); margin-top:10px; }
 
   /* ---------- SPACES: materials ---------- */
   .mat-wrap{ display:grid; grid-template-columns:.72fr 1fr; gap:60px; align-items:center; max-width:1640px; }
@@ -409,9 +457,34 @@
   .gal-slide.show{ opacity:1; }
   .gal-slide.show img{ animation:kenburns 16s var(--ease) forwards; }
   @keyframes kenburns{ from{ transform:scale(1.0); } to{ transform:scale(1.06); } }
+  #gal-stage.pan-mode .gal-slide.show img{
+    animation:none; cursor:grab;
+    transform:scale(1.35) translate(var(--px,0%), var(--py,0%));
+    transition:transform .25s var(--ease);
+  }
+  #gal-stage.pan-mode .gal-slide.show img.is-dragging{ cursor:grabbing; transition:none; }
+  .gal-mute{ position:absolute; top:96px; right:192px; z-index:6; width:38px; height:38px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.3); background:rgba(0,0,0,.35); backdrop-filter:blur(6px); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:background .25s, border-color .25s; }
+  .gal-mute:hover{ background:rgba(0,0,0,.55); border-color:rgba(255,255,255,.55); }
+  .gal-mute svg{ width:16px; height:16px; stroke:#fff; fill:none; stroke-width:1.6; }
+  .gal-mute .muted-line{ display:none; }
+  .gal-mute.is-muted .muted-line{ display:block; }
+  .gal-panmode{ right:144px; }
+  .gal-panmode.active, .gal-keyplan-toggle.active{ background:rgba(152,0,0,.55); border-color:rgba(255,255,255,.55); }
+  .gal-keyplan-toggle{ right:96px; }
+  .gal-keyplan{ position:absolute; top:150px; right:96px; z-index:6; width:140px; height:108px;
+    border:1px solid rgba(255,255,255,.3); background:rgba(0,0,0,.35); backdrop-filter:blur(6px);
+    border-radius:8px; overflow:hidden; }
+  .gkp-crop{ position:absolute; inset:0; background-repeat:no-repeat; }
+  .gkp-mark{ position:absolute; border:1.5px solid var(--maroon); border-radius:2px; pointer-events:none;
+    box-shadow:0 0 0 1px rgba(0,0,0,.4); }
+  .gkp-label{ position:absolute; left:0; right:0; bottom:0; padding:5px 10px; text-align:center;
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:9.5px; letter-spacing:.2em; text-transform:uppercase;
+    color:#fff; background:linear-gradient(0deg, rgba(0,0,0,.65), transparent); }
   .gal-scrim{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.32) 0%, transparent 30%, transparent 58%, rgba(0,0,0,.72) 100%); pointer-events:none; }
-  .gal-name{ position:absolute; left:168px; bottom:74px; z-index:5; }
-  .gal-name .k{ font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--maroon); margin-bottom:10px; }
+  .gal-name{ position:absolute; left:96px; bottom:64px; z-index:5; }
+  .gal-name .k{ font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:#fff; margin-bottom:10px; }
   .gal-name .n{ font-family:'Poppins',sans-serif; font-weight:700; font-size:42px; color:#fff; line-height:1; }
   .gal-name .ix{ font-family:'Poppins',sans-serif; font-weight:400; font-size:12.5px; letter-spacing:.18em; color:#cfcfcf; margin-top:10px; }
   .gal-nav{ position:absolute; right:96px; bottom:150px; z-index:5; display:flex; flex-direction:column; gap:8px; text-align:right; }
@@ -419,6 +492,19 @@
   .gal-nav .gi:hover{ color:#fff; }
   .gal-nav .gi.active{ color:#fff; letter-spacing:.06em; }
   .gal-nav .gi.active::after{ content:''; display:inline-block; width:16px; height:1px; background:var(--maroon); margin-left:10px; vertical-align:middle; }
+  .gal-nav .gi-opt{ font-family:'Poppins',sans-serif; font-weight:400; font-size:11px; letter-spacing:.04em; color:rgba(255,255,255,.4); cursor:pointer;
+    display:none; transition:color .25s; }
+  .gal-nav .gi-opt.show{ display:block; }
+  .gal-nav .gi-opt:hover{ color:rgba(255,255,255,.8); }
+  .gal-nav .gi-opt.active{ color:#fff; }
+  .gal-opts{ position:absolute; left:96px; bottom:170px; display:flex; gap:8px; z-index:6; }
+  .gal-opts img{ height:44px; width:66px; object-fit:cover; cursor:pointer; opacity:.45; border:1px solid transparent; border-radius:3px; transition:opacity .25s, border-color .25s; }
+  .gal-opts img.active{ opacity:1; border-color:#fff; }
+  .gal-slide.placeholder{ display:flex; align-items:center; justify-content:center; background:#161616; }
+  .gal-ph{ text-align:center; padding:40px; }
+  .gal-ph .ic{ width:64px; height:64px; margin:0 auto 18px; border-radius:50%; border:1.5px dotted var(--maroon); display:flex; align-items:center; justify-content:center; }
+  .gal-ph .ic .dt{ width:11px; height:11px; border-radius:50%; background:var(--maroon); }
+  .gal-ph .tx{ font-family:'Poppins',sans-serif; font-weight:600; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#bdbdbd; }
 
   /* ---------- THANKS ---------- */
   .thanks-wrap{ text-align:center; }
@@ -439,7 +525,8 @@
   .rm-close{ position:absolute; top:28px; right:32px; width:44px; height:44px; border-radius:50%; background:transparent; border:1px solid rgba(255,255,255,.4); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .25s, border-color .25s; }
   .rm-close:hover{ background:var(--maroon); border-color:var(--maroon); }
   .rm-close svg{ width:16px; height:16px; stroke:#fff; stroke-width:2.2; }
-  .rm-stage{ max-width:84vw; max-height:70vh; }
+  .rm-stage{ max-width:84vw; max-height:70vh; transform:scale(1); opacity:1; transition:transform .5s var(--ease), opacity .5s var(--ease); }
+  .rmodal:not(.open) .rm-stage{ transform:scale(.18); opacity:0; }
   .rm-stage img{ max-width:84vw; max-height:70vh; object-fit:contain; display:block; box-shadow:0 20px 80px rgba(0,0,0,.6); }
   .rm-thumbs{ position:absolute; bottom:26px; left:50%; transform:translateX(-50%); display:flex; gap:10px; }
   .rm-thumbs img{ height:54px; cursor:pointer; opacity:.45; border:1px solid transparent; transition:opacity .25s, border-color .25s; }
@@ -451,7 +538,7 @@
     #rail{ width:36px; }
     h1.hero{ font-size:30px; }
     .stat-grid{ grid-template-columns:repeat(2,1fr); }
-    .journey-wrap, .eco-wrap, .phil-wrap, .circuit-wrap, .occ-wrap, .mat-wrap, .plan-wrap{ grid-template-columns:1fr; gap:26px; }
+    .journey-wrap, .phil-wrap, .circuit-wrap, .occ-wrap, .mat-wrap, .plan-wrap, .site-wrap{ grid-template-columns:1fr; gap:26px; }
     .vm-content{ grid-template-columns:1fr; padding-left:40px; }
     .req-grid{ grid-template-columns:repeat(4,1fr); }
     .logo-wall{ grid-template-columns:repeat(5,1fr); }
@@ -463,10 +550,10 @@
 
 <div id="journey">
 
-  <!-- ================= ENTER ================= -->
+  <!-- ================= ENTER (22.07.26 hero video — baked title/CTA, no overlay text needed) ================= -->
   <section class="step active" id="st-enter" data-chapter="enter">
     <video class="landing-video" autoplay muted loop playsinline id="hero-video">
-      <source src="assets/videos/hero.mp4" type="video/mp4">
+      <source src="assets/videos/hero-v3.mp4" type="video/mp4">
     </video>
     <div class="landing-scrim"></div>
     <div class="enter-center">
@@ -576,38 +663,42 @@
   <section class="step" data-chapter="users" data-title="Identifying the users">
     <div class="step-inner">
       <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Identifying the Users</div></div>
-      <div class="eco-wrap" style="margin-top:10px;">
-        <div>
-          <h2 class="title rv d1" style="margin-bottom:26px;">The User</h2>
-          <div class="eco-stack rv d2" id="eco-stack"></div>
+      <h2 class="title rv d1" style="margin-top:10px;">The User</h2>
+      <div class="who-cards rv d2">
+        <div class="who-card"><img src="assets/final/user-leadership.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Leadership</div>
+            <div class="needs-mini">
+              <div>Strategic focus</div><div>Trusted collaboration</div><div>Client representation</div><div>Quiet confidence</div>
+            </div>
+          </div>
         </div>
-        <div class="eco-detail rv d3">
-          <div class="eco-photo"><img id="eco-img" src="assets/final/user-leadership.jpg" alt=""></div>
-          <div class="eco-needs">
-            <h4 id="eco-needs-title">Workplace needs</h4>
-            <div id="eco-needs-list"></div>
+        <div class="who-card"><img src="assets/final/user-engineering.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Engineering &amp; Technical Experts</div>
+            <div class="needs-mini">
+              <div>Deep focus</div><div>Technical reviews</div><div>Collaboration</div><div>Knowledge sharing</div>
+            </div>
+          </div>
+        </div>
+        <div class="who-card"><img src="assets/final/user-project-delivery.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Project Delivery &amp; Business Enablement</div>
+            <div class="needs-mini">
+              <div>Agile coordination</div><div>Cross-team huddles</div><div>Quick connectivity</div><div>Process flow</div>
+            </div>
+          </div>
+        </div>
+        <div class="who-card"><img src="assets/final/user-clients.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Clients &amp; Visitors</div>
+            <div class="needs-mini">
+              <div>First impressions</div><div>Hospitality-inspired arrival</div><div>Seamless wayfinding</div><div>Confidence in the brand</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="step" data-chapter="users">
-    <div class="step-inner">
-      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">A multi-generational workforce</div></div>
-      <h2 class="title rv d1" style="margin-top:10px;">Four generations, <span style="color:var(--ink)">one connected workplace</span></h2>
-      <div class="gen-strip rv d2">
-        <div class="gen-cell"><img src="assets/final/gen-boomers.jpg" alt=""><div class="veil"></div><div class="yr">Est. experience</div><div class="cap">Boomers</div></div>
-        <div class="gen-cell"><img src="assets/final/gen-genx.jpg" alt=""><div class="veil"></div><div class="yr">Steady judgement</div><div class="cap">Gen X</div></div>
-        <div class="gen-cell"><img src="assets/final/gen-millennial.jpg" alt=""><div class="veil"></div><div class="yr">Digital fluency</div><div class="cap">Millennial</div></div>
-        <div class="gen-cell"><img src="assets/final/gen-genz.jpg" alt=""><div class="veil"></div><div class="yr">Native adaptability</div><div class="cap">Gen Z</div></div>
-      </div>
-      <p class="lede rv d3" style="max-width:1150px; margin-top:26px;">The workplace is designed for a connected, multi-generational workforce, enabling seamless movement between focus, collaboration, and knowledge sharing. Through diverse work settings, hospitality-inspired experiences, and integrated technology, it creates an inclusive, adaptable, and future-ready environment.</p>
-    </div>
-  </section>
-
   <!-- ================= 04 CONCEPT ================= -->
-  <section class="step" data-chapter="concept" data-title="Defining your new workplace">
+  <section class="step on-dark" data-chapter="concept" data-title="Defining your new workplace">
     <div class="step-inner">
       <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Defining Your New Workplace</div></div>
       <div class="phil-card rv d1" style="margin-top:14px;">
@@ -635,50 +726,86 @@
     </div>
   </section>
 
-  <section class="step" id="st-circuit" data-chapter="concept">
+  <!-- ================= 05 PLANNING (Site Check autoplays straight into Final Layout, then stops) ================= -->
+  <section class="step" data-chapter="planning" data-title="Space strategy" data-evo="1">
     <div class="step-inner">
-      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Axonometric View</div></div>
-      <div class="circuit-wrap" style="margin-top:10px;">
-        <div class="axo-stage rv d1">
-          <img src="assets/final/axonometric.jpg" alt="Axonometric view" id="axo-img">
-          <svg id="axo-svg" viewBox="0 0 1916 821" preserveAspectRatio="none"></svg>
-        </div>
-        <div class="circuit-side rv d2">
-          <div class="it">A Workplace Built on Trust, Designed with Precision.</div>
-          <div class="ttl">THE CIRCUIT</div>
-          <p class="lede">Just like <b>circuits</b>, every <b>person</b>, every <b>discipline</b>, and every <b>idea</b> carries <b>energy through the organization</b>. The <b>Workplace becomes a living circuit</b>, where information <b>flows</b>, expertise <b>connects</b>, and <b>People Adapt</b>.</p>
-          <div class="cir-list" id="cir-list"></div>
-          <div class="cir-narr" id="cir-narr"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= 05 PLANNING ================= -->
-  <section class="step" data-chapter="planning" data-title="Space strategy">
-    <div class="step-inner">
-      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Requirements</div></div>
+      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Requirements — The Client's Brief</div></div>
       <div class="brief-title rv d1" style="margin-top:10px;">We heard you…</div>
       <div class="req-grid" id="req-grid"></div>
     </div>
   </section>
 
-  <section class="step" id="st-plan" data-chapter="planning">
+  <section class="step" id="st-sitecheck" data-chapter="planning" data-title="Site due diligence" data-evo="1">
     <div class="step-inner">
-      <div class="kicker rv"><div class="k1">Space Planning</div><div class="k2">Proposed Layout</div></div>
-      <div class="plan-wrap" style="margin-top:10px;">
-        <div class="layer-tabs rv d1" id="layer-tabs"></div>
-        <div class="plan-stage rv d2">
-          <img id="plan-line" src="assets/final/plan-line-full.jpg" alt="Structural plan">
-          <img id="plan-color" src="assets/final/plan-color-full.jpg" alt="Proposed layout">
-          <svg id="plan-veil" viewBox="0 0 4096 1611" preserveAspectRatio="none"></svg>
-          <div class="plan-side" id="plan-side"></div>
+      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Site Due Diligence</div></div>
+      <div class="site-wrap" style="margin-top:10px;">
+        <div class="site-stage evo-frame rv d1" id="site-stage">
+          <img src="assets/final/site-diligence-plan.png" alt="Site due diligence floor plate">
+          <div class="site-tag" id="site-tag">Existing Shell — As Built</div>
+        </div>
+        <div class="site-side rv d2">
+          <div class="it">10th Floor, DNR Altitude</div>
+          <div class="ttl">SITE CHECK</div>
+          <p class="lede">Before designing forward, we mapped the empty shell — egress, services, and light — against the proposed workplace concept.</p>
+          <div class="site-list" id="site-list"></div>
+          <div class="site-narr" id="site-narr"></div>
+          <button class="site-replay" id="site-replay">↺ &nbsp;Replay</button>
+          <div class="site-addr"><b>Site Address:</b> 10th Floor, DNR Altitude, Yeshwanthpur Industrial Area, Phase 1, Yeswanthpur, Bengaluru, Karnataka 560022</div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="step" data-chapter="planning">
+  <section class="step" id="st-plan" data-chapter="planning" data-evo="1">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Space Planning</div><div class="k2" id="plan-kicker-k2">The Finished Layout</div></div>
+      <div class="plan-tabs rv d1" id="plan-tabs">
+        <button class="plan-tab active" data-view="plan">Plan</button>
+        <button class="plan-tab" data-view="axo">Axonometric</button>
+      </div>
+      <div class="plan-wrap" style="margin-top:10px;">
+        <div class="plan-stage-wrap rv d2">
+          <div class="plan-view active" id="plan-view-plan">
+            <div class="plan-stage evo-frame">
+              <img class="on" id="plan-structure" src="assets/final/plan-structure-v2.jpg" alt="Structure plan">
+              <img id="plan-color" src="assets/final/plan-color-v2.jpg" alt="Proposed layout">
+              <svg id="plan-hotspot-svg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+            </div>
+          </div>
+          <div class="plan-view" id="plan-view-axo">
+            <div class="axo-stage evo-frame">
+              <img src="assets/final/axonometric-v2.jpg" alt="Axonometric view" id="axo-img">
+              <svg id="axo-svg" viewBox="0 0 1916 821" preserveAspectRatio="none"></svg>
+            </div>
+          </div>
+          <div class="plan-overlay rv d3" id="plan-overlay">
+            <button class="overlay-toggle" id="overlay-toggle" aria-label="Collapse panel" title="Collapse panel">
+              <svg viewBox="0 0 12 12"><path d="M2.5 4.5L6 8L9.5 4.5"/></svg>
+            </button>
+            <div class="plan-info active" id="plan-info">
+              <div class="layer-tabs" id="layer-tabs"></div>
+              <div class="overlay-body">
+                <div class="plan-side-static" id="plan-side"></div>
+              </div>
+            </div>
+            <div class="axo-info" id="axo-info">
+              <div class="circuit-side">
+                <div class="it">A Workplace Built on Trust, Designed with Precision.</div>
+                <div class="ttl">THE CIRCUIT</div>
+                <div class="overlay-body">
+                  <p class="lede">Just like <b>circuits</b>, every <b>person</b>, every <b>discipline</b>, and every <b>idea</b> carries <b>energy through the organization</b>. Hover a space to see it, click to step into its render.</p>
+                  <div class="cir-list" id="cir-list"></div>
+                  <div class="cir-narr" id="cir-narr"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" data-chapter="planning" data-evo="1">
     <div class="step-inner">
       <div class="kicker rv"><div class="k1">Space Planning</div><div class="k2">Occupancy</div></div>
       <h2 class="title rv d1" style="margin:10px 0 30px;">Every requirement, <span style="color:var(--ink)">accounted for</span></h2>
@@ -686,7 +813,7 @@
         <div class="occ-cards rv d2" id="occ-cards"></div>
         <div class="occ-detail rv d3">
           <h4 id="od-title">Workhall</h4>
-          <div class="opt">Option 1 · requirement vs achieved</div>
+          <div class="opt">Requirement vs achieved</div>
           <div class="od-head"><span>Area</span><span>Required</span><span>Achieved</span></div>
           <div id="od-rows"></div>
         </div>
@@ -709,15 +836,31 @@
     </div>
   </section>
 
-  <section class="step" id="st-gallery" data-chapter="spaces">
+  <section class="step on-dark" id="st-gallery" data-chapter="spaces">
     <div class="gal-stage" id="gal-stage"></div>
     <div class="gal-scrim"></div>
     <div class="gal-name">
       <div class="k">Visual Direction</div>
       <div class="n" id="gal-name">Reception</div>
-      <div class="ix" id="gal-ix">01 / 05</div>
+      <div class="ix" id="gal-ix">01 / 07</div>
     </div>
+    <div class="gal-opts" id="gal-opts"></div>
     <div class="gal-nav" id="gal-nav"></div>
+    <button class="gal-mute" id="gal-mute" aria-label="Mute background music" title="Mute background music">
+      <svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16 8a5 5 0 0 1 0 8" /><path d="M18.5 5.5a9 9 0 0 1 0 13"/><path class="muted-line" d="M2 2l20 20"/></svg>
+    </button>
+    <button class="gal-mute gal-panmode" id="gal-panmode" aria-label="Toggle pan mode" title="Toggle pan mode">
+      <svg viewBox="0 0 24 24"><path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V5a1.5 1.5 0 0 1 3 0v6"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 12v-2a1.5 1.5 0 0 1 3 0v5c0 3.5-2 6-5.5 6h-2c-2 0-3-.6-4.3-2.2L5 15c-.6-.8-.4-1.7.3-2.2.7-.5 1.6-.4 2.2.3L8 14"/></svg>
+    </button>
+    <button class="gal-mute gal-keyplan-toggle active" id="gal-keyplan-toggle" aria-label="Toggle key plan" title="Toggle key plan">
+      <svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>
+    </button>
+    <audio id="gal-audio" loop preload="none" src="assets/audio/gallery-ambient.mp3"></audio>
+    <div class="gal-keyplan" id="gal-keyplan">
+      <div class="gkp-crop" id="gkp-crop"></div>
+      <div class="gkp-mark" id="gkp-mark"></div>
+      <div class="gkp-label">Key Plan</div>
+    </div>
   </section>
 
   <!-- ================= THANKS ================= -->
@@ -777,7 +920,7 @@
   'use strict';
 
   /* ==================================================================
-     DATA — all figures transcribed from the 20.07.26 source deck (PDF)
+     DATA — transcribed from the 22.07.26 revised source deck (2.pdf)
      ================================================================== */
 
   var USERS = [
@@ -814,17 +957,24 @@
     { key:'public', name:'Public Zone', icon:'icon-reception.png', headline:'2',
       rows:[['Reception','1','1',1],['Waiting Lounge','1','1',1]] },
     { key:'workhall', name:'Workhall', icon:'icon-workstation.png', headline:'282',
-      rows:[['Total no. Workstations','280','282',1],['Workstations','256','162 (120° WS)',0],
-            ['Manager Cubicles','24','120 (L type)',0],['Discussion Table','—','5',1],
-            ['Library','—','1',1],['Finance Team','5','6',1],['HR Team','5','6',1]],
-      foot:'*Height adjustable — 42 out of 162 (120°) · *Manager cubicles — 24 out of 282' },
+      rows:[['Total Workstations + Cubicles','282','282',1],
+            ['Workstation (120°)','162','156',0],
+            ['Workstation (L type)','120','102',0],
+            ['Manager Cubicles (120°)','—','06',1],
+            ['Manager Cubicles (L type)','24','18',1],
+            ['Discussion Table','—','5',1],
+            ['Library','—','1',1],
+            ['Finance Team','6','6',1],
+            ['HR Team','6','6',1]],
+      foot:'*Height adjustable — 66 out of 282 (120° &amp; L type) · seating achieved overall — 300 Pax' },
     { key:'meeting', name:'Meeting Rooms', icon:'icon-meeting-rooms.png', headline:'11',
       rows:[['Board room','28–30','20 + 10 (bench seat)',1],['Meeting room · 4 Pax','—','4',1],
             ['Meeting room · 6 Pax','—','3',1],['Meeting room · 8 Pax','—','2',1],
             ['Meeting room · 10 Pax','1','2',1],['Total meeting rooms','11','11',1],
             ['Phone booth · 1 Pax','—','5',1],['Phone booth · 2 Pax','—','2',1]] },
-    { key:'cabins', name:'Cabins', icon:'icon-cabins.png', headline:'3+',
-      rows:[['MD Cabin','1','1',1],['Head of Engineering','1','1',1],['Head of Operation','1','1',1]] },
+    { key:'cabins', name:'Cabins', icon:'icon-cabins.png', headline:'6',
+      rows:[['Cabins (1+2 seating)','6','6',1],['MD Cabin','1','1',1],
+            ['Heads of Engineering / Ops / HR / Finance','5','5',1]] },
     { key:'training', name:'Training Room', icon:'icon-training-room.png', headline:'1',
       rows:[['Training Room · 25 Pax','2','1',0]] },
     { key:'wellness', name:'Recreational & Wellness', icon:'icon-gym.png', headline:'4',
@@ -833,41 +983,44 @@
 
   var PLAN_LAYERS = [
     { key:'structure', label:'Structure', count:'the floor plate',
-      side:{ title:'Structure', notes:['The base floor plate — cores, corridors, and the 1500&nbsp;mm wide circulation spine that everything connects to.'] } },
-    { key:'layout', label:'Full Layout', count:'seating achieved',
-      side:{ title:'Proposed Layout', rows:[['Workstation (120°)','162'],['Workstation (L type)','120'],['Meeting Rooms','11'],['Cabins','6'],['Cafeteria','81 Pax']],
-        notes:['MD Cabin located in the South-West zone as per vastu.','MD desk facing the North-East direction.','Cafeteria placed in the South-East zone.','Storage and display shelves distributed across the floor plate.'] } },
-    { key:'work', label:'Work Zones', count:'282 seats',
-      side:{ title:'Work Zones', rows:[['Workstation (120°)','162'],['Workstation (L type)','120'],['HR Team','06 Pax'],['Finance Team','06 Pax']],
-        notes:['Height adjustable — 42 out of 162 (120°).','Manager cubicles — 24 out of 282.'] } },
-    { key:'collab', label:'Collaboration', count:'11 rooms + 7 booths',
-      side:{ title:'Collaboration', rows:[['Board Room (20+10 Pax)','01'],['Meeting Rooms (4,6,8 & 10)','11'],['Phone Booth (01 Pax)','05'],['Phone Booth (02 Pax)','02'],['Discussion Tables','05']] } },
-    { key:'lead', label:'Leadership', count:'6 cabins',
-      side:{ title:'Leadership', rows:[['Cabins','06']],
-        notes:['MD Cabin in the South-West zone as per vastu, desk facing North-East.','Heads of Engineering, Operations, HR & Finance — 1+2 seating cabins.'] } },
-    { key:'amen', label:'Amenities', count:'wellness + arrival',
-      side:{ title:'Amenities & Arrival', rows:[['Reception','01'],['Cafeteria (81 Pax)','01'],['Gym','01'],['Recreational Area','01'],['Training Room (25 Pax)','01'],['Medical Room','02'],['Library','01'],['IT, Admin, Housekeeping','03'],['Server, UPS / Battery, Hub','03']] } }
+      side:{ title:'Structure', notes:['The base floor plate — core, lift lobbies, fire-egress staircases and the 1500&nbsp;mm wide corridor everything connects to.','Two 1500mm corridors run the full length of the plate, flanking the central core.'] } },
+    { key:'layout', label:'Final Layout', count:'seating achieved',
+      side:{ title:'Seating Capacity — Achieved 300 Pax', rows:[
+        ['Workstation (120°)','156'],['Workstation (L type)','102'],['Manager Cubicles (120°)','06'],['Manager Cubicles (L type)','18'],
+        ['Board Room (20+10 Pax)','01'],['Meeting Rooms (4,6,8 &10)','11'],['Cabins','06'],['Training Room (25 Pax)','01'],
+        ['Cafeteria (81 Pax)','01'],['Phone Booth (01/02 Pax)','05+02'],['Library','01'],['Gym','01']
+      ], notes:['MD Cabin located in the South-West zone as per vastu, desk facing North-East.','Cafeteria placed in the South-East zone.','*Height Adjustable — 66 out of 282 workstations, both 120° &amp; L type.'] } }
   ];
 
-  var PLAN_ZONES = {
-    work:  [ {key:'ws-ltype-nw', label:'L-type', points:'4.5,26 25,26 25,58 4.5,58'},
-             {key:'ws-120-central', label:'120° clusters', points:'26,38 61,38 61,93 26,93'},
-             {key:'ws-120-sw', label:'120°', points:'6,60 24,60 24,95 6,95'},
-             {key:'ws-ltype-ne', label:'L-type', points:'64,29 85,29 85,60 64,60'},
-             {key:'hr-finance', label:'HR · Finance', points:'8,74 19,74 19,95 8,95'} ],
-    collab:[ {key:'boardroom', label:'Board Room', points:'54,39 64,39 64,57 54,57'},
-             {key:'meeting-south', label:'Meeting Rooms', points:'31,79 61,79 61,96 31,96'},
-             {key:'meeting-east', label:'Meeting Rooms', points:'62,36 69,36 69,64 62,64'},
-             {key:'meeting-west', label:'Meeting · Hub', points:'25,46 31,46 31,70 25,70'} ],
-    lead:  [ {key:'md-cabin', label:'MD Cabin', points:'0.5,76 6,76 6,96 0.5,96'},
-             {key:'cabin-strip-west', label:'Cabins', points:'0.5,36 6.5,36 6.5,75 0.5,75'} ],
-    amen:  [ {key:'reception', label:'Reception', points:'42,39 52,39 52,61 42,61'},
-             {key:'cafeteria', label:'Cafeteria', points:'62,56 80,56 80,95 62,95'},
-             {key:'recreation-gym', label:'Recreation · Gym', points:'78,56 88,56 88,95 78,95'},
-             {key:'training', label:'Training', points:'88,55 99,55 99,90 88,90'},
-             {key:'medical', label:'Medical', points:'11,12 16,12 16,25 11,25'},
-             {key:'library', label:'Library', points:'84,28 88,28 88,50 84,50'} ]
+  var SITE_CALLOUTS = [
+    { key:'liftlobby', label:'Lift Lobby', pts:[[43.75,19.25],[58.5,19.25]],
+      note:'Two lift lobbies — low-rise banks — sit either side of the central core, keeping vertical circulation compact.' },
+    { key:'washroom', label:'Washrooms', pts:[[34.25,12.1],[67.25,12.1]],
+      note:'Washroom cores mirrored on both wings, directly adjacent to each lift lobby.' },
+    { key:'fireexit', label:'Fire Exit Staircase', pts:[[22.25,13.6],[51.1,12.1],[80.9,14.15]],
+      note:'Three fire-exit staircases — two flanking, one central — meet NBC egress-capacity norms for the floor plate.' },
+    { key:'ahu', label:'AHU Room', pts:[[33.4,26.6],[68.75,26.6]],
+      note:'Air-handling units positioned at both wings for balanced HVAC distribution across the plate.' },
+    { key:'glazing', label:'External Glazing', pts:[[6.5,45]],
+      note:'Full-perimeter external glazing brings daylight deep into the floor plate on all sides.' },
+    { key:'entry', label:'Entry', pts:[[43.9,27.0],[58.4,27.0]],
+      note:'Primary entry points align directly with the lift lobbies for an efficient arrival sequence.' },
+    { key:'sunpath', label:'Sun Path', pts:[[53.4,81.0]],
+      note:'East-to-west solar path informs glazing treatment, shading and workstation orientation.' }
+  ];
+
+  /* one representative rectangle per functional category on the Finished Layout, in the same
+     percent-coordinate space as plan-color-v2.jpg — feeds LAYOUT_HOTSPOTS below */
+  var ZN_TARGETS = {
+    work:'29,41.9 50,41.9 50,87.6 29,87.6',
+    wellness:'13.5,7 18.25,7 18.25,20.9 13.5,20.9',
+    meeting:'33,76.1 38.5,76.1 38.5,88.8 33,88.8',
+    leadership:'0.75,59.6 16.5,59.6 16.5,88.8 0.75,88.8',
+    welcome:'49.5,36.8 60,36.2 60,58.4 49.25,47.6',
+    noise:'83.5,58.4 96.5,58.4 96.5,83.8 83.5,83.8'
   };
+
+  var PLAN_ZONES = {}; // no zone tabs on the plan slide
 
   var AXO_NODES = {
     'reception':      { x:53.0, y:49.0, label:'Reception' },
@@ -888,27 +1041,27 @@
       path:['workhall-west','workhall-central','discussion','meeting-east','library'],
       narr:'The engineering workflow — deep focus at the workstations, quick alignment at discussion tables, formal review in meeting rooms, knowledge captured in the library.',
       points:'2.30,47.26 13.67,38.98 15.66,51.64 32.36,55.05 47.08,45.31 51.93,54.81 45.82,72.72 19.42,86.72 15.66,71.25 8.56,71.86',
-      images:['assets/images/s32_image119.png','assets/images/s32_image93.png','assets/images/s32_image107.png','assets/images/s32_image105.jpg'] },
+      images:['assets/final/render-workhall-v3.png','assets/final/render-workhall-v3b.png'] },
     'md-cabin': { title:'MD Cabin', node:'md-cabin',
       path:['md-cabin','board-room'],
       narr:'The leadership path — quiet confidence, from the MD cabin to the board room where decisions land.',
       points:'9.55,69.91 13.41,71.25 15.66,79.78 16.54,85.26 17.54,90.38 17.17,93.06 14.14,95.25',
-      images:['assets/images/s33_image103.png','assets/images/s33_image108.jpg','assets/images/s33_image104.jpg','assets/images/s33_image100.jpg'] },
+      images:['assets/final/render-mdcabin-v3.jpg'] },
     'reception': { title:'Reception & Waiting Lounge', node:'reception',
       path:['reception','board-room','md-cabin'],
       narr:'The arrival sequence — first impressions at reception, straight to executive collaboration.',
       points:'49.95,46.65 55.53,43.61 56.26,46.16 54.91,49.82 53.24,54.45 50.10,54.32',
-      images:['assets/final/render-reception.jpg','assets/images/s30_image90.png','assets/images/s30_image88.jpg','assets/images/s30_image91.jpg'] },
+      images:['assets/final/render-reception-v3.png'] },
     'board-room': { title:'Board Room & Executive Dining', node:'board-room',
       path:['reception','board-room','meeting-east'],
       narr:'The executive collaboration path — clients arrive, decisions are made, teams align.',
       points:'56.05,35.57 64.87,30.94 67.90,35.20 67.90,36.91 67.12,36.18 67.12,42.14 59.13,46.29 56.05,42.63',
-      images:['assets/final/render-boardroom.jpg','assets/images/s31_image92.png','assets/images/s31_image99.png','assets/images/s31_image110.jpg'] },
+      images:['assets/final/render-boardroom-v3.png','assets/final/render-boardroom-v3b.png'] },
     'cafe': { title:'Cafe & Recreation', node:'cafe',
       path:['cafe','recreation','workhall-central'],
       narr:'The culture loop — recharge over food and games, then back into the flow of work.',
       points:'68.68,38.73 73.80,36.78 84.86,31.79 86.53,37.39 88.31,43.48 76.10,48.36 74.11,48.60 68.37,46.65',
-      images:['assets/final/render-cafeteria.jpg','assets/images/s34_image111.png','assets/images/s34_image116.jpg','assets/images/s34_image109.jpg'] },
+      images:['assets/final/render-cafeteria-v3.png','assets/final/render-cafeteria-v3b.png'] },
     'library': { title:'Library', node:'library',
       path:['library','workhall-central','training'],
       narr:'The knowledge loop — expertise captured in the library, shared across the workhall, formalised in training.',
@@ -916,12 +1069,25 @@
   };
 
   var GALLERY = [
-    { name:'Reception', img:'assets/final/render-reception.jpg' },
-    { name:'Board Room', img:'assets/final/render-boardroom.jpg' },
-    { name:'Workhall', img:'assets/images/s32_image119.png' },
-    { name:'MD Cabin', img:'assets/images/s33_image103.png' },
-    { name:'Cafeteria', img:'assets/final/render-cafeteria.jpg' }
+    { name:'Reception', img:'assets/final/render-reception-v3.png' },
+    { name:'Board Room', img:'assets/final/render-boardroom-v3.png', img2:'assets/final/render-boardroom-v3b.png' },
+    { name:'MD Cabin', img:'assets/final/render-mdcabin-v3.jpg' },
+    { name:'Workhall & Library', img:'assets/final/render-workhall-v3.png', img2:'assets/final/render-workhall-v3b.png' },
+    { name:'Cafeteria', img:'assets/final/render-cafeteria-v3.png', img2:'assets/final/render-cafeteria-v3b.png' },
+    { name:'Training Room', img:'assets/final/render-training-v3.png' }
   ];
+
+  /* key-plan crop windows — hand-identified from the printed room labels on plan-color-v2.jpg.
+     cx/cy = crop center (% of the plan image); zoom = background-size %; rect = that room's
+     approximate bounding box (% of the full plan) used to draw the highlight box in the crop. */
+  var KEY_PLAN = {
+    'Reception':          { cx:54.5, cy:47.6, zoom:380, rect:{x:50,  y:37, w:9,  h:21} },
+    'Board Room':         { cx:66.5, cy:43,   zoom:380, rect:{x:61,  y:36, w:12, h:14} },
+    'MD Cabin':           { cx:3.5,  cy:89,   zoom:380, rect:{x:0.5, y:83, w:7,  h:13} },
+    'Cafeteria':          { cx:85,   cy:74,   zoom:380, rect:{x:79,  y:65, w:13, h:18} },
+    'Training Room':      { cx:96.4, cy:67,   zoom:380, rect:{x:93,  y:63, w:7,  h:9} },
+    'Workhall & Library': { cx:39.5, cy:64.75,zoom:300, rect:{x:29,  y:41.9, w:21, h:45.7} }
+  };
 
   var LOGOS = ["s07_image6.png","s07_image7.png","s07_image9.png","s07_image10.png","s07_image11.png","s07_image12.png",
     "s07_image16.png","s07_image17.png","s07_image18.png","s07_image19.png","s07_image23.png","s07_image24.png",
@@ -940,7 +1106,6 @@
   ];
   var CH_TITLES = { about:'About', brand:'Understanding the Brand', users:'Understanding the Users',
     concept:'The Design Philosophy', planning:'Space Strategy', spaces:'Visual Direction' };
-  var DARK_CHAPTER_STEPS = null; // computed at boot: steps whose bg is dark (vm-scene, tagline-step)
 
   /* ==================================================================
      ROUTER — steps, chapters, rail, interstitials
@@ -1012,8 +1177,11 @@
   function goTo(i, skipInter){
     if(transLock) return;
     if(i<0 || i>steps.length-1 || i===cur) return;
+    clearTimeout(autoTimer);
+    lastNavForward = i>cur;
     var prevCh = chapterOf(cur), nextCh = chapterOf(i);
     var crossing = nextCh!==prevCh && nextCh!=='enter' && nextCh!=='thanks' && i>cur;
+    if(steps[cur].id==='st-gallery' && i!==cur) galAudioStop();
     cur = i;
     if(crossing && !skipInter){
       showInterstitial(nextCh, function(){ render(); });
@@ -1021,6 +1189,30 @@
     } else {
       render();
     }
+  }
+
+  /* autoplay: Site Check advances on its own once the reveal cascade finishes, straight into
+     Final Layout; any manual goTo() (Next/Prev/rail-nav) cancels the pending one.
+     Only schedules on a forward arrival — stepping back to review a beat lets it sit still. */
+  var autoTimer = null, lastNavForward = true;
+  function scheduleAutoAdvance(ms){
+    if(!lastNavForward) return;
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(function(){ goTo(cur+1); }, ms);
+  }
+
+  /* Plan <-> Axonometric tilt-flip, now triggered by the tab click on the merged Layout/Axo slide
+     rather than a Next-click between two separate steps. */
+  function playTilt(frame, dir){
+    if(!frame) return;
+    frame.classList.remove('evo-tilt-out','evo-tilt-in');
+    void frame.offsetWidth;
+    frame.classList.add(dir==='out' ? 'evo-tilt-out' : 'evo-tilt-in');
+    setTimeout(function(){ frame.classList.remove('evo-tilt-out','evo-tilt-in'); }, 900);
+  }
+  function runTilt(outEl, inEl){
+    playTilt(outEl, 'out');
+    playTilt(inEl, 'in');
   }
   function next(){ goTo(cur+1); }
   function prev(){ goTo(cur-1, true); }
@@ -1061,6 +1253,16 @@
     if(s.querySelector('#req-grid')) revealGrid('#req-grid .req-cell', 65);
     if(s.querySelector('#logo-wall')) revealGrid('#logo-wall .logo-cell', 26);
     if(s.id==='st-plan') planEnter();
+    if(s.id==='st-sitecheck') siteEnter();
+    var frame = s.querySelector('.evo-frame');
+    if(frame) restartKenBurns(frame);
+  }
+
+  /* restart the slow Ken Burns drift on the evolving-stage image each time its step becomes active */
+  function restartKenBurns(frame){
+    frame.classList.remove('kb');
+    void frame.offsetWidth;
+    frame.classList.add('kb');
   }
 
   function revealGrid(sel, stagger){
@@ -1106,39 +1308,6 @@
   })();
 
   /* ==================================================================
-     USERS — ecosystem
-     ================================================================== */
-  (function(){
-    var stack = document.getElementById('eco-stack');
-    USERS.forEach(function(u, i){
-      var row = document.createElement('div');
-      row.className = 'eco-row' + (i===0?' active':'');
-      row.innerHTML = '<div class="dot"></div><div class="nm">'+u.name+'</div><div class="ct">0'+(i+1)+'</div>';
-      row.addEventListener('click', function(){ selectUser(i); });
-      stack.appendChild(row);
-    });
-    function selectUser(i){
-      var rows = stack.querySelectorAll('.eco-row');
-      Array.prototype.forEach.call(rows, function(r,j){ r.classList.toggle('active', j===i); });
-      var u = USERS[i];
-      var img = document.getElementById('eco-img');
-      img.style.transition = 'opacity .5s';
-      img.style.opacity = 0;
-      setTimeout(function(){ img.src = u.img; img.style.opacity = 1; }, 220);
-      var list = document.getElementById('eco-needs-list');
-      list.innerHTML = '';
-      u.needs.forEach(function(n, j){
-        var chip = document.createElement('div');
-        chip.className = 'need-chip';
-        chip.textContent = n;
-        list.appendChild(chip);
-        setTimeout(function(){ chip.classList.add('on'); }, 180 + j*130);
-      });
-    }
-    selectUser(0);
-  })();
-
-  /* ==================================================================
      CONCEPT — philosophy orbit
      ================================================================== */
   (function(){
@@ -1176,26 +1345,15 @@
   (function(){
     var svg = document.getElementById('axo-svg');
     var NS = 'http://www.w3.org/2000/svg';
-    var selected = null;
+    var nodeGroups = {};
 
-    Object.keys(AXO_SPACES).forEach(function(key){
-      var sp = AXO_SPACES[key];
-      if(!sp.points) return;
-      var poly = document.createElementNS(NS,'polygon');
-      var pts = sp.points.split(' ').map(function(pair){
-        var xy = pair.split(',');
-        return (parseFloat(xy[0])/100*AXW)+','+(parseFloat(xy[1])/100*AXH);
-      }).join(' ');
-      poly.setAttribute('points', pts);
-      poly.setAttribute('class','hotpoly');
-      poly.setAttribute('data-key', key);
-      poly.addEventListener('click', function(e){ e.stopPropagation(); selectSpace(key); });
-      svg.appendChild(poly);
-    });
-
-    var traceEl = document.createElementNS(NS,'path');
-    traceEl.setAttribute('class','trace');
-    svg.appendChild(traceEl);
+    function spaceForNode(nodeKey){
+      var found = null;
+      Object.keys(AXO_SPACES).forEach(function(sk){
+        if(AXO_SPACES[sk].node===nodeKey) found = sk;
+      });
+      return found;
+    }
 
     Object.keys(AXO_NODES).forEach(function(k){
       var g = document.createElementNS(NS,'g');
@@ -1217,74 +1375,69 @@
       tx.setAttribute('x',nx(k)+16); tx.setAttribute('y',ny(k)-14);
       tx.textContent = AXO_NODES[k].label;
       g.appendChild(pulse); g.appendChild(core); g.appendChild(tx);
-      var spKey = spaceForNode(k);
-      if(spKey){ g.addEventListener('click', function(e){ e.stopPropagation(); selectSpace(spKey); }); }
+      nodeGroups[k] = g;
       svg.appendChild(g);
     });
 
-    function spaceForNode(nodeKey){
-      var found = null;
-      Object.keys(AXO_SPACES).forEach(function(sk){
-        if(AXO_SPACES[sk].node===nodeKey) found = sk;
-      });
-      return found;
-    }
-
-    function route(a, b){
-      var x1=nx(a), y1=ny(a), x2=nx(b), y2=ny(b);
-      var dx=x2-x1, dy=y2-y1;
-      var adx=Math.abs(dx), ady=Math.abs(dy);
-      var mx, my;
-      if(adx>ady){ mx = x1 + Math.sign(dx)*(adx-ady); my = y1; return 'L'+mx+','+my+' L'+x2+','+y2; }
-      else{ mx = x1; my = y1 + Math.sign(dy)*(ady-adx); return 'L'+mx+','+my+' L'+x2+','+y2; }
-    }
-
+    var narr = document.getElementById('cir-narr');
     var list = document.getElementById('cir-list');
+
+    /* Hover a rendered space -> fill + its name label appear. Click -> straight to the render, no second click. */
+    Object.keys(AXO_SPACES).forEach(function(key){
+      var sp = AXO_SPACES[key];
+      if(!sp.points) return;
+      var poly = document.createElementNS(NS,'polygon');
+      var pts = sp.points.split(' ').map(function(pair){
+        var xy = pair.split(',');
+        return (parseFloat(xy[0])/100*AXW)+','+(parseFloat(xy[1])/100*AXH);
+      }).join(' ');
+      poly.setAttribute('points', pts);
+      poly.setAttribute('class','hotpoly');
+      poly.setAttribute('data-key', key);
+      var node = nodeGroups[sp.node];
+      function showHover(){
+        if(node) node.classList.add('sel');
+        var item = list.querySelector('[data-key="'+key+'"]');
+        if(item) item.classList.add('active');
+        narr.innerHTML = sp.narr;
+        narr.classList.add('on');
+      }
+      function hideHover(){
+        if(node) node.classList.remove('sel');
+        var item = list.querySelector('[data-key="'+key+'"]');
+        if(item) item.classList.remove('active');
+        narr.classList.remove('on');
+      }
+      poly.addEventListener('mouseenter', showHover);
+      poly.addEventListener('mouseleave', hideHover);
+      poly.addEventListener('click', function(e){ e.stopPropagation(); if(sp.images) openRM(key); });
+      if(node){
+        node.addEventListener('mouseenter', showHover);
+        node.addEventListener('mouseleave', hideHover);
+        node.addEventListener('click', function(e){ e.stopPropagation(); if(sp.images) openRM(key); });
+      }
+      svg.appendChild(poly);
+    });
+
     Object.keys(AXO_SPACES).forEach(function(key){
       var sp = AXO_SPACES[key];
       var item = document.createElement('div');
       item.className = 'cir-item'; item.setAttribute('data-key', key);
       item.innerHTML = '<div class="sq"></div><div class="nm">'+sp.title+'</div>' +
         (sp.images ? '<div class="go">Renders →</div>' : '');
-      item.addEventListener('click', function(){
-        if(selected===key && sp.images){ openRM(key); return; }
-        selectSpace(key);
+      item.addEventListener('mouseenter', function(){
+        var node = nodeGroups[sp.node]; if(node) node.classList.add('sel');
+        item.classList.add('active');
+        narr.innerHTML = sp.narr; narr.classList.add('on');
       });
+      item.addEventListener('mouseleave', function(){
+        var node = nodeGroups[sp.node]; if(node) node.classList.remove('sel');
+        item.classList.remove('active');
+        narr.classList.remove('on');
+      });
+      item.addEventListener('click', function(){ if(sp.images) openRM(key); });
       list.appendChild(item);
     });
-
-    window.selectSpace = function(key){
-      selected = key;
-      var sp = AXO_SPACES[key];
-      Array.prototype.forEach.call(list.querySelectorAll('.cir-item'), function(el){
-        el.classList.toggle('active', el.getAttribute('data-key')===key);
-      });
-      Array.prototype.forEach.call(svg.querySelectorAll('.hotpoly'), function(el){
-        el.classList.toggle('sel', el.getAttribute('data-key')===key);
-      });
-      var pathNodes = sp.path || [];
-      Array.prototype.forEach.call(svg.querySelectorAll('.node'), function(el){
-        var nk = el.getAttribute('data-node');
-        el.classList.toggle('sel', pathNodes.indexOf(nk)!==-1);
-        el.classList.toggle('dim', pathNodes.indexOf(nk)===-1);
-      });
-      if(pathNodes.length>1){
-        var d = 'M'+nx(pathNodes[0])+','+ny(pathNodes[0]);
-        for(var i=1;i<pathNodes.length;i++) d += ' ' + route(pathNodes[i-1], pathNodes[i]);
-        traceEl.setAttribute('d', d);
-        traceEl.classList.remove('lit');
-        void traceEl.getBoundingClientRect();
-        var len = traceEl.getTotalLength();
-        traceEl.style.setProperty('--len', len);
-        traceEl.classList.add('lit');
-      }
-      var narr = document.getElementById('cir-narr');
-      narr.classList.remove('on');
-      setTimeout(function(){
-        narr.innerHTML = sp.narr + (sp.images ? ' &nbsp;<span style="color:var(--gray-text)">(click again for renders)</span>' : '');
-        narr.classList.add('on');
-      }, 200);
-    };
   })();
 
   /* ==================================================================
@@ -1297,6 +1450,9 @@
     var sp = AXO_SPACES[key];
     if(!sp.images) return;
     document.getElementById('rm-title-tx').textContent = sp.title;
+    var node = AXO_NODES[sp.node];
+    var stage = document.querySelector('.rm-stage');
+    stage.style.transformOrigin = node ? (node.x+'% '+node.y+'%') : 'center center';
     var th = document.getElementById('rm-thumbs');
     th.innerHTML = '';
     sp.images.forEach(function(src, i){
@@ -1336,76 +1492,162 @@
   })();
 
   /* ==================================================================
-     PLANNING — layered plan
+     PLANNING — Site Due Diligence: sequential callout reveal
      ================================================================== */
-  var planBuilt = false, planLayer = 'structure', planAutoTimer = null;
+  var siteTimer = null, sitePlaying = false, siteBuilt = false;
+  function clearSiteCallouts(){
+    var stage = document.getElementById('site-stage');
+    Array.prototype.forEach.call(stage.querySelectorAll('.site-dot,.site-label'), function(el){ el.remove(); });
+    Array.prototype.forEach.call(document.querySelectorAll('.site-item'), function(el){ el.classList.remove('on'); });
+    document.getElementById('site-narr').classList.remove('on');
+  }
+  function siteEnter(){
+    if(sitePlaying) return;
+    sitePlaying = true;
+    clearTimeout(siteTimer);
+    clearSiteCallouts();
+    var stage = document.getElementById('site-stage');
+    var list = document.getElementById('site-list');
+    if(!siteBuilt){
+      siteBuilt = true;
+      SITE_CALLOUTS.forEach(function(g){
+        var item = document.createElement('div'); item.className='site-item'; item.setAttribute('data-key',g.key);
+        item.innerHTML = '<div class="sq"></div><div class="nm">'+g.label+'</div>';
+        list.appendChild(item);
+      });
+    }
+    stage.classList.remove('in');
+    var tag = document.getElementById('site-tag');
+    tag.textContent = 'Existing Shell — As Built'; tag.classList.remove('on');
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ stage.classList.add('in'); tag.classList.add('on'); }); });
+    var narr = document.getElementById('site-narr');
+    var i = 0;
+    function next(){
+      if(i>=SITE_CALLOUTS.length){ sitePlaying=false; scheduleAutoAdvance(1400); return; }
+      if(i===0){ tag.textContent='Site Due Diligence — Findings'; }
+      var g = SITE_CALLOUTS[i];
+      g.pts.forEach(function(p){
+        var dot = document.createElement('div'); dot.className='site-dot';
+        dot.style.left=p[0]+'%'; dot.style.top=p[1]+'%';
+        stage.appendChild(dot);
+        requestAnimationFrame(function(){ dot.classList.add('on'); });
+      });
+      var p0 = g.pts[0];
+      var lbl = document.createElement('div'); lbl.className='site-label';
+      lbl.style.left=p0[0]+'%'; lbl.style.top=(p0[1]-5)+'%';
+      lbl.innerHTML='<span class="ln"></span>'+g.label;
+      stage.appendChild(lbl);
+      requestAnimationFrame(function(){ lbl.classList.add('on'); });
+      var itemEl = list.querySelector('[data-key="'+g.key+'"]');
+      if(itemEl) itemEl.classList.add('on');
+      narr.textContent = g.note; narr.classList.add('on');
+      i++;
+      siteTimer = setTimeout(next, 620);
+    }
+    setTimeout(next, 500);
+  }
+  document.getElementById('site-replay').addEventListener('click', function(){ sitePlaying=false; siteEnter(); });
+
+  /* parsePtsStr/polyCentroidArea: used by the Finished Layout room-hotspot pulse-dot placement below. */
+  function parsePtsStr(str){
+    return str.trim().split(/\s+/).map(function(pair){ var xy=pair.split(','); return [parseFloat(xy[0]),parseFloat(xy[1])]; });
+  }
+  function polyCentroidArea(pts){
+    var a=0, cx=0, cy=0;
+    for(var i=0;i<pts.length;i++){
+      var p0=pts[i], p1=pts[(i+1)%pts.length];
+      var cr = p0[0]*p1[1]-p1[0]*p0[1];
+      a += cr; cx += (p0[0]+p1[0])*cr; cy += (p0[1]+p1[1])*cr;
+    }
+    a *= 0.5;
+    if(Math.abs(a)<1e-6) return { cx:pts[0][0], cy:pts[0][1], area:0.01 };
+    return { cx:cx/(6*a), cy:cy/(6*a), area:Math.abs(a) };
+  }
+
+  /* ==================================================================
+     PLANNING — Structure / Final Layout toggle, Plan<->Axo tab, room hotspots
+     ================================================================== */
+  /* Placeholder room hotspots on the Finished Layout, mapped to OCC card keys — traced
+     approximately from plan-color-v2.jpg pending the user's precise per-room reference folder. */
+  var LAYOUT_HOTSPOTS = [
+    { key:'public', label:'Reception', pts:ZN_TARGETS.welcome },
+    { key:'workhall', label:'Workstations', pts:ZN_TARGETS.work },
+    { key:'meeting', label:'Meeting Rooms', pts:ZN_TARGETS.meeting },
+    { key:'cabins', label:'Cabins', pts:ZN_TARGETS.leadership },
+    { key:'wellness', label:'Cafeteria & Recreation', pts:ZN_TARGETS.noise },
+    { key:'training', label:'Training Room', pts:'95,58.4 97.5,58.4 97.5,68.5 95,68.5' }
+  ];
+
+  var planBuilt = false;
   function buildPlan(){
     if(planBuilt) return; planBuilt = true;
     var tabs = document.getElementById('layer-tabs');
-    PLAN_LAYERS.forEach(function(L){
+    PLAN_LAYERS.forEach(function(L,i){
       var t = document.createElement('div');
-      t.className = 'ltab'; t.setAttribute('data-layer', L.key);
+      t.className = 'ltab'+(i===0?' active':''); t.setAttribute('data-layer', L.key);
       t.innerHTML = '<div class="nd"></div><div class="lb">'+L.label+'</div><div class="ct">'+L.count+'</div>';
-      t.addEventListener('click', function(){ clearTimeout(planAutoTimer); setLayer(L.key); });
+      t.addEventListener('click', function(){ setLayer(L.key); });
       tabs.appendChild(t);
     });
-    var svg = document.getElementById('plan-veil');
-    var NS = 'http://www.w3.org/2000/svg';
-    var PW = 4096, PH = 1611;
-    var defs = document.createElementNS(NS,'defs');
-    var mask = document.createElementNS(NS,'mask');
-    mask.setAttribute('id','zmask');
-    var mr = document.createElementNS(NS,'rect');
-    mr.setAttribute('x',0); mr.setAttribute('y',0); mr.setAttribute('width',PW); mr.setAttribute('height',PH);
-    mr.setAttribute('fill','white');
-    mask.appendChild(mr);
-    defs.appendChild(mask); svg.appendChild(defs);
-    var veil = document.createElementNS(NS,'rect');
-    veil.setAttribute('x',0); veil.setAttribute('y',0); veil.setAttribute('width',PW); veil.setAttribute('height',PH);
-    veil.setAttribute('class','veil-rect');
-    veil.setAttribute('mask','url(#zmask)');
-    svg.appendChild(veil);
-    svg._mask = mask; svg._NS = NS; svg._PW = PW; svg._PH = PH;
-  }
 
+    var hsvg = document.getElementById('plan-hotspot-svg');
+    var NS = 'http://www.w3.org/2000/svg';
+    LAYOUT_HOTSPOTS.forEach(function(h){
+      var poly = document.createElementNS(NS,'polygon');
+      poly.setAttribute('class','plan-hotspot');
+      poly.setAttribute('points', h.pts);
+      poly.setAttribute('data-key', h.key);
+      poly.addEventListener('click', function(){
+        var occStepIdx = steps.findIndex(function(s){ return s.querySelector && s.querySelector('.occ-wrap'); });
+        if(occStepIdx>-1) goTo(occStepIdx);
+        if(window.selectOccZone) window.selectOccZone(h.key);
+      });
+      hsvg.appendChild(poly);
+      var pulse = document.createElementNS(NS,'circle');
+      var ca = polyCentroidArea(parsePtsStr(h.pts));
+      pulse.setAttribute('class','plan-hotspot-pulse');
+      pulse.setAttribute('cx', ca.cx); pulse.setAttribute('cy', ca.cy); pulse.setAttribute('r', '2');
+      var an = document.createElementNS(NS,'animate');
+      an.setAttribute('attributeName','r'); an.setAttribute('values','2;4.5;2'); an.setAttribute('dur','2.6s'); an.setAttribute('repeatCount','indefinite');
+      var an2 = document.createElementNS(NS,'animate');
+      an2.setAttribute('attributeName','opacity'); an2.setAttribute('values','.7;0;.7'); an2.setAttribute('dur','2.6s'); an2.setAttribute('repeatCount','indefinite');
+      pulse.appendChild(an); pulse.appendChild(an2);
+      hsvg.appendChild(pulse);
+    });
+
+    var planTabs = document.getElementById('plan-tabs');
+    Array.prototype.forEach.call(planTabs.querySelectorAll('.plan-tab'), function(btn){
+      btn.addEventListener('click', function(){
+        var view = btn.getAttribute('data-view');
+        if(view===currentPlanView) return;
+        Array.prototype.forEach.call(planTabs.querySelectorAll('.plan-tab'), function(b){ b.classList.toggle('active', b===btn); });
+        var outView = document.getElementById('plan-view-'+currentPlanView);
+        var inView = document.getElementById('plan-view-'+view);
+        var outFrame = outView.querySelector('.evo-frame');
+        var inFrame = inView.querySelector('.evo-frame');
+        inView.classList.add('active');
+        runTilt(outFrame, inFrame);
+        setTimeout(function(){ outView.classList.remove('active'); }, 450);
+        document.getElementById('plan-kicker-k2').textContent = view==='axo' ? 'Final Layout Lifts Into — Axonometric View' : 'Zoning Resolves Into — Final Layout';
+        document.getElementById('plan-info').classList.toggle('active', view==='plan');
+        document.getElementById('axo-info').classList.toggle('active', view==='axo');
+        currentPlanView = view;
+      });
+    });
+
+    var ovToggle = document.getElementById('overlay-toggle');
+    ovToggle.addEventListener('click', function(){
+      document.getElementById('plan-overlay').classList.toggle('collapsed');
+    });
+  }
+  var currentPlanView = 'plan';
   function setLayer(key){
-    planLayer = key;
-    var svg = document.getElementById('plan-veil');
-    var NS = svg._NS, PW = svg._PW, PH = svg._PH;
     Array.prototype.forEach.call(document.querySelectorAll('.ltab'), function(t){
       t.classList.toggle('active', t.getAttribute('data-layer')===key);
     });
     var colorOn = key!=='structure';
-    document.getElementById('plan-color').style.opacity = colorOn ? 1 : 0;
-    Array.prototype.forEach.call(svg.querySelectorAll('.zpoly, .zlbl'), function(el){ el.remove(); });
-    Array.prototype.forEach.call(svg._mask.querySelectorAll('polygon'), function(el){ el.remove(); });
-    var zones = PLAN_ZONES[key];
-    if(zones){
-      svg.classList.add('zoned');
-      zones.forEach(function(z){
-        var ptsArr = z.points.split(' ').map(function(pair){
-          var xy = pair.split(',');
-          return [parseFloat(xy[0])/100*PW, parseFloat(xy[1])/100*PH];
-        });
-        var pts = ptsArr.map(function(p){ return p[0]+','+p[1]; }).join(' ');
-        var hole = document.createElementNS(NS,'polygon');
-        hole.setAttribute('points', pts); hole.setAttribute('fill','black');
-        svg._mask.appendChild(hole);
-        var oly = document.createElementNS(NS,'polygon');
-        oly.setAttribute('points', pts); oly.setAttribute('class','zpoly');
-        svg.appendChild(oly);
-        var cx0=0, cy0=1e9;
-        ptsArr.forEach(function(p){ cx0+=p[0]; if(p[1]<cy0) cy0=p[1]; });
-        cx0/=ptsArr.length;
-        var lbl = document.createElementNS(NS,'text');
-        lbl.setAttribute('x',cx0); lbl.setAttribute('y',Math.max(40, cy0-18));
-        lbl.setAttribute('text-anchor','middle'); lbl.setAttribute('class','zlbl');
-        lbl.textContent = z.label;
-        svg.appendChild(lbl);
-      });
-    } else {
-      svg.classList.remove('zoned');
-    }
+    document.getElementById('plan-structure').classList.toggle('on', !colorOn);
+    document.getElementById('plan-color').classList.toggle('on', colorOn);
     var L = PLAN_LAYERS.filter(function(l){ return l.key===key; })[0];
     var side = document.getElementById('plan-side');
     var html = '<h5>'+L.side.title+'</h5>';
@@ -1413,12 +1655,9 @@
     (L.side.notes||[]).forEach(function(n){ html += '<div class="pl-note">'+n+'</div>'; });
     side.innerHTML = html;
   }
-
   function planEnter(){
     buildPlan();
     setLayer('structure');
-    clearTimeout(planAutoTimer);
-    planAutoTimer = setTimeout(function(){ if(planLayer==='structure') setLayer('layout'); }, 1500);
   }
 
   /* ==================================================================
@@ -1451,11 +1690,15 @@
       });
       if(z.foot){
         var f = document.createElement('div');
-        f.className = 'pl-foot'; f.textContent = z.foot;
+        f.className = 'pl-foot'; f.innerHTML = z.foot;
         box.appendChild(f);
       }
     }
     selectZone(1);
+    window.selectOccZone = function(key){
+      var idx = OCC.map(function(o){ return o.key; }).indexOf(key);
+      if(idx>-1) selectZone(idx);
+    };
   })();
 
   /* ==================================================================
@@ -1469,33 +1712,222 @@
       var nav = document.getElementById('gal-nav');
       GALLERY.forEach(function(g, i){
         var slide = document.createElement('div');
-        slide.className = 'gal-slide';
-        slide.innerHTML = '<img src="'+g.img+'" alt="'+g.name+'">';
+        if(g.img){
+          slide.className = 'gal-slide';
+          slide.innerHTML = '<img src="'+g.img+'" alt="'+g.name+'">';
+        } else {
+          slide.className = 'gal-slide placeholder';
+          slide.innerHTML = '<div class="gal-ph"><div class="ic"><div class="dt"></div></div><div class="tx">Render in progress</div></div>';
+        }
         stage.appendChild(slide);
         var gi = document.createElement('div');
         gi.className = 'gi'; gi.textContent = g.name;
         gi.addEventListener('click', function(){ galShow(i); });
         nav.appendChild(gi);
+        if(g.img2){
+          ['Option 1','Option 2'].forEach(function(label, oi){
+            var opt = document.createElement('div');
+            opt.className = 'gi-opt'; opt.textContent = label;
+            opt.setAttribute('data-space', i); opt.setAttribute('data-opt', oi);
+            opt.addEventListener('click', function(e){ e.stopPropagation(); galSetOption(i, oi); });
+            nav.appendChild(opt);
+          });
+        }
       });
     }
     galShow(0);
+    galAudioPlay();
+  }
+  var galCurrentOpt = GALLERY.map(function(){ return 0; });
+  function galApplyOption(){
+    var g = GALLERY[galIdx];
+    var img = document.querySelector('.gal-slide.show img');
+    if(img && g.img2){ img.src = galCurrentOpt[galIdx]===1 ? g.img2 : g.img; }
+    var optsBox = document.getElementById('gal-opts');
+    optsBox.innerHTML = '';
+    if(g.img2){
+      optsBox.style.display = 'flex';
+      [g.img, g.img2].forEach(function(src, oi){
+        var t = document.createElement('img');
+        t.src = src; t.className = oi===galCurrentOpt[galIdx] ? 'active' : '';
+        t.addEventListener('click', function(){ galSetOption(galIdx, oi); });
+        optsBox.appendChild(t);
+      });
+    } else {
+      optsBox.style.display = 'none';
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('.gal-nav .gi-opt'), function(el){
+      var sIdx = parseInt(el.getAttribute('data-space'), 10);
+      var oIdx = parseInt(el.getAttribute('data-opt'), 10);
+      el.classList.toggle('show', sIdx===galIdx);
+      el.classList.toggle('active', sIdx===galIdx && oIdx===galCurrentOpt[galIdx]);
+    });
+  }
+  function galSetOption(spaceIdx, optIdx){
+    galCurrentOpt[spaceIdx] = optIdx;
+    if(spaceIdx===galIdx){ galApplyOption(); }
+    else { galShow(spaceIdx); }
   }
   function galShow(i){
     galIdx = (i + GALLERY.length) % GALLERY.length;
     var slides = document.querySelectorAll('.gal-slide');
-    Array.prototype.forEach.call(slides, function(s,j){ s.classList.toggle('show', j===galIdx); });
+    Array.prototype.forEach.call(slides, function(s,j){
+      s.classList.toggle('show', j===galIdx);
+      var img = s.querySelector('img');
+      if(img){ img.style.setProperty('--px','0%'); img.style.setProperty('--py','0%'); }
+    });
     Array.prototype.forEach.call(document.querySelectorAll('.gal-nav .gi'), function(g,j){ g.classList.toggle('active', j===galIdx); });
     document.getElementById('gal-name').textContent = GALLERY[galIdx].name;
     document.getElementById('gal-ix').textContent = ('0'+(galIdx+1)).slice(-2)+' / '+('0'+GALLERY.length).slice(-2);
+    updateKeyPlan(GALLERY[galIdx].name);
+    galApplyOption();
+  }
+
+  var KEYPLAN_IMG_W = 2520, KEYPLAN_IMG_H = 993, KEYPLAN_CARD_W = 140, KEYPLAN_CARD_H = 108;
+  var keyPlanOn = true;
+  function updateKeyPlan(name){
+    var card = document.getElementById('gal-keyplan');
+    var kp = KEY_PLAN[name];
+    if(!keyPlanOn || !kp){ card.style.display = 'none'; return; }
+    card.style.display = 'block';
+    var imgAspect = KEYPLAN_IMG_W / KEYPLAN_IMG_H, cardAspect = KEYPLAN_CARD_W / KEYPLAN_CARD_H;
+    var Zx = kp.zoom / 100;
+    var Zy = Zx * cardAspect / imgAspect; /* background-size:'X% auto' scales height to preserve the image's own aspect ratio, so the effective vertical zoom differs from Zx whenever the card and image aspect ratios differ */
+    var winW = 100 / Zx, winH = 100 / Zy; /* % of the plan image visible inside the crop window, per axis */
+    /* keep the window fully inside the image (0-100%) so a center near an edge doesn't reveal blank space */
+    var cx = Math.min(Math.max(kp.cx, winW/2), 100 - winW/2);
+    var cy = Math.min(Math.max(kp.cy, winH/2), 100 - winH/2);
+    function bgPos(target, Z){ return 100/(Z-1) * (Z*(target/100) - 0.5); }
+    var crop = document.getElementById('gkp-crop');
+    crop.style.backgroundImage = "url('assets/final/plan-color-v2.jpg')";
+    crop.style.backgroundSize = kp.zoom + '% auto';
+    crop.style.backgroundPosition = bgPos(cx, Zx) + '% ' + bgPos(cy, Zy) + '%';
+    var winLeft = cx - winW/2, winTop = cy - winH/2;
+    var mark = document.getElementById('gkp-mark');
+    mark.style.left = ((kp.rect.x - winLeft) / winW * 100) + '%';
+    mark.style.top = ((kp.rect.y - winTop) / winH * 100) + '%';
+    mark.style.width = (kp.rect.w / winW * 100) + '%';
+    mark.style.height = (kp.rect.h / winH * 100) + '%';
+  }
+
+  var galFadeTimer = null;
+  function galAudioFadeTo(target, ms, thenPause){
+    var audio = document.getElementById('gal-audio');
+    clearInterval(galFadeTimer);
+    var steps = 16, stepMs = ms/steps, start = audio.volume, i = 0;
+    galFadeTimer = setInterval(function(){
+      i++;
+      audio.volume = Math.max(0, Math.min(1, start + (target-start)*(i/steps)));
+      if(i>=steps){
+        clearInterval(galFadeTimer);
+        if(thenPause) audio.pause();
+      }
+    }, stepMs);
+  }
+  function galAudioPlay(){
+    var audio = document.getElementById('gal-audio');
+    if(audio.muted) return;
+    audio.volume = 0;
+    audio.play().then(function(){ galAudioFadeTo(0.35, 800, false); }).catch(function(){});
+  }
+  function galAudioStop(){
+    var audio = document.getElementById('gal-audio');
+    if(audio.paused) return;
+    galAudioFadeTo(0, 500, true);
+  }
+  var galMuteBtn = document.getElementById('gal-mute');
+  if(galMuteBtn){
+    galMuteBtn.addEventListener('click', function(){
+      var audio = document.getElementById('gal-audio');
+      audio.muted = !audio.muted;
+      galMuteBtn.classList.toggle('is-muted', audio.muted);
+      if(!audio.muted && document.getElementById('st-gallery').classList.contains('active')) galAudioPlay();
+    });
+  }
+  var galPanBtn = document.getElementById('gal-panmode');
+  var galDrag = null;
+  var GAL_PAN_MAX = 17.5; /* % — matches (1.35 scale - 1) / 2 * 100 */
+  function galPanStart(x, y){
+    if(galDrag) return;
+    var stage = document.getElementById('gal-stage');
+    if(!stage.classList.contains('pan-mode')) return;
+    var img = stage.querySelector('.gal-slide.show img');
+    if(!img) return;
+    var rect = stage.getBoundingClientRect();
+    galDrag = {
+      img: img, startX: x, startY: y,
+      startPx: parseFloat(img.style.getPropertyValue('--px')) || 0,
+      startPy: parseFloat(img.style.getPropertyValue('--py')) || 0,
+      w: rect.width, h: rect.height
+    };
+    img.classList.add('is-dragging');
+  }
+  function galPanMove(x, y){
+    if(!galDrag) return;
+    var dxPct = (x - galDrag.startX) / galDrag.w * 100;
+    var dyPct = (y - galDrag.startY) / galDrag.h * 100;
+    var px = Math.max(-GAL_PAN_MAX, Math.min(GAL_PAN_MAX, galDrag.startPx + dxPct));
+    var py = Math.max(-GAL_PAN_MAX, Math.min(GAL_PAN_MAX, galDrag.startPy + dyPct));
+    galDrag.img.style.setProperty('--px', px+'%');
+    galDrag.img.style.setProperty('--py', py+'%');
+  }
+  function galPanEnd(){
+    if(!galDrag) return;
+    galDrag.img.classList.remove('is-dragging');
+    galDrag = null;
+  }
+  var galStageEl = document.getElementById('gal-stage');
+  var galSectionEl = document.getElementById('st-gallery');
+  if(galSectionEl && galStageEl){
+    galSectionEl.addEventListener('mousedown', function(e){
+      if(!galStageEl.classList.contains('pan-mode')) return;
+      if(e.target.closest('.gal-mute')) return; /* let the mute/pan buttons handle their own click */
+      e.preventDefault();
+      galPanStart(e.clientX, e.clientY);
+    });
+    galSectionEl.addEventListener('touchstart', function(e){
+      if(!galStageEl.classList.contains('pan-mode')) return;
+      if(e.target.closest('.gal-mute')) return;
+      var t = e.touches[0];
+      galPanStart(t.clientX, t.clientY);
+    }, {passive:true});
+  }
+  document.addEventListener('mousemove', function(e){ galPanMove(e.clientX, e.clientY); });
+  document.addEventListener('mouseup', galPanEnd);
+  document.addEventListener('touchmove', function(e){
+    if(!galDrag) return;
+    var t = e.touches[0]; galPanMove(t.clientX, t.clientY);
+  });
+  document.addEventListener('touchend', galPanEnd);
+  if(galPanBtn){
+    galPanBtn.addEventListener('click', function(){
+      var stage = document.getElementById('gal-stage');
+      var on = stage.classList.toggle('pan-mode');
+      galPanBtn.classList.toggle('active', on);
+      if(!on){
+        galPanEnd();
+        var img = stage.querySelector('.gal-slide.show img');
+        if(img){ img.style.setProperty('--px','0%'); img.style.setProperty('--py','0%'); }
+      }
+    });
+  }
+  var galKeyPlanBtn = document.getElementById('gal-keyplan-toggle');
+  if(galKeyPlanBtn){
+    galKeyPlanBtn.addEventListener('click', function(){
+      keyPlanOn = !keyPlanOn;
+      galKeyPlanBtn.classList.toggle('active', keyPlanOn);
+      updateKeyPlan(GALLERY[galIdx].name);
+    });
   }
 
   /* ==================================================================
      boot: preload heavies, deep links
      ================================================================== */
-  ['assets/final/plan-line-full.jpg','assets/final/plan-color-full.jpg',
-   'assets/final/axonometric.jpg','assets/final/render-reception.jpg',
-   'assets/final/render-boardroom.jpg','assets/final/render-cafeteria.jpg',
-   'assets/final/material-board.jpg'].forEach(function(src){
+  ['assets/final/plan-structure-v2.jpg','assets/final/plan-color-v2.jpg',
+   'assets/final/axonometric-v2.jpg','assets/final/render-reception-v3.png',
+   'assets/final/render-boardroom-v3.png','assets/final/render-cafeteria-v3.png',
+   'assets/final/material-board.jpg','assets/final/site-diligence-plan.png',
+   'assets/final/zoning-base-clean.jpg'].forEach(function(src){
     var im = new Image(); im.src = src;
   });
 
