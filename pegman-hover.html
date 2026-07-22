@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Axo Space Hover POC</title>
+<style>
+  :root{
+    --maroon:#980000;
+    --charcoal:#252525;
+    --paper:#F3F3F3;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; height:100%; background:var(--paper);
+    font-family:Arial, Helvetica, sans-serif; overflow:hidden;
+  }
+  #frame{
+    position:relative; width:100vw; height:100vh;
+    display:flex; align-items:center; justify-content:center;
+  }
+  #stage{
+    position:relative;
+    width:min(100vw, 177.78vh);
+  }
+  #axo-img{
+    width:100%; height:100%; display:block; user-select:none; -webkit-user-drag:none;
+  }
+  .space-overlay{
+    position:absolute; pointer-events:none;
+    opacity:0; transition:opacity .25s ease;
+  }
+  .space-overlay.hovered{ opacity:1; }
+
+  /* floating tooltip that follows the cursor (shapes are irregular, no fixed anchor point) */
+  #hover-tip{
+    position:fixed; z-index:40; pointer-events:none;
+    background:rgba(24,22,22,.68);
+    -webkit-backdrop-filter:blur(16px) saturate(160%);
+    backdrop-filter:blur(16px) saturate(160%);
+    color:#fff; padding:9px 16px; border-radius:8px;
+    border:1px solid rgba(255,255,255,.14);
+    box-shadow:0 10px 30px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.08);
+    white-space:nowrap;
+    opacity:0; transform:translate(-50%, -140%) scale(.82);
+    transition:opacity .16s ease, transform .22s cubic-bezier(.34,1.56,.64,1);
+  }
+  #hover-tip .tip-name{ font-size:12.5px; font-weight:600; letter-spacing:.01em; }
+  #hover-tip .tip-caption{ font-size:10.5px; font-weight:400; color:rgba(255,255,255,.6); margin-top:2px; }
+  #hover-tip.show{ opacity:1; transform:translate(-50%, -140%) scale(1); }
+
+  #frame.is-zooming #heading{ opacity:0; pointer-events:none; }
+
+  /* render overlay — an opaque veil (fades in fast, hides the axo immediately)
+     with the render image "iris revealed" through a slower expanding circle on
+     top of it, so the axo never peeks through around the growing circle */
+  #render-overlay{
+    position:fixed; inset:0; z-index:50;
+    background:var(--charcoal);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .3s ease;
+  }
+  #render-overlay.open{ opacity:1; pointer-events:auto; }
+
+  #render-reveal{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    clip-path:circle(0px at var(--rx, 50%) var(--ry, 50%));
+    transition:clip-path 1.6s cubic-bezier(.16,1,.3,1);
+  }
+  #render-overlay.open #render-reveal{
+    clip-path:circle(150vmax at var(--rx, 50%) var(--ry, 50%));
+  }
+  #render-reveal img{
+    max-width:100%; max-height:100%; width:100%; object-fit:contain;
+    transform:scale(1.08);
+    transition:transform 1.6s cubic-bezier(.16,1,.3,1);
+  }
+  #render-overlay.open #render-reveal img{ transform:scale(1); }
+  #render-caption{
+    position:absolute; left:32px; bottom:28px; color:#fff;
+  }
+  #render-caption .eyebrow{
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.55);
+    margin-bottom:4px;
+  }
+  #render-caption h2{ margin:0; font-size:26px; font-weight:800; }
+  #render-close{
+    position:absolute; top:24px; right:28px; width:40px; height:40px; border-radius:50%;
+    background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3); color:#fff;
+    font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    z-index:6;
+  }
+  #render-close:hover{ background:rgba(255,255,255,.22); }
+
+  /* render list — bottom-right nav of every space that has a render, so you
+     can jump between renders without leaving the viewer (mirrors index2.html's
+     .gal-nav) */
+  #render-nav{
+    position:absolute; right:32px; bottom:36px; z-index:6;
+    display:flex; flex-direction:column; gap:8px; text-align:right;
+  }
+  #render-nav .rn-item{
+    font-size:13px; font-weight:500; color:rgba(255,255,255,.55);
+    cursor:pointer; transition:color .25s ease;
+  }
+  #render-nav .rn-item:hover{ color:#fff; }
+  #render-nav .rn-item.active{ color:#fff; letter-spacing:.03em; }
+  #render-nav .rn-item.active::after{
+    content:""; display:inline-block; width:16px; height:1px;
+    background:var(--maroon); margin-left:10px; vertical-align:middle;
+  }
+
+  /* key plan — small crop of the axo showing where the open render sits
+     (mirrors index2.html's .gal-keyplan) */
+  #render-keyplan{
+    position:absolute; top:80px; right:28px; z-index:6;
+    width:140px; height:108px; border-radius:8px; overflow:hidden;
+    border:1px solid rgba(255,255,255,.3); background:rgba(0,0,0,.35);
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  }
+  #rkp-crop{ position:absolute; inset:0; background-repeat:no-repeat; }
+  #rkp-mark{
+    position:absolute; border:1.5px solid var(--maroon); border-radius:2px;
+    pointer-events:none; box-shadow:0 0 0 1px rgba(0,0,0,.4);
+  }
+  #render-keyplan .rkp-label{
+    position:absolute; left:0; right:0; bottom:0; padding:5px 10px; text-align:center;
+    font-size:9.5px; font-weight:600; letter-spacing:.2em; text-transform:uppercase;
+    color:#fff; background:linear-gradient(0deg, rgba(0,0,0,.65), transparent);
+  }
+
+  /* mute toggle — reuses index2.html's .gal-mute look */
+  #render-mute{
+    position:absolute; top:24px; right:80px; width:40px; height:40px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.3); background:rgba(255,255,255,.12);
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:background .25s ease; z-index:6;
+  }
+  #render-mute:hover{ background:rgba(255,255,255,.22); }
+  #render-mute svg{ width:16px; height:16px; stroke:#fff; fill:none; stroke-width:1.6; }
+  #render-mute .muted-line{ display:none; }
+  #render-mute.is-muted .muted-line{ display:block; }
+
+  /* toast for spaces without a render yet */
+  #toast{
+    position:fixed; left:50%; bottom:40px; transform:translateX(-50%) translateY(20px);
+    background:var(--charcoal); color:#fff; padding:10px 18px; border-radius:8px;
+    font-size:13px; opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;
+    z-index:60;
+  }
+  #toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  #heading{
+    position:absolute; top:28px; left:32px; z-index:5;
+    transition:opacity .35s ease;
+  }
+  #heading h1{ margin:0; font-size:20px; font-weight:800; color:var(--charcoal); }
+  #heading p{ margin:2px 0 0; font-size:13px; color:#666; }
+</style>
+</head>
+<body>
+
+<div id="frame">
+  <div id="heading">
+    <h1>Design Thinking</h1>
+    <p>Axonometric View — hover a space to see its name, click to view its render</p>
+  </div>
+
+  <div id="stage">
+    <img id="axo-img" alt="Axonometric view">
+    <div id="overlays"></div>
+  </div>
+</div>
+
+<div id="hover-tip"></div>
+
+<div id="render-overlay">
+  <button id="render-close" aria-label="Close">✕</button>
+  <button id="render-mute" aria-label="Mute background music" title="Mute background music">
+    <svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16 8a5 5 0 0 1 0 8"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/><path class="muted-line" d="M2 2l20 20"/></svg>
+  </button>
+  <audio id="render-audio" loop preload="none" src="assets/audio/gallery-ambient.mp3"></audio>
+  <div id="render-keyplan">
+    <div id="rkp-crop"></div>
+    <div id="rkp-mark"></div>
+    <div class="rkp-label">Key Plan</div>
+  </div>
+  <div id="render-reveal">
+    <img id="render-img" src="" alt="">
+  </div>
+  <div id="render-caption">
+    <div class="eyebrow">Rendered concept</div>
+    <h2 id="render-title"></h2>
+  </div>
+  <div id="render-nav"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  const MANIFEST_URL = params.get('manifest') || 'assets/pegman/spaces/manifest.json';
+  const AXO_URL       = params.get('axo')      || 'assets/pegman/axo.png';
+  const MANIFEST_DIR  = MANIFEST_URL.slice(0, MANIFEST_URL.lastIndexOf('/') + 1);
+
+  // known space-id -> render image, so a real render lights up automatically
+  // once a manifest space happens to share that id (e.g. from "Reception.pdf")
+  const RENDER_MAP = {
+    'reception': 'assets/pegman/render_reception_op01.png',
+  };
+
+  const frame       = document.getElementById('frame');
+  const stage       = document.getElementById('stage');
+  const axoImg      = document.getElementById('axo-img');
+  const overlaysEl  = document.getElementById('overlays');
+  const tip         = document.getElementById('hover-tip');
+  const overlay     = document.getElementById('render-overlay');
+  const renderImg   = document.getElementById('render-img');
+  const renderTitle = document.getElementById('render-title');
+  const toast       = document.getElementById('toast');
+
+  let hitCanvas, hitCtx;
+  let spaces = [];
+  let hoveredSpace = null;
+  let toastTimer = null;
+  let canvasDims = null;
+  let openSpace = null;
+  let navBuilt = false;
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>toast.classList.remove('show'), 1800);
+  }
+
+  function loadImage(src){
+    return new Promise((resolve, reject)=>{
+      const img = new Image();
+      img.onload = ()=>resolve(img);
+      img.onerror = reject;
+      img.src = src;
+    });
+  }
+
+  async function init(){
+    const manifest = await (await fetch(MANIFEST_URL)).json();
+    spaces = manifest.spaces.map((s, i)=>({ ...s, idIndex: i + 1 }));
+    canvasDims = manifest.canvas;
+
+    stage.style.aspectRatio = manifest.canvas.width + ' / ' + manifest.canvas.height;
+    axoImg.src = AXO_URL;
+
+    hitCanvas = document.createElement('canvas');
+    hitCanvas.width = manifest.canvas.width;
+    hitCanvas.height = manifest.canvas.height;
+    hitCtx = hitCanvas.getContext('2d', { willReadFrequently: true });
+
+    // scratch canvas isolates each space's own mask+recolor step — compositing
+    // straight onto the shared hitCanvas would let a later space's `source-in`
+    // fill recolor EVERY already-opaque pixel on the canvas (not just its own
+    // just-drawn region), silently stomping earlier spaces' id colors.
+    const scratch = document.createElement('canvas');
+    scratch.width = hitCanvas.width;
+    scratch.height = hitCanvas.height;
+    const sctx = scratch.getContext('2d');
+
+    for (const space of spaces){
+      const overlayImg = document.createElement('img');
+      overlayImg.className = 'space-overlay';
+      overlayImg.src = MANIFEST_DIR + space.overlay;
+      overlayImg.style.left   = space.bbox.xPct + '%';
+      overlayImg.style.top    = space.bbox.yPct + '%';
+      overlayImg.style.width  = space.bbox.wPct + '%';
+      overlayImg.style.height = space.bbox.hPct + '%';
+      overlaysEl.appendChild(overlayImg);
+      space.overlayEl = overlayImg;
+
+      const hitMaskImg = await loadImage(MANIFEST_DIR + space.hitMask);
+      sctx.clearRect(0, 0, scratch.width, scratch.height);
+      sctx.globalCompositeOperation = 'source-over';
+      sctx.drawImage(hitMaskImg, 0, 0, scratch.width, scratch.height);
+      sctx.globalCompositeOperation = 'source-in';
+      sctx.fillStyle = 'rgb(' + space.idIndex + ',0,0)';
+      sctx.fillRect(0, 0, scratch.width, scratch.height);
+
+      hitCtx.drawImage(scratch, 0, 0); // source-over: only paints this space's own shape
+    }
+
+    stage.addEventListener('mousemove', onMouseMove);
+    stage.addEventListener('mouseleave', clearHover);
+    stage.addEventListener('click', onClick);
+  }
+
+  let rafPending = false;
+  let lastEvent = null;
+  function onMouseMove(e){
+    lastEvent = e;
+    if (rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(()=>{
+      rafPending = false;
+      handleMove(lastEvent);
+    });
+  }
+
+  function handleMove(e){
+    const rect = axoImg.getBoundingClientRect();
+    const fx = (e.clientX - rect.left) / rect.width;
+    const fy = (e.clientY - rect.top) / rect.height;
+    if (fx < 0 || fx > 1 || fy < 0 || fy > 1) { clearHover(); return; }
+
+    const px = Math.min(hitCanvas.width - 1, Math.max(0, Math.floor(fx * hitCanvas.width)));
+    const py = Math.min(hitCanvas.height - 1, Math.max(0, Math.floor(fy * hitCanvas.height)));
+    const [r] = hitCtx.getImageData(px, py, 1, 1).data;
+
+    if (r === 0){ clearHover(); return; }
+    const space = spaces[r - 1];
+    if (!space) { clearHover(); return; }
+
+    if (space !== hoveredSpace){
+      if (hoveredSpace) hoveredSpace.overlayEl.classList.remove('hovered');
+      hoveredSpace = space;
+      space.overlayEl.classList.add('hovered');
+      const hasRender = !!RENDER_MAP[space.id];
+      tip.innerHTML = '<div class="tip-name">' + space.name + '</div>'
+        + '<div class="tip-caption">' + (hasRender ? 'Click to view render' : 'Render coming soon') + '</div>';
+      tip.classList.add('show');
+      stage.style.cursor = hasRender ? 'pointer' : '';
+    }
+    tip.style.left = e.clientX + 'px';
+    tip.style.top  = e.clientY + 'px';
+  }
+
+  function clearHover(){
+    if (hoveredSpace) hoveredSpace.overlayEl.classList.remove('hovered');
+    hoveredSpace = null;
+    tip.classList.remove('show');
+    stage.style.cursor = '';
+  }
+
+  function onClick(e){
+    if (!hoveredSpace) return;
+    const renderSrc = RENDER_MAP[hoveredSpace.id];
+    if (renderSrc){
+      revealRender(hoveredSpace, renderSrc, e.clientX, e.clientY);
+    } else {
+      showToast(hoveredSpace.name + ': render in progress');
+    }
+  }
+
+  function revealRender(space, renderSrc, clientX, clientY){
+    overlay.style.setProperty('--rx', clientX + 'px');
+    overlay.style.setProperty('--ry', clientY + 'px');
+    clearHover();
+    swapRender(space, renderSrc);
+    frame.classList.add('is-zooming');
+
+    // next frame, so the circle animates FROM 0 rather than snapping straight to full size
+    requestAnimationFrame(()=> overlay.classList.add('open'));
+    playRenderAudio();
+  }
+
+  // updates the open render in place (image/title/key plan/nav highlight)
+  // without touching the iris circle - used both by the initial open and by
+  // clicking a different space in the render-nav list while already open
+  function swapRender(space, renderSrc){
+    openSpace = space;
+    renderImg.src = renderSrc;
+    renderTitle.textContent = space.name;
+    updateKeyPlan(space);
+    buildRenderNav();
+    Array.prototype.forEach.call(document.querySelectorAll('#render-nav .rn-item'), (el)=>{
+      el.classList.toggle('active', el.dataset.spaceId === space.id);
+    });
+  }
+
+  function buildRenderNav(){
+    if (navBuilt) return;
+    navBuilt = true;
+    const nav = document.getElementById('render-nav');
+    spaces.filter(s => RENDER_MAP[s.id]).forEach((s)=>{
+      const item = document.createElement('div');
+      item.className = 'rn-item';
+      item.textContent = s.name;
+      item.dataset.spaceId = s.id;
+      item.addEventListener('click', ()=>{
+        if (openSpace === s) return;
+        swapRender(s, RENDER_MAP[s.id]);
+      });
+      nav.appendChild(item);
+    });
+  }
+
+  // key plan — crops/zooms the same axo.png around the open space's bbox and
+  // draws a highlight rect over it, so you can see where the render sits on
+  // the overall plan (math mirrors index2.html's updateKeyPlan/gal-keyplan,
+  // just deriving zoom/center from the manifest bbox instead of a hand-tuned
+  // per-space table, since here the crop source IS the same image the bbox
+  // coordinates already live in)
+  const KEYPLAN_CARD_W = 140, KEYPLAN_CARD_H = 108, KEYPLAN_CONTEXT_MULT = 3.2;
+  function updateKeyPlan(space){
+    const crop = document.getElementById('rkp-crop');
+    const mark = document.getElementById('rkp-mark');
+    const imgAspect = canvasDims.width / canvasDims.height;
+    const cardAspect = KEYPLAN_CARD_W / KEYPLAN_CARD_H;
+
+    const winWPct = Math.min(70, Math.max(18, space.bbox.wPct * KEYPLAN_CONTEXT_MULT));
+    const Zx = 100 / winWPct;
+    const Zy = Zx * cardAspect / imgAspect;
+    const winW = 100 / Zx, winH = 100 / Zy;
+
+    const cx = Math.min(Math.max(space.bbox.xPct + space.bbox.wPct / 2, winW / 2), 100 - winW / 2);
+    const cy = Math.min(Math.max(space.bbox.yPct + space.bbox.hPct / 2, winH / 2), 100 - winH / 2);
+    const bgPos = (target, Z) => 100 / (Z - 1) * (Z * (target / 100) - 0.5);
+
+    crop.style.backgroundImage = 'url(' + AXO_URL + ')';
+    crop.style.backgroundSize = (Zx * 100) + '% auto';
+    crop.style.backgroundPosition = bgPos(cx, Zx) + '% ' + bgPos(cy, Zy) + '%';
+
+    const winLeft = cx - winW / 2, winTop = cy - winH / 2;
+    mark.style.left   = ((space.bbox.xPct - winLeft) / winW * 100) + '%';
+    mark.style.top    = ((space.bbox.yPct - winTop) / winH * 100) + '%';
+    mark.style.width  = (space.bbox.wPct / winW * 100) + '%';
+    mark.style.height = (space.bbox.hPct / winH * 100) + '%';
+  }
+
+  // ambient music, mirroring index2.html's galAudioPlay/Stop/FadeTo
+  let audioFadeTimer = null;
+  function audioFadeTo(target, ms, thenPause){
+    const audio = document.getElementById('render-audio');
+    clearInterval(audioFadeTimer);
+    const steps = 16, stepMs = ms / steps, start = audio.volume;
+    let i = 0;
+    audioFadeTimer = setInterval(()=>{
+      i++;
+      audio.volume = Math.max(0, Math.min(1, start + (target - start) * (i / steps)));
+      if (i >= steps){
+        clearInterval(audioFadeTimer);
+        if (thenPause) audio.pause();
+      }
+    }, stepMs);
+  }
+  function playRenderAudio(){
+    const audio = document.getElementById('render-audio');
+    if (audio.muted) return;
+    audio.volume = 0;
+    audio.play().then(()=> audioFadeTo(0.35, 800, false)).catch(()=>{});
+  }
+  function stopRenderAudio(){
+    const audio = document.getElementById('render-audio');
+    if (audio.paused) return;
+    audioFadeTo(0, 500, true);
+  }
+
+  const muteBtn = document.getElementById('render-mute');
+  muteBtn.addEventListener('click', ()=>{
+    const audio = document.getElementById('render-audio');
+    audio.muted = !audio.muted;
+    muteBtn.classList.toggle('is-muted', audio.muted);
+    if (!audio.muted && overlay.classList.contains('open')) playRenderAudio();
+  });
+
+  document.getElementById('render-close').addEventListener('click', ()=>{
+    overlay.classList.remove('open');
+    frame.classList.remove('is-zooming');
+    stopRenderAudio();
+  });
+
+  overlay.addEventListener('click', (e)=>{
+    if (e.target === overlay) document.getElementById('render-close').click();
+  });
+
+  document.addEventListener('keydown', (e)=>{
+    if (e.key === 'Escape' && overlay.classList.contains('open')){
+      document.getElementById('render-close').click();
+    }
+  });
+
+  init();
+</script>
+
+</body>
+</html>

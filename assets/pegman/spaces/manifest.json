@@ -1,0 +1,80 @@
+{
+  "canvas": {
+    "width": 4645,
+    "height": 2614
+  },
+  "spaces": [
+    {
+      "id": "boardroom",
+      "name": "Boardroom",
+      "bbox": {
+        "xPct": 57.589,
+        "yPct": 28.883,
+        "wPct": 11.216,
+        "hPct": 10.061
+      },
+      "overlay": "boardroom.png",
+      "hitMask": "boardroom.hit-mask.png"
+    },
+    {
+      "id": "cafeteria",
+      "name": "Cafeteria",
+      "bbox": {
+        "xPct": 70.807,
+        "yPct": 26.97,
+        "wPct": 20.129,
+        "hPct": 15.914
+      },
+      "overlay": "cafeteria.png",
+      "hitMask": "cafeteria.hit-mask.png"
+    },
+    {
+      "id": "md-cabin",
+      "name": "MD Cabin",
+      "bbox": {
+        "xPct": 18.235,
+        "yPct": 71.729,
+        "wPct": 5.705,
+        "hPct": 8.263
+      },
+      "overlay": "md-cabin.png",
+      "hitMask": "md-cabin.hit-mask.png"
+    },
+    {
+      "id": "reception",
+      "name": "Reception",
+      "bbox": {
+        "xPct": 40.065,
+        "yPct": 33.129,
+        "wPct": 18.924,
+        "hPct": 13.772
+      },
+      "overlay": "reception.png",
+      "hitMask": "reception.hit-mask.png"
+    },
+    {
+      "id": "training",
+      "name": "Training",
+      "bbox": {
+        "xPct": 85.64,
+        "yPct": 24.101,
+        "wPct": 10.614,
+        "hPct": 13.542
+      },
+      "overlay": "training.png",
+      "hitMask": "training.hit-mask.png"
+    },
+    {
+      "id": "workhall",
+      "name": "Workhall",
+      "bbox": {
+        "xPct": 72.53,
+        "yPct": 19.319,
+        "wPct": 11.948,
+        "hPct": 13.466
+      },
+      "overlay": "workhall.png",
+      "hitMask": "workhall.hit-mask.png"
+    }
+  ]
+}

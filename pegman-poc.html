@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Axo Pin → Render POC</title>
+<style>
+  :root{
+    --maroon:#980000;
+    --charcoal:#252525;
+    --paper:#F3F3F3;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; height:100%; background:var(--paper);
+    font-family:Arial, Helvetica, sans-serif; overflow:hidden;
+  }
+  #frame{
+    position:relative; width:100vw; height:100vh;
+    display:flex; align-items:center; justify-content:center;
+  }
+  #frame.is-zooming #heading,
+  #frame.is-zooming .pin{
+    opacity:0; pointer-events:none;
+  }
+  #stage{
+    position:relative;
+    width:min(100vw, 177.78vh);
+    aspect-ratio:1920/1080;
+    transition:transform 1.3s cubic-bezier(.76,0,.18,1), filter 1.3s ease;
+    will-change:transform;
+  }
+  #stage.zooming{ filter:blur(3px) brightness(1.04); }
+  #axo-img{
+    width:100%; height:100%; display:block; user-select:none; -webkit-user-drag:none;
+  }
+
+  /* pins */
+  .pin{
+    position:absolute; width:28px; height:28px; margin:-20px 0 0 -14px;
+    cursor:pointer; transition:opacity .3s ease;
+  }
+  .pin-head{
+    width:28px; height:28px; border-radius:50% 50% 50% 0;
+    transform:rotate(-45deg);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 3px 8px rgba(0,0,0,.35);
+    transition:transform .18s ease;
+  }
+  .pin-head::after{
+    content:""; width:10px; height:10px; border-radius:50%;
+    background:#fff; transform:rotate(45deg);
+  }
+  .pin.has-render .pin-head{ background:var(--maroon); }
+  .pin.pending .pin-head{ background:#9a9a9a; }
+  .pin:hover .pin-head{ transform:rotate(-45deg) scale(1.15); }
+  .pin.has-render{ animation:bob 2.4s ease-in-out infinite; }
+  @keyframes bob{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-4px); }
+  }
+
+  /* tooltip */
+  .tip{
+    position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+    background:var(--charcoal); color:#fff; padding:6px 12px; border-radius:6px;
+    font-size:13px; white-space:nowrap; opacity:0; pointer-events:none;
+    transition:opacity .15s ease, transform .15s ease;
+  }
+  .tip::after{
+    content:""; position:absolute; top:100%; left:50%; margin-left:-5px;
+    border:5px solid transparent; border-top-color:var(--charcoal);
+  }
+  .pin:hover .tip{ opacity:1; transform:translateX(-50%) translateY(-4px); }
+  .tip .sub{ display:block; font-size:10.5px; color:#c9c9c9; font-weight:400; margin-top:1px; }
+  .tip b{ font-weight:700; }
+
+  /* render overlay */
+  #render-overlay{
+    position:fixed; inset:0; z-index:50;
+    background:var(--charcoal);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+    opacity:0; pointer-events:none;
+    transition:opacity .45s ease;
+  }
+  #render-overlay.open{ opacity:1; pointer-events:auto; }
+  #render-overlay img{
+    max-width:100%; max-height:100%; width:100%; object-fit:contain;
+    opacity:0;
+  }
+  @keyframes render-in{
+    from{ opacity:0; transform:scale(1.45); filter:blur(18px); }
+    60% { filter:blur(2px); }
+    to  { opacity:1; transform:scale(1); filter:blur(0); }
+  }
+  @keyframes render-out{
+    from{ opacity:1; transform:scale(1); filter:blur(0); }
+    to  { opacity:0; transform:scale(1.3); filter:blur(14px); }
+  }
+  #render-img.entering{ animation:render-in 1.1s cubic-bezier(.16,1,.3,1) forwards; }
+  #render-img.leaving{ animation:render-out .45s ease forwards; }
+  #render-caption{
+    position:absolute; left:32px; bottom:28px; color:#fff;
+  }
+  #render-caption .eyebrow{
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.55);
+    margin-bottom:4px;
+  }
+  #render-caption h2{ margin:0; font-size:26px; font-weight:800; }
+  #render-close{
+    position:absolute; top:24px; right:28px; width:40px; height:40px; border-radius:50%;
+    background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3); color:#fff;
+    font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  #render-close:hover{ background:rgba(255,255,255,.22); }
+
+  /* toast for pending pins */
+  #toast{
+    position:fixed; left:50%; bottom:40px; transform:translateX(-50%) translateY(20px);
+    background:var(--charcoal); color:#fff; padding:10px 18px; border-radius:8px;
+    font-size:13px; opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease;
+    z-index:60;
+  }
+  #toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  #heading{
+    position:absolute; top:28px; left:32px; z-index:5;
+    transition:opacity .35s ease;
+  }
+  #heading h1{ margin:0; font-size:20px; font-weight:800; color:var(--charcoal); }
+  #heading p{ margin:2px 0 0; font-size:13px; color:#666; }
+</style>
+</head>
+<body>
+
+<div id="frame">
+  <div id="heading">
+    <h1>Design Thinking</h1>
+    <p>Axonometric View — click a pin with a render to zoom in</p>
+  </div>
+
+  <div id="stage">
+    <img id="axo-img" src="assets/pegman/axo.png" alt="Axonometric view">
+    <div id="pins"></div>
+  </div>
+</div>
+
+<div id="render-overlay">
+  <button id="render-close" aria-label="Close">✕</button>
+  <img id="render-img" src="" alt="">
+  <div id="render-caption">
+    <div class="eyebrow">Rendered concept</div>
+    <h2 id="render-title"></h2>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  // percent coords traced from axo_space highlight.png (1920x1080)
+  const SPACES = [
+    { id:'space-1', name:'Workhall',        x:24.17, y:58.57, render:null },
+    { id:'space-2', name:'Breakout Lounge',  x:40.20, y:58.55, render:null },
+    { id:'space-3', name:'Reception',        x:57.92, y:44.44, render:'assets/pegman/render_reception_op01.png' },
+  ];
+
+  const frame       = document.getElementById('frame');
+  const pinsLayer   = document.getElementById('pins');
+  const stage       = document.getElementById('stage');
+  const overlay     = document.getElementById('render-overlay');
+  const renderImg    = document.getElementById('render-img');
+  const renderTitle  = document.getElementById('render-title');
+  const toast        = document.getElementById('toast');
+
+  let toastTimer = null;
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>toast.classList.remove('show'), 1800);
+  }
+
+  SPACES.forEach(space=>{
+    const hasRender = !!space.render;
+    const pin = document.createElement('div');
+    pin.className = 'pin ' + (hasRender ? 'has-render' : 'pending');
+    pin.style.left = space.x + '%';
+    pin.style.top  = space.y + '%';
+
+    pin.innerHTML = `
+      <div class="pin-head"></div>
+      <div class="tip"><b>${space.name}</b>${hasRender ? '' : '<span class="sub">Render coming soon</span>'}</div>
+    `;
+
+    pin.addEventListener('click', ()=>{
+      if (hasRender){
+        zoomIntoSpace(space);
+      } else {
+        showToast(`${space.name}: render in progress`);
+      }
+    });
+
+    pinsLayer.appendChild(pin);
+  });
+
+  // ?debugzoom=<space-id> auto-triggers a zoom on load, for screenshot verification
+  const debugZoom = new URLSearchParams(location.search).get('debugzoom');
+  if (debugZoom){
+    const target = SPACES.find(s => s.id === debugZoom && s.render);
+    if (target) setTimeout(()=>zoomIntoSpace(target), 50);
+  }
+
+  const ZOOM_SCALE = 9;          // how deep the axo dives in before blending
+  const ZOOM_MS    = 1300;       // must match #stage transition duration
+  const CROSSFADE_AT = 750;      // start blending into the render before the dive finishes
+
+  function zoomIntoSpace(space){
+    frame.classList.add('is-zooming');
+    stage.style.transformOrigin = space.x + '% ' + space.y + '%';
+    stage.classList.add('zooming');
+    stage.style.transform = 'scale(' + ZOOM_SCALE + ')';
+
+    setTimeout(()=>{
+      renderImg.src = space.render;
+      renderTitle.textContent = space.name;
+      overlay.classList.add('open');
+      renderImg.classList.remove('leaving');
+      // force reflow so the entrance animation restarts every time
+      void renderImg.offsetWidth;
+      renderImg.classList.add('entering');
+    }, CROSSFADE_AT);
+  }
+
+  document.getElementById('render-close').addEventListener('click', ()=>{
+    renderImg.classList.remove('entering');
+    renderImg.classList.add('leaving');
+
+    setTimeout(()=>{
+      overlay.classList.remove('open');
+      stage.classList.remove('zooming');
+      stage.style.transform = 'scale(1)';
+      frame.classList.remove('is-zooming');
+    }, 450);
+  });
+
+  overlay.addEventListener('click', (e)=>{
+    if (e.target === overlay) document.getElementById('render-close').click();
+  });
+
+  document.addEventListener('keydown', (e)=>{
+    if (e.key === 'Escape' && overlay.classList.contains('open')){
+      document.getElementById('render-close').click();
+    }
+  });
+</script>
+
+</body>
+</html>

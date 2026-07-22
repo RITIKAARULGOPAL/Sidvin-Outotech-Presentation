@@ -1,0 +1,32 @@
+{
+  "canvas": {
+    "width": 2223,
+    "height": 1389
+  },
+  "spaces": [
+    {
+      "id": "board-room",
+      "name": "Board Room",
+      "bbox": {
+        "xPct": 55.78,
+        "yPct": 55.148,
+        "wPct": 27.215,
+        "hPct": 23.614
+      },
+      "overlay": "board-room.png",
+      "hitMask": "board-room.hit-mask.png"
+    },
+    {
+      "id": "reception",
+      "name": "Reception",
+      "bbox": {
+        "xPct": 14.485,
+        "yPct": 17.207,
+        "wPct": 23.482,
+        "hPct": 31.605
+      },
+      "overlay": "reception.png",
+      "hitMask": "reception.hit-mask.png"
+    }
+  ]
+}

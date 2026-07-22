@@ -1,0 +1,2131 @@
+<meta charset="UTF-8" />
+<title>Sidvin Outotec — Workplace Design Journey</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     SIDVIN OUTOTEC — guided journey, restrained corporate register.
+     22.07.26 revision (index2). Colors and type are the deck's own:
+       maroon #980000, cyan #5FC9E6, navy #0F162F, charcoal #252525,
+       white / paper #F3F3F3. Headings Poppins, body Arial.
+     ============================================================ */
+  :root{
+    --ink:#000000;
+    --charcoal:#252525;
+    --navy:#0F162F;
+    --maroon:#980000;
+    --white:#FFFFFF;
+    --paper:#F3F3F3;
+    --gray-line:#e4e4e4;
+    --gray-text:#6b6b6b;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%; overflow:hidden; background:var(--paper);}
+  body{
+    font-family:Arial, Helvetica, sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+  }
+  .disp{ font-family:'Poppins', Arial, sans-serif; }
+  img{ user-select:none; -webkit-user-drag:none; }
+
+  /* ---------- shell / steps ---------- */
+  #journey{ position:relative; z-index:2; width:100%; height:100vh; background:var(--paper); }
+  .step{
+    position:absolute; inset:0; background:var(--paper);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden;
+    transition:opacity .6s var(--ease), visibility 0s linear .6s;
+    padding:64px 96px 84px 96px;
+  }
+  .step.active{ opacity:1; visibility:visible; transition:opacity .6s var(--ease), visibility 0s; }
+  .step[data-evo="1"]{ transition:opacity 1s var(--ease), visibility 0s linear 1s; }
+  .step[data-evo="1"].active{ transition:opacity 1s var(--ease), visibility 0s; }
+  .step-inner{ width:100%; max-width:1680px; height:100%; position:relative; display:flex; flex-direction:column; justify-content:center; }
+  .step:has(.kicker) .step-inner{ justify-content:flex-start; }
+  .step.on-paper{ background:var(--paper); }
+  .step.on-dark{ background:var(--charcoal); }
+
+  .rv{ opacity:0; transform:translateY(16px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+  .step.active .rv{ opacity:1; transform:none; }
+  .rv.d1{ transition-delay:.10s; } .rv.d2{ transition-delay:.20s; } .rv.d3{ transition-delay:.30s; }
+  .rv.d4{ transition-delay:.40s; } .rv.d5{ transition-delay:.50s; } .rv.d6{ transition-delay:.60s; }
+
+  .kicker{ position:relative; font-size:15px; margin-bottom:6px; }
+  .kicker .k1{ font-weight:700; font-size:19px; color:var(--ink); }
+  .kicker .k2{ font-size:17px; color:var(--ink); margin-top:2px; }
+  .on-dark .kicker .k1, .on-dark .kicker .k2{ color:#fff; }
+  .accent-dash{ width:46px; height:4px; background:var(--charcoal); margin:14px 0 20px; }
+
+  h1.hero{ font-family:'Poppins',sans-serif; font-weight:700; font-size:44px; line-height:1.22; color:var(--navy); max-width:1240px; }
+  h2.title{ font-family:'Poppins',sans-serif; font-weight:800; font-size:48px; color:var(--maroon); line-height:1.1; }
+  h2.title.dark-h{ color:var(--maroon); }
+  p.lede{ font-size:16px; line-height:1.7; color:var(--ink); max-width:760px; }
+  p.lede b{ font-weight:700; }
+  .on-dark p.lede{ color:#f2f2f2; }
+
+  /* ---------- top-left chapter rail (light) ---------- */
+  #rail{
+    position:fixed; left:44px; top:64px; width:44px; z-index:40;
+    display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start; gap:14px;
+    background:transparent;
+    opacity:0; pointer-events:none; transition:opacity .7s var(--ease);
+  }
+  #rail.show{ opacity:1; pointer-events:auto; }
+  .rail-ch{ position:relative; display:flex; align-items:center; cursor:pointer; padding:6px 0; }
+  .rail-ch .nd{
+    width:18px; height:1px; border-radius:0; flex:none;
+    background:var(--gray-line);
+    transition:background .3s, width .3s;
+  }
+  .rail-ch.active .nd{ background:var(--maroon); width:26px; }
+  .rail-ch.done .nd{ background:var(--charcoal); }
+  .rail-ch .tip{
+    position:absolute; left:calc(100% + 16px); top:50%; transform:translateY(-50%) translateX(-6px);
+    background:var(--ink); color:#fff; font-family:'Poppins',sans-serif; font-weight:600; font-size:12px;
+    padding:7px 14px; border-radius:6px; white-space:nowrap; z-index:2;
+    opacity:0; pointer-events:none; transition:opacity .25s var(--ease), transform .25s var(--ease);
+    box-shadow:0 8px 24px rgba(0,0,0,.2);
+  }
+  .rail-ch .tip::after{
+    content:''; position:absolute; right:100%; top:50%; transform:translateY(-50%);
+    border:5px solid transparent; border-right-color:var(--ink);
+  }
+  .rail-ch:hover .tip{ opacity:1; transform:translateY(-50%) translateX(0); }
+  #rail.on-dark-ctx .rail-ch .nd{ background:rgba(255,255,255,.3); }
+  #rail.on-dark-ctx .rail-ch.active .nd{ background:#fff; }
+  #rail.on-dark-ctx .rail-ch .tip{ background:#fff; color:var(--ink); }
+  #rail.on-dark-ctx .rail-ch .tip::after{ border-right-color:#fff; }
+
+  /* ---------- bottom chrome ---------- */
+  #chrome-foot{
+    position:fixed; left:168px; right:96px; bottom:26px; z-index:40;
+    display:flex; justify-content:space-between; align-items:center; pointer-events:none;
+    opacity:0; transition:opacity .7s var(--ease);
+  }
+  #chrome-foot.show{ opacity:1; }
+  .foot-copy{ font-size:10px; letter-spacing:.03em; color:#9a9a9a; text-transform:uppercase; }
+  .foot-logos{ display:flex; align-items:center; gap:10px; height:16px; }
+  .foot-logos img{ height:100%; width:auto; display:block; }
+  .foot-logos img.ob{ height:15px; }
+  .foot-logos .sep{ width:1px; height:14px; background:#ccc; }
+  #chrome-foot.on-dark-ctx .foot-copy{ color:rgba(255,255,255,.5); }
+  #chrome-foot.on-dark-ctx .foot-logos img{ filter:brightness(0) invert(1); }
+  #chrome-foot.on-dark-ctx .foot-logos .sep{ background:rgba(255,255,255,.3); }
+
+  #nav-hint{
+    position:fixed; right:96px; bottom:64px; z-index:40;
+    display:flex; align-items:center; gap:16px;
+    opacity:0; transition:opacity .7s var(--ease); pointer-events:none;
+  }
+  #nav-hint.show{ opacity:1; pointer-events:auto; }
+  .nav-btn{
+    width:44px; height:44px; border-radius:50%; border:1px solid var(--gray-line);
+    background:rgba(255,255,255,.92);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition:background .25s, border-color .25s; box-shadow:0 2px 10px rgba(0,0,0,.06);
+  }
+  .nav-btn svg{ width:15px; height:15px; stroke:var(--ink); stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; transition:stroke .25s; }
+  .nav-btn:hover{ background:var(--maroon); border-color:var(--maroon); }
+  .nav-btn:hover svg{ stroke:#fff; }
+  .nav-btn.dim{ opacity:.25; pointer-events:none; }
+  #step-count{ font-family:'Poppins',sans-serif; font-size:10.5px; letter-spacing:.2em; color:var(--gray-text); }
+  #nav-hint.on-dark-ctx .nav-btn{ background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.3); }
+  #nav-hint.on-dark-ctx .nav-btn svg{ stroke:#fff; }
+  #nav-hint.on-dark-ctx #step-count{ color:rgba(255,255,255,.55); }
+
+  /* ---------- chapter interstitial ---------- */
+  #interstitial{
+    position:fixed; inset:0; z-index:60; display:flex; align-items:center; justify-content:center;
+    background:var(--paper);
+    opacity:0; visibility:hidden; transition:opacity .45s var(--ease), visibility 0s linear .45s;
+    cursor:pointer;
+  }
+  #interstitial.open{ opacity:1; visibility:visible; transition:opacity .3s var(--ease), visibility 0s; }
+  .int-wrap{ text-align:center; position:relative; margin-left:-4vw; }
+  .int-num{
+    font-family:'Poppins',sans-serif; font-weight:700; font-size:180px; line-height:1; color:var(--charcoal);
+    opacity:0; transform:translateY(20px); transition:opacity .6s var(--ease), transform .6s var(--ease);
+  }
+  .int-title{
+    font-family:'Poppins',sans-serif; font-weight:700; font-size:38px; color:var(--maroon); margin-top:-30px;
+    opacity:0; transform:translateY(14px); transition:opacity .6s var(--ease) .12s, transform .6s var(--ease) .12s;
+  }
+  .int-line{ width:0; height:3px; background:var(--charcoal); margin:22px auto 0; transition:width .8s var(--ease) .2s; }
+  #interstitial.open .int-num{ opacity:1; transform:none; }
+  #interstitial.open .int-title{ opacity:1; transform:none; }
+  #interstitial.open .int-line{ width:110px; }
+
+  /* ---------- ENTER (video hero — 22.07.26 revision video, baked title/CTA) ---------- */
+  #st-enter{ padding:0; background:#000; }
+  .landing-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .landing-scrim{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.32) 100%); }
+  .enter-center{ position:relative; z-index:2; text-align:center; width:100%; }
+  .enter-center{ position:absolute; left:75.5%; top:72.8%; width:auto; text-align:left; z-index:2; }
+  #begin-btn{
+    display:inline-flex; align-items:center; gap:12px;
+    font-family:'Poppins',sans-serif; font-weight:500; font-size:12.5px; letter-spacing:.2em; text-indent:.2em; text-transform:uppercase;
+    color:#fff; background:rgba(13,15,15,.28); border:1px solid rgba(255,255,255,.4); border-radius:2px;
+    padding:16px 34px; cursor:pointer; transition:background .3s, border-color .3s; backdrop-filter:blur(1px);
+  }
+  #begin-btn:hover{ background:rgba(13,15,15,.5); border-color:#fff; }
+  #begin-btn .arr{ transition:transform .3s var(--ease); }
+  #begin-btn:hover .arr{ transform:translateX(5px); }
+
+  /* ---------- ABOUT: stats ---------- */
+  .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:2px; margin-top:34px; max-width:1240px; background:var(--gray-line); }
+  .stat-cell{
+    background:#fff; padding:32px 30px 28px;
+    opacity:0; transform:translateY(16px); transition:opacity .6s var(--ease), transform .6s var(--ease);
+  }
+  .stat-cell.on{ opacity:1; transform:none; }
+  .stat-cell .num{ font-family:'Poppins',sans-serif; font-weight:800; font-size:44px; color:var(--maroon); line-height:1; }
+  .stat-cell .lbl{ font-size:13.5px; color:var(--ink); margin-top:10px; }
+  .pillars{ display:flex; gap:44px; margin-top:34px; }
+  .pillars span{
+    font-family:'Poppins',sans-serif; font-weight:800; font-size:24px; letter-spacing:.02em; text-transform:uppercase;
+    color:#dfe9ec;
+  }
+
+  /* ---------- ABOUT: journey ---------- */
+  .journey-wrap{ display:grid; grid-template-columns:1.05fr .9fr; gap:56px; align-items:center; max-width:1500px; }
+  .quote-card{ background:#fff; border:1px solid var(--gray-line); border-left:3px solid var(--maroon); padding:38px 42px; }
+  .quote-card .q{ font-size:16px; line-height:1.8; color:var(--ink); }
+  .quote-card .attr{ margin-top:20px; display:flex; align-items:center; gap:12px; font-style:italic; font-size:13.5px; color:var(--gray-text); }
+  .quote-card .attr img{ height:16px; width:auto; }
+  .quote-card .note{ font-size:12px; color:var(--gray-text); margin-top:6px; font-style:italic; }
+  .mile-list{ display:flex; flex-direction:column; gap:2px; }
+  .mile{ display:flex; align-items:center; gap:20px; padding:18px 22px; background:#fff; border:1px solid var(--gray-line); }
+  .mile .thumb{ width:84px; height:58px; flex:none; overflow:hidden; }
+  .mile .thumb img{ width:100%; height:100%; object-fit:cover; }
+  .mile .tx{ font-family:'Poppins',sans-serif; font-weight:600; font-size:15px; color:var(--ink); line-height:1.4; }
+  .mile .ix{ font-family:'Poppins',sans-serif; font-weight:700; font-size:20px; color:var(--maroon); }
+
+  /* ---------- ABOUT: vision & mission ---------- */
+  .vm-scene{ padding:0; }
+  .vm-bg{ position:absolute; inset:0; }
+  .vm-bg img{ width:100%; height:100%; object-fit:cover; }
+  .vm-bg::after{ content:''; position:absolute; inset:0; background:rgba(0,0,0,.42); }
+  .vm-content{ position:relative; z-index:2; width:100%; max-width:1720px; margin:0 auto; padding:60px 64px 60px 168px; display:grid; grid-template-columns:.62fr 1fr; gap:40px; align-items:center; }
+  .vm-icons{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px 20px; }
+  .vm-icon{ text-align:center; }
+  .vm-icon .circ{ width:84px; height:84px; border-radius:50%; background:var(--maroon); display:flex; align-items:center; justify-content:center; margin:0 auto 10px; }
+  .vm-icon .circ img{ width:40px; height:40px; object-fit:contain; }
+  .vm-icon .lbl{ font-size:13px; font-weight:400; color:#fff; }
+  .vm-icon .lbl b{ display:block; font-weight:700; }
+  .vm-right{ border-left:1px dashed rgba(255,255,255,.5); padding-left:44px; }
+  .vm-right h2{ font-family:'Poppins',sans-serif; font-weight:800; font-size:34px; color:var(--maroon); margin-bottom:10px; }
+  .vm-right p{ font-size:16px; color:#fff; line-height:1.55; max-width:640px; }
+  .vm-right .block{ margin-bottom:32px; }
+
+  /* ---------- ABOUT: clients ---------- */
+  .logo-wall{ display:grid; grid-template-columns:repeat(9,1fr); gap:1px; margin-top:30px; max-width:1500px; background:var(--gray-line); }
+  .logo-cell{ background:var(--paper); aspect-ratio:190/135; display:flex; align-items:center; justify-content:center; padding:16px; opacity:0; transform:scale(.96); transition:opacity .45s var(--ease), transform .45s var(--ease); }
+  .logo-cell.on{ opacity:1; transform:none; }
+  .logo-cell img{ max-width:100%; max-height:100%; object-fit:contain; }
+
+  /* ---------- BRAND: cards ---------- */
+  .who-cards{ display:flex; gap:6px; height:52vh; max-height:520px; margin-top:32px; }
+  .who-card{ position:relative; flex:1; overflow:hidden; cursor:pointer; transition:flex .8s var(--ease); }
+  .who-card img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform 1.1s var(--ease); }
+  .who-card:hover{ flex:2.3; }
+  .who-card:hover img{ transform:scale(1.04); }
+  .who-card .veil{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.04) 45%, rgba(0,0,0,.82) 100%); }
+  .who-card .cap{ position:absolute; left:22px; right:22px; bottom:20px; }
+  .who-card .cap .nm{ font-family:'Poppins',sans-serif; font-weight:700; font-size:20px; color:#fff; font-style:italic; }
+  .who-card .cap .df{ font-size:13px; line-height:1.6; color:#e9e9e9; margin-top:8px; max-width:320px; opacity:0; transform:translateY(8px); transition:opacity .5s var(--ease) .1s, transform .5s var(--ease) .1s; }
+  .who-card:hover .cap .df{ opacity:1; transform:none; }
+  .who-card .cap .needs-mini{ margin-top:10px; max-width:320px; opacity:0; transform:translateY(8px); transition:opacity .5s var(--ease) .1s, transform .5s var(--ease) .1s; }
+  .who-card:hover .cap .needs-mini{ opacity:1; transform:none; }
+  .who-card .cap .needs-mini div{ display:flex; align-items:center; gap:10px; font-size:12px; line-height:1.9; color:#e9e9e9; }
+  .who-card .cap .needs-mini div::before{ content:''; width:12px; height:1px; background:var(--maroon); flex:none; }
+
+  /* ---------- BRAND: tagline ---------- */
+  .tagline-step h1{ font-family:'Poppins',sans-serif; font-weight:400; font-size:44px; line-height:1.3; color:#fff; max-width:1300px; }
+  .tagline-step h1 b{ font-weight:700; }
+  .tagline-step h1 .mr{ font-weight:700; color:var(--maroon); }
+
+  /* ---------- USERS: The User (reuses .who-card, see BRAND) ---------- */
+
+  /* ---------- USERS: generations ---------- */
+
+  /* ---------- CONCEPT: philosophy ---------- */
+  .phil-slide{ position:relative; width:100%; max-width:1720px; }
+  .phil-slide img{ width:100%; height:auto; display:block; border-radius:4px; }
+  .phil-pulse-svg{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+  .phil-pulse{ fill:none; stroke:var(--maroon); stroke-width:1.6; stroke-linecap:round; opacity:0; vector-effect:non-scaling-stroke; }
+  .phil-pulse.on{ opacity:.85; stroke-dasharray:10 var(--len); animation:philTracePulse 4.2s linear infinite; }
+  @keyframes philTracePulse{ from{ stroke-dashoffset:var(--len); } to{ stroke-dashoffset:-10; } }
+  .phil-hotspot{ position:absolute; cursor:pointer; }
+  .phil-hotspot-outline{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; }
+  .phil-hotspot-outline polygon{ fill:none; stroke:var(--maroon); stroke-width:2; vector-effect:non-scaling-stroke; opacity:0; transition:opacity .3s; }
+  .phil-hotspot:hover .phil-hotspot-outline polygon{ opacity:1; }
+
+  /* ---------- EVOLVING STAGE — one shared frame across Site Check -> Requirements -> Zoning -> Layout -> Occupancy -> Axo ---------- */
+  .evo-frame{ position:relative; width:100%; aspect-ratio:1916/821; background:#EDEBE6; border:1px solid var(--gray-line); overflow:hidden; }
+  /* axo.png's native aspect (4645x2614) differs from the plan-stage's 1916x821 convention -
+     override so it renders un-distorted (object-fit:fill on .evo-frame img would stretch
+     it otherwise) */
+  .axo-stage.evo-frame{ aspect-ratio:4645/2614; }
+  .evo-frame img{ position:absolute; inset:0; width:100%; height:100%; object-fit:fill; display:block; }
+  .evo-frame.kb img{ animation:kenburns 15s var(--ease) forwards; }
+  .evo-tilt-out{ animation:evoTiltOut .85s var(--ease) forwards; }
+  .evo-tilt-in{ animation:evoTiltIn .85s var(--ease) forwards; }
+  @keyframes evoTiltOut{ from{ transform:rotateX(0deg); opacity:1; } to{ transform:rotateX(-16deg); opacity:0; } }
+  @keyframes evoTiltIn{ from{ transform:rotateX(16deg); opacity:0; } to{ transform:rotateX(0deg); opacity:1; } }
+
+  /* ---------- CONCEPT: circuit ---------- */
+  #st-circuit{ padding-right:64px; }
+  .circuit-wrap{ display:grid; grid-template-columns:1fr 320px; gap:40px; align-items:center; width:100%; max-width:1720px; perspective:1400px; }
+  .axo-stage{ transform-style:preserve-3d; }
+  #axo-svg{ position:absolute; inset:0; width:100%; height:100%; }
+  /* superseded by the precise PDF-mask hover system (see the phm- rules/script
+     below) - pointer-events:none keeps this code intact but inert rather than
+     deleting it, so the old hand-traced hover no longer double-fires */
+  #axo-svg .hotpoly{ fill:rgba(152,0,0,0); stroke:rgba(152,0,0,0); stroke-width:2; cursor:pointer; pointer-events:none; transition:fill .3s, stroke .3s; }
+  #axo-svg .hotpoly:hover{ fill:rgba(152,0,0,.14); stroke:rgba(152,0,0,.55); }
+  #axo-svg .hotpoly.sel{ fill:rgba(152,0,0,.18); stroke:rgba(152,0,0,.85); }
+  #axo-svg .trace{ fill:none; stroke:var(--charcoal); stroke-width:3; opacity:0; }
+  #axo-svg .trace.lit{ opacity:.95; stroke-dasharray:var(--len); stroke-dashoffset:var(--len); animation:traceDraw 1.3s var(--ease) forwards; }
+  @keyframes traceDraw{ to{ stroke-dashoffset:0; } }
+  #axo-svg .node{ cursor:pointer; }
+  #axo-svg .node circle.core{ fill:var(--maroon); stroke:#fff; stroke-width:2; }
+  #axo-svg .node.dim{ opacity:.35; }
+  #axo-svg .node.sel circle.core{ fill:var(--charcoal); }
+  #axo-svg .node circle.pulse{ fill:none; stroke:rgba(152,0,0,.5); stroke-width:2; }
+  #axo-svg .node text{ font-family:Arial; font-size:22px; fill:var(--ink); paint-order:stroke; stroke:#fff; stroke-width:5px; opacity:0; transition:opacity .3s; pointer-events:none; }
+  #axo-svg .node:hover text, #axo-svg .node.sel text{ opacity:1; }
+
+  /* ---------- axo PDF-mask hover (precise hover regions extracted from real
+     highlighted PDFs, click routes into the existing #st-gallery) ---------- */
+  .phm-overlays{ position:absolute; inset:0; pointer-events:none; z-index:2; }
+  .phm-overlay{ position:absolute; opacity:0; pointer-events:none; transition:opacity .25s ease; }
+  .phm-overlay.hovered{ opacity:1; }
+  .phm-tip{
+    position:fixed; z-index:40; pointer-events:none;
+    background:rgba(24,22,22,.68);
+    -webkit-backdrop-filter:blur(16px) saturate(160%);
+    backdrop-filter:blur(16px) saturate(160%);
+    color:#fff; padding:9px 16px; border-radius:8px;
+    border:1px solid rgba(255,255,255,.14);
+    box-shadow:0 10px 30px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.08);
+    white-space:nowrap;
+    opacity:0; transform:translate(-50%, -140%) scale(.82);
+    transition:opacity .16s ease, transform .22s cubic-bezier(.34,1.56,.64,1);
+  }
+  .phm-tip-name{ font-size:12.5px; font-weight:600; letter-spacing:.01em; }
+  .phm-tip.show{ opacity:1; transform:translate(-50%, -140%) scale(1); }
+
+  .circuit-side .it{ font-style:italic; font-size:13.5px; color:var(--gray-text); }
+  .circuit-side .ttl{ font-family:'Poppins',sans-serif; font-weight:800; font-size:36px; color:var(--maroon); margin:6px 0 4px; }
+  .circuit-side p.lede{ font-size:13.5px; margin-top:14px; }
+  .cir-list{ margin-top:22px; display:flex; flex-direction:column; }
+  .cir-item{ display:flex; align-items:center; gap:12px; padding:10px 4px; cursor:pointer; border-bottom:1px solid var(--gray-line); transition:padding-left .3s var(--ease); }
+  .cir-item .sq{ width:7px; height:7px; background:var(--gray-text); opacity:.5; transform:rotate(45deg); transition:all .3s; }
+  .cir-item .nm{ font-family:'Poppins',sans-serif; font-weight:600; font-size:13.5px; color:var(--gray-text); transition:color .3s; }
+  .cir-item .go{ margin-left:auto; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--maroon); opacity:0; transition:opacity .3s; }
+  .cir-item:hover{ padding-left:8px; }
+  .cir-item:hover .nm{ color:var(--ink); }
+  .cir-item.active{ padding-left:8px; }
+  .cir-item.active .sq{ background:var(--maroon); opacity:1; }
+  .cir-item.active .nm{ color:var(--ink); }
+  .cir-item.active .go{ opacity:1; }
+  .cir-narr{ margin-top:16px; min-height:50px; font-size:12.5px; line-height:1.7; color:var(--charcoal); border-left:2px solid var(--charcoal); padding-left:14px; opacity:0; transition:opacity .45s; }
+  .cir-narr.on{ opacity:1; }
+
+  /* ---------- PLANNING: brief ---------- */
+  .brief-title{ font-family:'Poppins',sans-serif; font-weight:800; font-style:italic; font-size:44px; color:var(--maroon); margin-bottom:22px; }
+  .req-list{ max-width:1720px; }
+  .req-line{ font-size:16.5px; line-height:1.45; color:var(--ink); margin-bottom:15px; opacity:0; transform:translateY(10px); transition:opacity .5s var(--ease), transform .5s var(--ease); }
+  .req-line.on{ opacity:1; transform:none; }
+  .req-line b{ color:var(--maroon); font-weight:800; display:inline-block; transition:transform .7s var(--ease); }
+  .req-line b.zoom{ transform:translate(var(--tx,0),var(--ty,0)) scale(1.35); position:relative; z-index:10; }
+  .req-list.touring .req-line{ opacity:.4; transition:opacity .5s var(--ease); }
+  .req-list.touring .req-line.active-tour{ opacity:1; }
+
+  /* ---------- PLANNING: Site Due Diligence (sequential reveal) ---------- */
+  #st-sitecheck{ padding-right:64px; }
+  .site-wrap{ display:grid; grid-template-columns:1fr 320px; gap:40px; align-items:center; width:100%; max-width:1720px; }
+  .site-stage{ opacity:0; filter:blur(6px); transform:scale(1.01); transition:opacity 1.1s var(--ease), filter 1.1s var(--ease), transform 1.1s var(--ease); }
+  .site-stage.in{ opacity:1; filter:none; transform:none; }
+  .site-tag{
+    position:absolute; left:16px; top:14px; z-index:4; opacity:0; transition:opacity .6s var(--ease);
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink);
+    background:rgba(255,255,255,.85); padding:6px 12px; border:1px solid var(--gray-line);
+  }
+  .site-tag.on{ opacity:1; }
+  .site-dot{ position:absolute; width:11px; height:11px; margin:-5.5px 0 0 -5.5px; border-radius:50%; background:var(--maroon);
+    box-shadow:0 0 0 0 rgba(152,0,0,.5); opacity:0; transform:scale(.4); transition:opacity .35s var(--ease), transform .35s var(--ease); }
+  .site-dot.on{ opacity:1; transform:scale(1); animation:sitePulse 1.8s var(--ease) .1s 2; }
+  @keyframes sitePulse{ 0%{ box-shadow:0 0 0 0 rgba(152,0,0,.5);} 70%{ box-shadow:0 0 0 14px rgba(152,0,0,0);} 100%{ box-shadow:0 0 0 0 rgba(152,0,0,0);} }
+  .site-label{ position:absolute; z-index:4; pointer-events:none; opacity:0; transition:opacity .3s var(--ease);
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:12px; color:var(--ink); white-space:nowrap; }
+  .site-label.on{ opacity:1; }
+  .site-label .ln{ display:inline-block; width:22px; height:2px; background:var(--maroon); vertical-align:middle; margin-right:8px; }
+  .site-side .it{ font-style:italic; font-size:13.5px; color:var(--gray-text); }
+  .site-side .ttl{ font-family:'Poppins',sans-serif; font-weight:800; font-size:36px; color:var(--maroon); margin:6px 0 4px; }
+  .site-side p.lede{ font-size:13.5px; margin-top:14px; }
+  .site-list{ margin-top:22px; display:flex; flex-direction:column; }
+  .site-item{ display:flex; align-items:center; gap:12px; padding:9px 4px; border-bottom:1px solid var(--gray-line); opacity:.35; transition:opacity .4s var(--ease); }
+  .site-item.on{ opacity:1; }
+  .site-item .sq{ width:7px; height:7px; background:var(--gray-text); opacity:.5; transform:rotate(45deg); flex:none; transition:all .3s; }
+  .site-item.on .sq{ background:var(--maroon); opacity:1; }
+  .site-item .nm{ font-family:'Poppins',sans-serif; font-weight:600; font-size:13.5px; color:var(--ink); }
+  .site-narr{ margin-top:16px; min-height:46px; font-size:12.5px; line-height:1.7; color:var(--charcoal); border-left:2px solid var(--charcoal); padding-left:14px; opacity:0; transition:opacity .45s; }
+  .site-narr.on{ opacity:1; }
+  .site-replay{ margin-top:20px; display:inline-flex; align-items:center; gap:9px; font-family:'Poppins',sans-serif; font-weight:600; font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--gray-text);
+    background:none; border:1px solid var(--gray-line); padding:9px 16px; cursor:pointer; transition:color .3s, border-color .3s; }
+  .site-replay:hover{ color:var(--maroon); border-color:var(--maroon); }
+  .site-addr{ margin-top:20px; font-size:12px; line-height:1.7; color:var(--gray-text); border-top:1px solid var(--gray-line); padding-top:14px; }
+  .site-addr b{ color:var(--ink); }
+
+
+  /* ---------- PLANNING: Finished Layout / Axonometric tab merge ---------- */
+  .plan-tabs{ display:flex; gap:8px; margin-top:6px; }
+  .plan-tab{ font-family:'Poppins',sans-serif; font-weight:600; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--gray-text);
+    background:#fff; border:1px solid var(--gray-line); padding:9px 20px; cursor:pointer; transition:color .3s, border-color .3s, background .3s; }
+  .plan-tab.active{ color:#fff; background:var(--maroon); border-color:var(--maroon); }
+  .plan-view{ display:none; }
+  .plan-view.active{ display:block; }
+  #plan-hotspot-svg{ position:absolute; inset:0; width:100%; height:100%; }
+  .plan-hotspot{ fill:rgba(152,0,0,0); stroke:none; pointer-events:fill; transition:fill .25s; }
+  .plan-hotspot:hover{ fill:rgba(152,0,0,.16); }
+  .plan-hotspot-pulse{ fill:none; stroke:rgba(152,0,0,.5); stroke-width:.4; opacity:.7; }
+  .plan-info, .axo-info{ display:none; }
+  .plan-info.active, .axo-info.active{ display:block; }
+
+  /* ---------- PLANNING: collapsible glass overlay (floats on the layout/axo image) ---------- */
+  .plan-overlay{
+    position:absolute; top:-47px; right:16px; width:300px; z-index:5; padding:16px 34px 16px 18px;
+    background:rgba(255,255,255,.55); border:1px solid rgba(255,255,255,.65); border-radius:10px;
+    box-shadow:0 16px 44px rgba(0,0,0,.16); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    max-height:calc(100% - 32px); overflow:hidden;
+  }
+  .overlay-toggle{
+    position:absolute; top:14px; right:14px; width:26px; height:26px; border-radius:50%; z-index:2;
+    border:1px solid var(--gray-line); background:rgba(255,255,255,.8); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:background .25s;
+  }
+  .overlay-toggle:hover{ background:#fff; }
+  .overlay-toggle svg{ width:11px; height:11px; stroke:var(--ink); stroke-width:2; fill:none; transition:transform .35s var(--ease); }
+  .plan-overlay.collapsed .overlay-toggle svg{ transform:rotate(180deg); }
+  .overlay-body{ overflow:hidden; max-height:420px; opacity:1; margin-top:16px; transition:max-height .4s var(--ease), opacity .3s var(--ease), margin-top .4s var(--ease); }
+  .plan-overlay.collapsed .overlay-body{ max-height:0; opacity:0; margin-top:0; }
+
+  /* ---------- PLANNING: layers ---------- */
+  #st-plan{ padding-right:64px; }
+  .plan-wrap{ width:100%; max-width:1720px; }
+  .plan-stage-wrap{ position:relative; perspective:1400px; }
+  .layer-tabs{ display:flex; flex-direction:column; gap:2px; }
+  .ltab{ display:flex; align-items:center; gap:14px; padding:11px 8px; cursor:pointer; border-bottom:1px solid var(--gray-line); }
+  .ltab .nd{ width:19px; height:19px; flex:none; border-radius:50%; border:1.5px solid var(--gray-line); background:#fff; transition:border-color .3s; }
+  .ltab .lb{ font-family:'Poppins',sans-serif; font-weight:600; font-size:13px; color:var(--gray-text); transition:color .3s; }
+  .ltab .ct{ font-size:9.5px; color:var(--gray-text); opacity:.75; margin-left:auto; letter-spacing:.06em; }
+  .ltab:hover .lb{ color:var(--ink); }
+  .ltab.active .nd{ border-color:var(--maroon); background:var(--maroon); }
+  .ltab.active .lb{ color:var(--ink); }
+  .plan-stage{ transform-style:preserve-3d; }
+  .plan-stage img{ opacity:0; transition:opacity .8s var(--ease); }
+  .plan-stage img.on{ opacity:1; }
+  .plan-side-static{ margin-top:16px; max-height:340px; overflow:auto; background:rgba(255,255,255,.94); border:1px solid var(--gray-line); box-shadow:0 12px 40px rgba(0,0,0,.10); padding:20px 22px; }
+  .plan-side h5{ font-family:'Poppins',sans-serif; font-weight:700; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--maroon); margin-bottom:12px; }
+  .pl-row{ display:flex; justify-content:space-between; gap:14px; font-size:12px; color:var(--ink); padding:5px 0; border-bottom:1px solid var(--gray-line); }
+  .pl-row .v{ font-weight:700; }
+  .pl-note{ font-size:11.5px; line-height:1.6; color:var(--gray-text); padding:5px 0; }
+  .pl-note::before{ content:'· '; color:var(--maroon); }
+
+
+  /* ---------- SPACES: materials compare ---------- */
+  #st-matcompare{ background:#fff; }
+  #mat-compare{ position:relative; width:100%; max-width:1400px; aspect-ratio:16/9; max-height:660px; overflow:hidden; border-radius:4px; --split:44.5%; user-select:none; -webkit-user-select:none; margin:0 auto; background:#fff; }
+  .mat-side{ position:absolute; inset:0; background:#fff; }
+  .mat-side img{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block; }
+  #mat-pulse{ z-index:2; clip-path:inset(0 calc(100% - var(--split)) 0 0); }
+  /* purely a visual divider during the button-triggered sweep now - no longer
+     draggable, so no ew-resize cursor. Hidden at rest, only shown while the
+     button-triggered sweep is actually running (2026-07-22) */
+  .mat-handle{ position:absolute; top:0; bottom:0; left:var(--split); width:0; z-index:20; transform:translateX(-1px); pointer-events:none; opacity:0; transition:opacity .4s var(--ease); }
+  #mat-compare.mat-sweeping .mat-handle{ opacity:1; }
+  .mat-handle::before{ content:''; position:absolute; top:0; bottom:0; left:0; width:2px; background:var(--maroon); opacity:.7; }
+  .mat-handle-knob{ position:absolute; top:50%; left:0; transform:translate(-50%,-50%); width:44px; height:44px; border-radius:50%; background:var(--maroon); display:flex; align-items:center; justify-content:center; font-size:16px; color:#fff; box-shadow:0 6px 18px rgba(0,0,0,.25); }
+  /* head row: kicker + compare button on one line, so the button's vertical
+     center lines up with the "Visual Direction" kicker text (2026-07-22) */
+  .mc-head{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+  .mat-play{ position:relative; z-index:21; flex:0 0 auto;
+    display:flex; align-items:center; gap:10px; padding:12px 22px 12px 16px; border-radius:999px;
+    border:1px solid rgba(0,0,0,.15); background:rgba(20,20,20,.85); backdrop-filter:blur(8px);
+    color:#fff; font-family:'Poppins',sans-serif; font-weight:600; font-size:13px; letter-spacing:.03em;
+    cursor:pointer; transition:background .25s, border-color .25s, opacity .3s; }
+  .mat-play:hover{ background:rgba(20,20,20,.75); border-color:rgba(255,255,255,.7); }
+  .mat-play svg{ width:16px; height:16px; fill:#fff; stroke:none; }
+  .mc-head.mat-sweeping .mat-play{ opacity:0; pointer-events:none; }
+
+  /* ---------- SPACES: gallery ---------- */
+  #st-gallery{ padding:0; }
+  .gal-stage{ position:absolute; inset:0; overflow:hidden; background:#000; }
+  .gal-slide{ position:absolute; inset:0; opacity:0; transition:opacity 1s var(--ease); }
+  .gal-slide img{ width:100%; height:100%; object-fit:cover; transform:scale(1.0); }
+  .gal-slide.show{ opacity:1; }
+  .gal-slide.show img{ animation:kenburns 16s var(--ease) forwards; }
+  @keyframes kenburns{ from{ transform:scale(1.0); } to{ transform:scale(1.06); } }
+  #gal-stage.pan-mode .gal-slide.show img{
+    animation:none; cursor:grab;
+    transform:scale(1.35) translate(var(--px,0%), var(--py,0%));
+    transition:transform .25s var(--ease);
+  }
+  #gal-stage.pan-mode .gal-slide.show img.is-dragging{ cursor:grabbing; transition:none; }
+  .gal-mute{ position:absolute; top:96px; right:192px; z-index:6; width:38px; height:38px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.3); background:rgba(0,0,0,.35); backdrop-filter:blur(6px); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:background .25s, border-color .25s; }
+  .gal-mute:hover{ background:rgba(0,0,0,.55); border-color:rgba(255,255,255,.55); }
+  .gal-mute svg{ width:16px; height:16px; stroke:#fff; fill:none; stroke-width:1.6; }
+  .gal-mute .muted-line{ display:none; }
+  .gal-mute.is-muted .muted-line{ display:block; }
+  .gal-panmode{ right:144px; }
+  .gal-panmode.active, .gal-keyplan-toggle.active{ background:rgba(152,0,0,.55); border-color:rgba(255,255,255,.55); }
+  .gal-keyplan-toggle{ right:96px; }
+  .gal-keyplan{ position:absolute; top:150px; right:96px; z-index:6; width:140px; height:108px;
+    border:1px solid rgba(255,255,255,.3); background:rgba(0,0,0,.35); backdrop-filter:blur(6px);
+    border-radius:8px; overflow:hidden; }
+  .gkp-crop{ position:absolute; inset:0; background-repeat:no-repeat; }
+  .gkp-mark{ position:absolute; border:1.5px solid var(--maroon); border-radius:2px; pointer-events:none;
+    box-shadow:0 0 0 1px rgba(0,0,0,.4); }
+  .gkp-label{ position:absolute; left:0; right:0; bottom:0; padding:5px 10px; text-align:center;
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:9.5px; letter-spacing:.2em; text-transform:uppercase;
+    color:#fff; background:linear-gradient(0deg, rgba(0,0,0,.65), transparent); }
+  .gal-scrim{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.32) 0%, transparent 30%, transparent 58%, rgba(0,0,0,.72) 100%); pointer-events:none; }
+  /* shown only when the gallery is opened as an overlay from the axo hover-mask
+     click (see #st-gallery.overlay-mode below) - lets you jump straight back
+     to the Axonometric view without walking the deck's normal step order */
+  .gal-close{ display:none; position:absolute; top:96px; left:96px; z-index:7;
+    align-items:center; gap:8px; padding:9px 16px 9px 12px; border-radius:999px;
+    border:1px solid rgba(255,255,255,.3); background:rgba(0,0,0,.35); backdrop-filter:blur(6px);
+    color:#fff; font-family:'Poppins',sans-serif; font-weight:600; font-size:12px; letter-spacing:.02em;
+    cursor:pointer; transition:background .25s, border-color .25s; }
+  .gal-close:hover{ background:rgba(0,0,0,.55); border-color:rgba(255,255,255,.55); }
+  .gal-close svg{ width:16px; height:16px; stroke:#fff; fill:none; stroke-width:2; }
+  #st-gallery.overlay-mode .gal-close{ display:flex; }
+  .gal-name{ position:absolute; left:96px; bottom:64px; z-index:5; }
+  .gal-name .k{ font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:#fff; margin-bottom:10px; }
+  .gal-name .n{ font-family:'Poppins',sans-serif; font-weight:700; font-size:42px; color:#fff; line-height:1; }
+  .gal-name .ix{ font-family:'Poppins',sans-serif; font-weight:400; font-size:12.5px; letter-spacing:.18em; color:#cfcfcf; margin-top:10px; }
+  .gal-nav{ position:absolute; right:96px; bottom:150px; z-index:5; display:flex; flex-direction:column; gap:8px; text-align:right; }
+  .gal-nav .gi{ font-family:'Poppins',sans-serif; font-weight:500; font-size:13px; color:rgba(255,255,255,.55); cursor:pointer; transition:color .3s; }
+  .gal-nav .gi:hover{ color:#fff; }
+  .gal-nav .gi.active{ color:#fff; letter-spacing:.06em; }
+  .gal-nav .gi.active::after{ content:''; display:inline-block; width:16px; height:1px; background:var(--maroon); margin-left:10px; vertical-align:middle; }
+  .gal-nav .gi-opt{ font-family:'Poppins',sans-serif; font-weight:400; font-size:11px; letter-spacing:.04em; color:rgba(255,255,255,.4); cursor:pointer;
+    display:none; transition:color .25s; }
+  .gal-nav .gi-opt.show{ display:block; }
+  .gal-nav .gi-opt:hover{ color:rgba(255,255,255,.8); }
+  .gal-nav .gi-opt.active{ color:#fff; }
+  .gal-opts{ position:absolute; left:96px; bottom:170px; display:flex; gap:8px; z-index:6; }
+  .gal-opts img{ height:44px; width:66px; object-fit:cover; cursor:pointer; opacity:.45; border:1px solid transparent; border-radius:3px; transition:opacity .25s, border-color .25s; }
+  .gal-opts img.active{ opacity:1; border-color:#fff; }
+  .gal-slide.placeholder{ display:flex; align-items:center; justify-content:center; background:#161616; }
+  .gal-ph{ text-align:center; padding:40px; }
+  .gal-ph .ic{ width:64px; height:64px; margin:0 auto 18px; border-radius:50%; border:1.5px dotted var(--maroon); display:flex; align-items:center; justify-content:center; }
+  .gal-ph .ic .dt{ width:11px; height:11px; border-radius:50%; background:var(--maroon); }
+  .gal-ph .tx{ font-family:'Poppins',sans-serif; font-weight:600; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#bdbdbd; }
+
+  /* ---------- THANKS ---------- */
+  .thanks-wrap{ text-align:center; }
+  .thanks-wrap h1{ font-family:'Poppins',sans-serif; font-weight:700; font-size:72px; color:var(--ink); }
+  .thanks-wrap h1 b{ font-weight:700; color:var(--maroon); }
+  .thanks-logos{ display:flex; align-items:center; justify-content:center; gap:14px; margin-top:40px; height:16px; }
+  .thanks-logos img{ height:100%; width:auto; }
+  .thanks-logos .sep{ width:1px; height:14px; background:#ccc; }
+  .again{ margin-top:46px; display:inline-flex; align-items:center; gap:10px; font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--gray-text); border:none; background:none; cursor:pointer; transition:color .3s; }
+  .again:hover{ color:var(--maroon); }
+
+  /* ---------- render modal ---------- */
+  .rmodal{ position:fixed; inset:0; z-index:80; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.92); opacity:0; visibility:hidden; transition:opacity .3s var(--ease), visibility 0s linear .3s; }
+  .rmodal.open{ opacity:1; visibility:visible; transition:opacity .3s var(--ease), visibility 0s; }
+  .rm-title{ position:absolute; top:32px; left:64px; }
+  .rm-title .ey{ font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:rgba(255,255,255,.55); margin-bottom:8px; }
+  .rm-title .tx{ font-family:'Poppins',sans-serif; font-weight:700; font-size:23px; color:#fff; }
+  .rm-close{ position:absolute; top:28px; right:32px; width:44px; height:44px; border-radius:50%; background:transparent; border:1px solid rgba(255,255,255,.4); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .25s, border-color .25s; }
+  .rm-close:hover{ background:var(--maroon); border-color:var(--maroon); }
+  .rm-close svg{ width:16px; height:16px; stroke:#fff; stroke-width:2.2; }
+  .rm-stage{ max-width:84vw; max-height:70vh; transform:scale(1); opacity:1; transition:transform .5s var(--ease), opacity .5s var(--ease); }
+  .rmodal:not(.open) .rm-stage{ transform:scale(.18); opacity:0; }
+  .rm-stage img{ max-width:84vw; max-height:70vh; object-fit:contain; display:block; box-shadow:0 20px 80px rgba(0,0,0,.6); }
+  .rm-thumbs{ position:absolute; bottom:26px; left:50%; transform:translateX(-50%); display:flex; gap:10px; }
+  .rm-thumbs img{ height:54px; cursor:pointer; opacity:.45; border:1px solid transparent; transition:opacity .25s, border-color .25s; }
+  .rm-thumbs img.active{ opacity:1; border-color:#fff; }
+  .rm-count{ position:absolute; bottom:36px; right:36px; color:#bbb; font-size:11px; letter-spacing:.12em; }
+
+  @media (max-width:1180px){
+    .step{ padding:56px 40px 80px 70px; }
+    #rail{ width:36px; top:56px; }
+    h1.hero{ font-size:30px; }
+    .stat-grid{ grid-template-columns:repeat(2,1fr); }
+    .journey-wrap, .circuit-wrap, .plan-wrap, .site-wrap{ grid-template-columns:1fr; gap:26px; }
+    .vm-content{ grid-template-columns:1fr; padding-left:40px; }
+    .logo-wall{ grid-template-columns:repeat(5,1fr); }
+    .who-cards{ flex-direction:column; height:auto; }
+    .who-card{ min-height:110px; }
+    .gal-name{ left:40px; }
+  }
+</style>
+
+<div id="journey">
+
+  <!-- ================= ENTER (22.07.26 hero video — baked title/CTA, no overlay text needed) ================= -->
+  <section class="step active" id="st-enter" data-chapter="enter">
+    <video class="landing-video" autoplay muted loop playsinline id="hero-video">
+      <source src="assets/videos/hero-v3.mp4" type="video/mp4">
+    </video>
+    <div class="landing-scrim"></div>
+    <div class="enter-center">
+      <button id="begin-btn">Begin Journey <span class="arr">→</span></button>
+    </div>
+  </section>
+
+  <!-- ================= 01 ABOUT ================= -->
+  <section class="step" data-chapter="about" data-title="A brief introduction">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Company Profile</div><div class="k2">Overview</div></div>
+      <h1 class="hero rv d1">Environments engineered to help people<br><b>solve complex industrial challenges.</b></h1>
+      <div class="accent-dash rv d2"></div>
+      <p class="lede rv d3">Officebanao — the design &amp; build partner behind this proposal.</p>
+    </div>
+  </section>
+
+  <section class="step" data-chapter="about">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Company Profile</div><div class="k2">Overview</div></div>
+      <h2 class="title rv d1" style="margin-top:10px;">About us</h2>
+      <div class="stat-grid">
+        <div class="stat-cell" data-count="400" data-suffix="+"><div class="num"><span class="cnt">0</span><span class="u">+</span></div><div class="lbl">Offices built</div></div>
+        <div class="stat-cell" data-count="18" data-suffix="M+"><div class="num"><span class="cnt">0</span><span class="u">M+</span></div><div class="lbl">Sq ft office area delivered</div></div>
+        <div class="stat-cell" data-count="400" data-suffix="+"><div class="num"><span class="cnt">0</span><span class="u">+</span></div><div class="lbl">Experienced employees</div></div>
+        <div class="stat-cell" data-count="235" data-suffix="+Cr"><div class="num"><span class="cnt">0</span><span class="u">+Cr</span></div><div class="lbl">Turnover</div></div>
+      </div>
+      <p class="lede rv d4" style="margin-top:30px;"><b>15+ years</b> of experience; <b>100+</b> satisfied customers &amp; <b>20 million sq.ft</b> of office space delivered.</p>
+      <div class="pillars rv d5"><span>Technology</span><span>Design</span><span>Quality</span></div>
+    </div>
+  </section>
+
+  <section class="step" data-chapter="about">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Company Profile</div><div class="k2">Our Journey — crafting exceptional workspaces with expertise &amp; innovation</div></div>
+      <div class="journey-wrap" style="margin-top:10px;">
+        <div class="quote-card rv d1">
+          <div class="q">"Office Banao is a mission driven company, committed to making a meaningful difference in how workspaces are developed in India. We are delighted to partner with them and are excited to see how they transform this market. With depth of experience and supplier network, the team is best placed to disrupt the existing opaque and sub-par experience that plagues the industry today."</div>
+          <div class="attr">— Rahul Taneja, Partner <img src="assets/final/lightspeed-logo.jpg" alt="Lightspeed"></div>
+          <div class="note">We are backed by US based leading multi-stage venture capital fund</div>
+        </div>
+        <div class="mile-list">
+          <div class="mile rv d2"><span class="ix">01</span><div class="thumb"><img src="assets/final/journey-founded.jpg" alt=""></div><div class="tx">Founded on expertise</div></div>
+          <div class="mile rv d3"><span class="ix">02</span><div class="thumb"><img src="assets/final/journey-onestop.jpg" alt=""></div><div class="tx">One-stop solution powered by technology</div></div>
+          <div class="mile rv d4"><span class="ix">03</span><div class="thumb"><img src="assets/final/journey-designed.jpg" alt=""></div><div class="tx">Designed &amp; delivered millions of square feet</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step vm-scene" data-chapter="about">
+    <div class="vm-bg"><img src="assets/final/vision-bg.jpg" alt="Workspace"></div>
+    <div class="vm-content">
+      <div class="vm-icons rv d1">
+        <div class="vm-icon"><div class="circ"><img src="assets/final/icon-customer-centric.png" alt=""></div><div class="lbl">Customer<b>Centric</b></div></div>
+        <div class="vm-icon"><div class="circ"><img src="assets/final/icon-collaboration.png" alt=""></div><div class="lbl">Collaboration<b>Unleashed</b></div></div>
+        <div class="vm-icon"><div class="circ"><img src="assets/final/icon-quality.png" alt=""></div><div class="lbl">Quality<b>Craftsmanship</b></div></div>
+        <div class="vm-icon"><div class="circ"><img src="assets/final/icon-sustainability.png" alt=""></div><div class="lbl">Sustainability<b>Matters</b></div></div>
+        <div class="vm-icon"><div class="circ"><img src="assets/final/icon-accountability.png" alt=""></div><div class="lbl">Accountability<b>Guaranteed</b></div></div>
+      </div>
+      <div class="vm-right rv d2">
+        <div class="block"><h2>Vision</h2><p>To revolutionise office creation and management with technology.</p></div>
+        <div class="block"><h2>Mission</h2><p>Transforming office interiors by uniting designers, architects, suppliers, and contractors on a tech platform, and empowering them with tools and support to redefine the office experience for clients.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" data-chapter="about">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Company Profile</div><div class="k2">Clients</div></div>
+      <h2 class="title rv d1" style="margin-top:10px;">They <span style="color:var(--ink)">trust</span> us</h2>
+      <div class="logo-wall" id="logo-wall"></div>
+    </div>
+  </section>
+
+  <!-- ================= 02 BRAND ================= -->
+  <section class="step" data-chapter="brand" data-title="Understanding the brand">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Brand Understanding</div></div>
+      <h2 class="title rv d1" style="margin-top:10px;">The Who</h2>
+      <p class="lede rv d2" style="max-width:1150px; margin-top:12px;">Sidvin Outotec Engineering is a multidisciplinary engineering partner that delivers end-to-end solutions for industrial and process sectors worldwide. Through expertise in plant engineering, product development, project execution, and digital solutions, they transform complex engineering challenges into efficient, sustainable outcomes.</p>
+      <div class="who-cards rv d3">
+        <div class="who-card"><img src="assets/final/who-committed.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Committed</div><div class="df">End-to-end ownership — from first concept to final commissioning, seen through with discipline.</div></div>
+        </div>
+        <div class="who-card"><img src="assets/final/who-adaptable.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Adaptable</div><div class="df">Solutions shaped to every sector, site, and system — never one template for all.</div></div>
+        </div>
+        <div class="who-card"><img src="assets/final/who-speed.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Speed</div><div class="df">Momentum without compromise — fast, precise delivery across global projects.</div></div>
+        </div>
+        <div class="who-card"><img src="assets/final/who-pragmatic.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Pragmatic</div><div class="df">Grounded engineering judgement — decisions driven by what demonstrably works.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step tagline-step on-dark" data-chapter="brand">
+    <div class="step-inner">
+      <h1 class="rv d1">Where Trust <b>Connects</b>, <span class="mr">People Lead</span> &amp;<br><b>Adaptability</b> Drives <b>Progress</b>.</h1>
+    </div>
+  </section>
+
+  <!-- ================= 03 USERS ================= -->
+  <section class="step" data-chapter="users" data-title="Identifying the users">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Identifying the Users</div></div>
+      <h2 class="title rv d1" style="margin-top:10px;">The User</h2>
+      <div class="who-cards rv d2">
+        <div class="who-card"><img src="assets/final/user-leadership.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Leadership</div>
+            <div class="needs-mini">
+              <div>Strategic focus</div><div>Trusted collaboration</div><div>Client representation</div><div>Quiet confidence</div>
+            </div>
+          </div>
+        </div>
+        <div class="who-card"><img src="assets/final/user-engineering.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Engineering &amp; Technical Experts</div>
+            <div class="needs-mini">
+              <div>Deep focus</div><div>Technical reviews</div><div>Collaboration</div><div>Knowledge sharing</div>
+            </div>
+          </div>
+        </div>
+        <div class="who-card"><img src="assets/final/user-project-delivery.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Project Delivery &amp; Business Enablement</div>
+            <div class="needs-mini">
+              <div>Agile coordination</div><div>Cross-team huddles</div><div>Quick connectivity</div><div>Process flow</div>
+            </div>
+          </div>
+        </div>
+        <div class="who-card"><img src="assets/final/user-clients.jpg" alt=""><div class="veil"></div>
+          <div class="cap"><div class="nm">Clients &amp; Visitors</div>
+            <div class="needs-mini">
+              <div>First impressions</div><div>Hospitality-inspired arrival</div><div>Seamless wayfinding</div><div>Confidence in the brand</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 04 CONCEPT ================= -->
+  <section class="step on-dark" data-chapter="concept" data-title="Defining your new workplace">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Defining Your New Workplace</div></div>
+      <div class="phil-slide rv d1" style="margin-top:14px;">
+        <img src="assets/materials/circuit-workplace-slide.jpg" alt="An intelligent circuit connecting people, processes, and ideas — Trust, Agility, Quiet Confidence">
+        <svg class="phil-pulse-svg" viewBox="0 0 720 385" preserveAspectRatio="none">
+          <path class="phil-pulse" d="M74.50,170.57 L139.87,28.71 L335.98,28.71 L401.36,170.57 L335.98,312.43 L139.87,312.43 Z"></path>
+        </svg>
+        <div class="phil-hotspot" data-mode="quiet" style="left:17.3%; top:9%; width:13.7%; height:22%;"><svg class="phil-hotspot-outline" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="25,0 75,0 100,50 75,100 25,100 0,50"></polygon></svg></div>
+        <div class="phil-hotspot" data-mode="trust" style="left:16.5%; top:68.5%; width:13.5%; height:22.5%;"><svg class="phil-hotspot-outline" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="25,0 75,0 100,50 75,100 25,100 0,50"></polygon></svg></div>
+        <div class="phil-hotspot" data-mode="agility" style="left:43%; top:45.5%; width:13.5%; height:22.5%;"><svg class="phil-hotspot-outline" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="25,0 75,0 100,50 75,100 25,100 0,50"></polygon></svg></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 05 PLANNING (Site Check autoplays straight into Final Layout, then stops) ================= -->
+  <section class="step" data-chapter="planning" data-title="Space strategy" data-evo="1">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Requirements</div></div>
+      <div class="brief-title rv d1" style="margin-top:28px;">We heard you…</div>
+      <div class="req-list" id="req-grid"></div>
+    </div>
+  </section>
+
+  <section class="step" id="st-sitecheck" data-chapter="planning" data-title="Site due diligence" data-evo="1">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Design Thinking</div><div class="k2">Site Due Diligence</div></div>
+      <div class="site-wrap" style="margin-top:10px;">
+        <div class="site-stage evo-frame rv d1" id="site-stage">
+          <img src="assets/final/site-diligence-plan.png" alt="Site due diligence floor plate">
+          <div class="site-tag" id="site-tag">Existing Shell — As Built</div>
+        </div>
+        <div class="site-side rv d2">
+          <div class="it">10th Floor, DNR Altitude</div>
+          <div class="ttl">SITE CHECK</div>
+          <p class="lede">Before designing forward, we mapped the empty shell — egress, services, and light — against the proposed workplace concept.</p>
+          <div class="site-list" id="site-list"></div>
+          <div class="site-narr" id="site-narr"></div>
+          <button class="site-replay" id="site-replay">↺ &nbsp;Replay</button>
+          <div class="site-addr"><b>Site Address:</b> 10th Floor, DNR Altitude, Yeshwanthpur Industrial Area, Phase 1, Yeswanthpur, Bengaluru, Karnataka 560022</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" id="st-plan" data-chapter="planning" data-evo="1">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Space Planning</div><div class="k2" id="plan-kicker-k2">The Finished Layout</div></div>
+      <div class="plan-wrap" style="margin-top:10px;">
+        <div class="plan-stage-wrap rv d2">
+          <div class="plan-view active" id="plan-view-plan">
+            <div class="plan-stage evo-frame">
+              <img class="on" id="plan-structure" src="assets/final/plan-structure-v2.jpg" alt="Structure plan">
+              <img id="plan-color" src="assets/final/plan-color-v2.jpg" alt="Proposed layout">
+              <svg id="plan-hotspot-svg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+            </div>
+          </div>
+          <div class="plan-overlay rv d3" id="plan-overlay">
+            <button class="overlay-toggle" id="overlay-toggle" aria-label="Collapse panel" title="Collapse panel">
+              <svg viewBox="0 0 12 12"><path d="M2.5 4.5L6 8L9.5 4.5"/></svg>
+            </button>
+            <div class="plan-info active" id="plan-info">
+              <div class="layer-tabs" id="layer-tabs"></div>
+              <div class="overlay-body">
+                <div class="plan-side-static" id="plan-side"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= AXONOMETRIC (own slide, was a tab inside st-plan) ================= -->
+  <section class="step" id="st-axo" data-chapter="planning" data-evo="1">
+    <div class="step-inner">
+      <div class="kicker rv"><div class="k1">Space Planning</div><div class="k2">Axonometric View</div></div>
+      <div class="plan-wrap" style="margin-top:10px;">
+        <div class="plan-stage-wrap rv d2">
+          <div class="plan-view active" id="plan-view-axo">
+            <div class="axo-stage evo-frame">
+              <img src="assets/pegman/axo.png" alt="Axonometric view" id="axo-img">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 06 SPACES ================= -->
+  <section class="step" id="st-matcompare" data-chapter="spaces" data-title="Visual direction">
+    <div class="step-inner">
+      <div class="mc-head">
+        <div class="kicker rv"><div class="k1">Visual Direction</div><div class="k2">Space Inspiration</div></div>
+        <button class="mat-play" id="mat-play" aria-label="Compare palettes" title="Compare palettes">
+          <svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8V4z"/></svg>
+          <span>Compare Palettes</span>
+        </button>
+      </div>
+      <div id="mat-compare" class="rv d1" style="margin-top:10px;">
+        <div class="mat-side" id="mat-resonance"><img src="assets/materials/circuit-resonance-slide.jpg" alt="Circuit's Resonance mood board" loading="lazy"></div>
+        <div class="mat-side" id="mat-pulse"><img src="assets/materials/circuit-pulse-slide.jpg" alt="Circuit's Pulse mood board" loading="lazy"></div>
+        <div class="mat-handle" id="mat-handle"><div class="mat-handle-knob">⟷</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="step on-dark" id="st-gallery" data-chapter="spaces">
+    <div class="gal-stage" id="gal-stage"></div>
+    <div class="gal-scrim"></div>
+    <div class="gal-name">
+      <div class="k">Visual Direction</div>
+      <div class="n" id="gal-name">Reception</div>
+      <div class="ix" id="gal-ix">01 / 07</div>
+    </div>
+    <div class="gal-opts" id="gal-opts"></div>
+    <div class="gal-nav" id="gal-nav"></div>
+    <button class="gal-mute" id="gal-mute" aria-label="Mute background music" title="Mute background music">
+      <svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16 8a5 5 0 0 1 0 8" /><path d="M18.5 5.5a9 9 0 0 1 0 13"/><path class="muted-line" d="M2 2l20 20"/></svg>
+    </button>
+    <button class="gal-mute gal-panmode" id="gal-panmode" aria-label="Toggle pan mode" title="Toggle pan mode">
+      <svg viewBox="0 0 24 24"><path d="M8 11V6.5a1.5 1.5 0 0 1 3 0V11"/><path d="M11 10.5V5a1.5 1.5 0 0 1 3 0v6"/><path d="M14 10.5V6a1.5 1.5 0 0 1 3 0v7"/><path d="M17 12v-2a1.5 1.5 0 0 1 3 0v5c0 3.5-2 6-5.5 6h-2c-2 0-3-.6-4.3-2.2L5 15c-.6-.8-.4-1.7.3-2.2.7-.5 1.6-.4 2.2.3L8 14"/></svg>
+    </button>
+    <button class="gal-mute gal-keyplan-toggle active" id="gal-keyplan-toggle" aria-label="Toggle key plan" title="Toggle key plan">
+      <svg viewBox="0 0 24 24"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>
+    </button>
+    <audio id="gal-audio" loop preload="none" src="assets/audio/gallery-ambient.mp3"></audio>
+    <div class="gal-keyplan" id="gal-keyplan">
+      <div class="gkp-crop" id="gkp-crop"></div>
+      <div class="gkp-mark" id="gkp-mark"></div>
+      <div class="gkp-label">Key Plan</div>
+    </div>
+    <button class="gal-close" id="gal-close" aria-label="Back to Axonometric View" title="Back to Axonometric View">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+      <span>Back to Axo</span>
+    </button>
+  </section>
+
+  <!-- ================= THANKS ================= -->
+  <section class="step" data-chapter="thanks">
+    <div class="step-inner">
+      <div class="thanks-wrap">
+        <h1 class="rv">Thank <b>You.</b></h1>
+        <div class="thanks-logos rv d2">
+          <img src="assets/final/footer-sidvin-outotec.png" alt="Sidvin Outotec" style="height:15px;">
+          <div class="sep"></div>
+          <img src="assets/final/footer-officebanao.png" alt="Officebanao" style="height:17px;">
+        </div>
+        <br>
+        <button class="again rv d3" id="again-btn">↺ &nbsp;Begin again</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- chapter interstitial -->
+<div id="interstitial">
+  <div class="int-wrap">
+    <div class="int-num" id="int-num">01</div>
+    <div class="int-title" id="int-title">About</div>
+    <div class="int-line"></div>
+  </div>
+</div>
+
+<!-- fixed chrome -->
+<div id="rail"></div>
+<div id="chrome-foot">
+  <div class="foot-copy">Copyright © 2026 Officebanao Pvt Ltd. All rights reserved</div>
+  <div class="foot-logos">
+    <img src="assets/final/footer-sidvin-outotec.png" alt="Sidvin Outotec">
+    <div class="sep"></div>
+    <img class="ob" src="assets/final/footer-officebanao.png" alt="Officebanao">
+  </div>
+</div>
+<div id="nav-hint">
+  <span id="step-count"></span>
+  <div class="nav-btn" id="btn-prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></div>
+  <div class="nav-btn" id="btn-next"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+</div>
+
+<!-- render modal -->
+<div class="rmodal" id="rmodal">
+  <div class="rm-title"><div class="ey">Visual Direction</div><div class="tx" id="rm-title-tx"></div></div>
+  <button class="rm-close" id="rm-close"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  <div class="rm-stage"><img id="rm-img" src="" alt=""></div>
+  <div class="rm-thumbs" id="rm-thumbs"></div>
+  <div class="rm-count" id="rm-count"></div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ==================================================================
+     DATA — transcribed from the 22.07.26 revised source deck (2.pdf)
+     ================================================================== */
+
+  var USERS = [
+    { key:'leadership', name:'Leadership', img:'assets/final/user-leadership.jpg',
+      needs:['Strategic focus','Trusted collaboration','Client representation','Quiet confidence'] },
+    { key:'engineering', name:'Engineering & Technical Experts', img:'assets/final/user-engineering.jpg',
+      needs:['Deep focus','Technical reviews','Collaboration','Knowledge sharing'] },
+    { key:'delivery', name:'Project Delivery & Business Enablement', img:'assets/final/user-project-delivery.jpg',
+      needs:['Agile coordination','Cross-team huddles','Quick connectivity','Process flow'] },
+    { key:'visitors', name:'Clients & Visitors', img:'assets/final/user-clients.jpg',
+      needs:['First impressions','Hospitality-inspired arrival','Seamless wayfinding','Confidence in the brand'] }
+  ];
+
+  var REQS = [
+    '<b>Vastu-Compliant Planning</b>, with leadership functions located in the South-West (SW) zone and the North-East (NE) maintained as an open, light, and unobstructed area.',
+    '11 Meeting Rooms of varying capacities to accommodate formal meetings, brainstorming sessions, and cross-functional collaboration.',
+    '<b>280 Workstations, including 24 Manager Cubicles,</b> designed to support collaborative and focused work.',
+    'Discussion Tables distributed throughout the open workspace to encourage spontaneous interactions and informal teamwork.',
+    '<b>Integrated Cafeteria, Training Room, and Recreation Zone</b>, planned as a flexible, multi-functional hub that can seamlessly transform into a town hall or event space.',
+    'Dedicated Storage Areas and Display Shelving thoughtfully integrated across the floor plate to enhance accessibility, organization, and brand storytelling.',
+    'Wellness Room providing employees with a private and restorative space for relaxation, wellness, and personal needs.',
+    '<b>Flexible Team Zoning</b> with the ability to organize departments into <b>2–3 distinct neighborhoods</b>, promoting team identity while maintaining visual and operational connectivity.',
+    '6 Dedicated Cabins, including a Visitor Cabin, strategically positioned for leadership and client interactions.',
+    '<b>Brand-Led Material &amp; Colour Palette</b>, anchored by Sidvin Blue and Metso Black, complemented with carefully curated red accents to introduce energy and visual interest without overwhelming the overall aesthetic.'
+  ];
+
+
+  var PLAN_LAYERS = [
+    { key:'structure', label:'Structure', count:'the floor plate',
+      side:{ title:'Structure', notes:['The base floor plate — core, lift lobbies, fire-egress staircases and the 1500&nbsp;mm wide corridor everything connects to.','Two 1500mm corridors run the full length of the plate, flanking the central core.'] } },
+    { key:'layout', label:'Final Layout', count:'seating achieved',
+      side:{ title:'Seating Capacity — Achieved 300 Pax', rows:[
+        ['Workstation (120°)','156'],['Workstation (L type)','102'],['Manager Cubicles (120°)','06'],['Manager Cubicles (L type)','18'],
+        ['Board Room (20+10 Pax)','01'],['Meeting Rooms (4,6,8 &10)','11'],['Cabins','06'],['Training Room (25 Pax)','01'],
+        ['Cafeteria (81 Pax)','01'],['Phone Booth (01/02 Pax)','05+02'],['Library','01'],['Gym','01']
+      ], notes:['MD Cabin located in the South-West zone as per vastu, desk facing North-East.','Cafeteria placed in the South-East zone.','*Height Adjustable — 66 out of 282 workstations, both 120° &amp; L type.'] } }
+  ];
+
+  var SITE_CALLOUTS = [
+    { key:'liftlobby', label:'Lift Lobby', pts:[[43.75,19.25],[58.5,19.25]],
+      note:'Two lift lobbies — low-rise banks — sit either side of the central core, keeping vertical circulation compact.' },
+    { key:'washroom', label:'Washrooms', pts:[[34.25,12.1],[67.25,12.1]],
+      note:'Washroom cores mirrored on both wings, directly adjacent to each lift lobby.' },
+    { key:'fireexit', label:'Fire Exit Staircase', pts:[[22.25,13.6],[51.1,12.1],[80.9,14.15]],
+      note:'Three fire-exit staircases — two flanking, one central — meet NBC egress-capacity norms for the floor plate.' },
+    { key:'ahu', label:'AHU Room', pts:[[33.4,26.6],[68.75,26.6]],
+      note:'Air-handling units positioned at both wings for balanced HVAC distribution across the plate.' },
+    { key:'glazing', label:'External Glazing', pts:[[6.5,45]],
+      note:'Full-perimeter external glazing brings daylight deep into the floor plate on all sides.' },
+    { key:'entry', label:'Entry', pts:[[43.9,27.0],[58.4,27.0]],
+      note:'Primary entry points align directly with the lift lobbies for an efficient arrival sequence.' },
+    { key:'sunpath', label:'Sun Path', pts:[[53.4,81.0]],
+      note:'East-to-west solar path informs glazing treatment, shading and workstation orientation.' }
+  ];
+
+  /* one representative rectangle per functional category on the Finished Layout, in the same
+     percent-coordinate space as plan-color-v2.jpg — feeds LAYOUT_HOTSPOTS below */
+  var ZN_TARGETS = {
+    work:'29,41.9 50,41.9 50,87.6 29,87.6',
+    wellness:'13.5,7 18.25,7 18.25,20.9 13.5,20.9',
+    meeting:'33,76.1 38.5,76.1 38.5,88.8 33,88.8',
+    leadership:'0.75,59.6 16.5,59.6 16.5,88.8 0.75,88.8',
+    welcome:'49.5,36.8 60,36.2 60,58.4 49.25,47.6',
+    noise:'83.5,58.4 96.5,58.4 96.5,83.8 83.5,83.8'
+  };
+
+  var PLAN_ZONES = {}; // no zone tabs on the plan slide
+
+  var AXO_NODES = {
+    'reception':      { x:53.0, y:49.0, label:'Reception' },
+    'board-room':     { x:62.0, y:38.0, label:'Board Room' },
+    'md-cabin':       { x:13.5, y:82.0, label:'MD Cabin' },
+    'cafe':           { x:78.0, y:40.0, label:'Cafe & Recreation' },
+    'workhall-central':{ x:33.0, y:60.0, label:'Workhall' },
+    'workhall-west':  { x:12.0, y:50.0, label:'Workhall West' },
+    'library':        { x:70.0, y:52.0, label:'Library' },
+    'training':       { x:90.0, y:38.0, label:'Training' },
+    'recreation':     { x:84.0, y:42.0, label:'Recreation' },
+    'meeting-east':   { x:57.0, y:44.0, label:'Meeting Rooms' },
+    'discussion':     { x:44.0, y:52.0, label:'Discussion' }
+  };
+
+  var AXO_SPACES = {
+    'workhall': { title:'Workhall & Collab', node:'workhall-central',
+      path:['workhall-west','workhall-central','discussion','meeting-east','library'],
+      narr:'The engineering workflow — deep focus at the workstations, quick alignment at discussion tables, formal review in meeting rooms, knowledge captured in the library.',
+      points:'2.30,47.26 13.67,38.98 15.66,51.64 32.36,55.05 47.08,45.31 51.93,54.81 45.82,72.72 19.42,86.72 15.66,71.25 8.56,71.86',
+      images:['assets/final/render-workhall-v3.png','assets/final/render-workhall-v3b.png'] },
+    'md-cabin': { title:'MD Cabin', node:'md-cabin',
+      path:['md-cabin','board-room'],
+      narr:'The leadership path — quiet confidence, from the MD cabin to the board room where decisions land.',
+      points:'9.55,69.91 13.41,71.25 15.66,79.78 16.54,85.26 17.54,90.38 17.17,93.06 14.14,95.25',
+      images:['assets/final/render-mdcabin-v3.jpg'] },
+    'reception': { title:'Reception & Waiting Lounge', node:'reception',
+      path:['reception','board-room','md-cabin'],
+      narr:'The arrival sequence — first impressions at reception, straight to executive collaboration.',
+      points:'49.95,46.65 55.53,43.61 56.26,46.16 54.91,49.82 53.24,54.45 50.10,54.32',
+      images:['assets/final/render-reception-v3.png'] },
+    'board-room': { title:'Board Room & Executive Dining', node:'board-room',
+      path:['reception','board-room','meeting-east'],
+      narr:'The executive collaboration path — clients arrive, decisions are made, teams align.',
+      points:'56.05,35.57 64.87,30.94 67.90,35.20 67.90,36.91 67.12,36.18 67.12,42.14 59.13,46.29 56.05,42.63',
+      images:['assets/final/render-boardroom-v3.png','assets/final/render-boardroom-v3b.png'] },
+    'cafe': { title:'Cafe & Recreation', node:'cafe',
+      path:['cafe','recreation','workhall-central'],
+      narr:'The culture loop — recharge over food and games, then back into the flow of work.',
+      points:'68.68,38.73 73.80,36.78 84.86,31.79 86.53,37.39 88.31,43.48 76.10,48.36 74.11,48.60 68.37,46.65',
+      images:['assets/final/render-cafeteria-v3.png','assets/final/render-cafeteria-v3b.png'] },
+    'library': { title:'Library', node:'library',
+      path:['library','workhall-central','training'],
+      narr:'The knowledge loop — expertise captured in the library, shared across the workhall, formalised in training.',
+      points:null, images:null }
+  };
+
+  var GALLERY = [
+    { name:'Reception', img:'assets/final/render-reception-v3.png' },
+    { name:'Board Room', img:'assets/final/render-boardroom-v3.png', img2:'assets/final/render-boardroom-v3b.png' },
+    { name:'MD Cabin', img:'assets/final/render-mdcabin-v3.jpg' },
+    { name:'Workhall & Library', img:'assets/final/render-workhall-v3.png', img2:'assets/final/render-workhall-v3b.png' },
+    { name:'Cafeteria', img:'assets/final/render-cafeteria-v3.png', img2:'assets/final/render-cafeteria-v3b.png' },
+    { name:'Training Room', img:'assets/final/render-training-v3.png' }
+  ];
+
+  /* key-plan crop windows — hand-identified from the printed room labels on plan-color-v2.jpg.
+     cx/cy = crop center (% of the plan image); zoom = background-size %; rect = that room's
+     approximate bounding box (% of the full plan) used to draw the highlight box in the crop. */
+  var KEY_PLAN = {
+    'Reception':          { cx:54.5, cy:47.6, zoom:380, rect:{x:50,  y:37, w:9,  h:21} },
+    'Board Room':         { cx:66.5, cy:43,   zoom:380, rect:{x:61,  y:36, w:12, h:14} },
+    'MD Cabin':           { cx:3.5,  cy:89,   zoom:380, rect:{x:0.5, y:83, w:7,  h:13} },
+    'Cafeteria':          { cx:85,   cy:74,   zoom:380, rect:{x:79,  y:65, w:13, h:18} },
+    'Training Room':      { cx:96.4, cy:67,   zoom:380, rect:{x:93,  y:63, w:7,  h:9} },
+    'Workhall & Library': { cx:39.5, cy:64.75,zoom:300, rect:{x:29,  y:41.9, w:21, h:45.7} }
+  };
+
+  var LOGOS = ["s07_image6.png","s07_image7.png","s07_image9.png","s07_image10.png","s07_image11.png","s07_image12.png",
+    "s07_image16.png","s07_image17.png","s07_image18.png","s07_image19.png","s07_image23.png","s07_image24.png",
+    "s07_image27.png","s07_image28.png","s07_image29.png","s07_image31.png","s07_image32.png","s07_image33.png",
+    "s07_image34.png","s07_image35.png","s07_image36.png","s07_image37.png","s07_image38.png","s07_image39.png",
+    "s07_image40.png","s07_image41.png","s07_image42.png","s07_image43.png","s07_image47.png","s07_image48.png",
+    "s07_image49.png","s07_image51.png","s07_image56.png","s07_image61.png","s07_image70.png","s07_image120.png"];
+
+  var CHAPTERS = [
+    { key:'about',    num:'01', label:'About' },
+    { key:'brand',    num:'02', label:'Brand' },
+    { key:'users',    num:'03', label:'Users' },
+    { key:'concept',  num:'04', label:'Concept' },
+    { key:'planning', num:'05', label:'Planning' },
+    { key:'spaces',   num:'06', label:'Spaces' }
+  ];
+  var CH_TITLES = { about:'About', brand:'Understanding the Brand', users:'Understanding the Users',
+    concept:'The Design Philosophy', planning:'Space Strategy', spaces:'Visual Direction' };
+
+  /* ==================================================================
+     ROUTER — steps, chapters, rail, interstitials
+     ================================================================== */
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
+  var cur = 0, transLock = false;
+  var rail = document.getElementById('rail');
+  var chromeFoot = document.getElementById('chrome-foot');
+  var navHint = document.getElementById('nav-hint');
+  var interEl = document.getElementById('interstitial');
+  var interTimer = null;
+
+  var chIndex = {};
+  steps.forEach(function(s,i){
+    var ch = s.getAttribute('data-chapter');
+    (chIndex[ch] = chIndex[ch] || []).push(i);
+  });
+
+  CHAPTERS.forEach(function(ch){
+    var el = document.createElement('div');
+    el.className = 'rail-ch'; el.setAttribute('data-ch', ch.key);
+    el.innerHTML = '<div class="nd"></div><div class="tip">'+ch.label+'</div>';
+    el.addEventListener('click', function(){ goTo(chIndex[ch.key][0]); });
+    rail.appendChild(el);
+  });
+
+  function chapterOf(i){ return steps[i].getAttribute('data-chapter'); }
+  function isDarkStep(i){ return steps[i].classList.contains('on-dark') || steps[i].classList.contains('vm-scene'); }
+
+  function render(){
+    var ch = chapterOf(cur);
+    steps.forEach(function(s,i){ s.classList.toggle('active', i===cur); });
+    var order = CHAPTERS.map(function(c){ return c.key; });
+    var chPos = order.indexOf(ch);
+    Array.prototype.forEach.call(rail.querySelectorAll('.rail-ch'), function(el){
+      var k = el.getAttribute('data-ch'), pos = order.indexOf(k);
+      el.classList.toggle('active', k===ch);
+      el.classList.toggle('done', chPos>-1 && pos>-1 && pos<chPos);
+    });
+    var chromeOn = ch!=='enter';
+    var darkCtx = isDarkStep(cur);
+    [rail, chromeFoot, navHint].forEach(function(el){ el.classList.toggle('on-dark-ctx', darkCtx); });
+    rail.classList.toggle('show', chromeOn && ch!=='thanks');
+    chromeFoot.classList.toggle('show', chromeOn);
+    navHint.classList.toggle('show', chromeOn);
+    document.getElementById('btn-prev').classList.toggle('dim', cur===0);
+    document.getElementById('btn-next').classList.toggle('dim', cur===steps.length-1);
+    document.getElementById('step-count').textContent =
+      ('0'+(cur)).slice(-2) + ' — ' + ('0'+(steps.length-1)).slice(-2);
+    stepHooks(cur);
+  }
+
+  function showInterstitial(ch, then){
+    var meta = CHAPTERS.filter(function(c){ return c.key===ch; })[0];
+    if(!meta){ then(); return; }
+    document.getElementById('int-num').textContent = meta.num;
+    document.getElementById('int-title').textContent = CH_TITLES[ch] || meta.label;
+    interEl.classList.add('open');
+    transLock = true;
+    interTimer = setTimeout(function(){ hideInterstitial(then); }, 1400);
+    interEl.onclick = function(){ clearTimeout(interTimer); hideInterstitial(then); };
+  }
+  function hideInterstitial(then){
+    interEl.classList.remove('open');
+    transLock = false;
+    then();
+  }
+
+  function goTo(i, skipInter){
+    if(transLock) return;
+    if(i<0 || i>steps.length-1 || i===cur) return;
+    clearTimeout(autoTimer);
+    lastNavForward = i>cur;
+    var prevCh = chapterOf(cur), nextCh = chapterOf(i);
+    var crossing = nextCh!==prevCh && nextCh!=='enter' && nextCh!=='thanks' && i>cur;
+    if(steps[cur].id==='st-gallery' && i!==cur) galAudioStop();
+    cur = i;
+    if(crossing && !skipInter){
+      showInterstitial(nextCh, function(){ render(); });
+      render();
+    } else {
+      render();
+    }
+  }
+
+  /* autoplay: Site Check advances on its own once the reveal cascade finishes, straight into
+     Final Layout; any manual goTo() (Next/Prev/rail-nav) cancels the pending one.
+     Only schedules on a forward arrival — stepping back to review a beat lets it sit still. */
+  var autoTimer = null, lastNavForward = true;
+  function scheduleAutoAdvance(ms){
+    if(!lastNavForward) return;
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(function(){ goTo(cur+1); }, ms);
+  }
+
+  /* Plan <-> Axonometric tilt-flip, now triggered by the tab click on the merged Layout/Axo slide
+     rather than a Next-click between two separate steps. */
+  function playTilt(frame, dir){
+    if(!frame) return;
+    frame.classList.remove('evo-tilt-out','evo-tilt-in');
+    void frame.offsetWidth;
+    frame.classList.add(dir==='out' ? 'evo-tilt-out' : 'evo-tilt-in');
+    setTimeout(function(){ frame.classList.remove('evo-tilt-out','evo-tilt-in'); }, 900);
+  }
+  function runTilt(outEl, inEl){
+    playTilt(outEl, 'out');
+    playTilt(inEl, 'in');
+  }
+  function next(){ goTo(cur+1); }
+  function prev(){ goTo(cur-1, true); }
+
+  document.getElementById('btn-next').addEventListener('click', next);
+  document.getElementById('btn-prev').addEventListener('click', prev);
+  document.getElementById('begin-btn').addEventListener('click', function(){ goTo(1); });
+  document.getElementById('again-btn').addEventListener('click', function(){ goTo(0, true); });
+
+  document.addEventListener('keydown', function(e){
+    if(document.getElementById('rmodal').classList.contains('open')){
+      if(e.key==='Escape') closeRM();
+      else if(e.key==='ArrowRight') rmShow(rmIdx+1);
+      else if(e.key==='ArrowLeft') rmShow(rmIdx-1);
+      return;
+    }
+    if(e.key==='ArrowRight' || e.key===' ' || e.key==='PageDown'){ e.preventDefault(); next(); }
+    else if(e.key==='ArrowLeft' || e.key==='PageUp'){ e.preventDefault(); prev(); }
+    else if(e.key==='Escape' && interEl.classList.contains('open')){ clearTimeout(interTimer); hideInterstitial(function(){}); }
+  });
+
+  var touchStartX = null;
+  document.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', function(e){
+    if(touchStartX===null) { touchStartX = null; return; }
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if(dx > 60) prev(); else if(dx < -60) next();
+    touchStartX = null;
+  });
+
+  /* ==================================================================
+     STEP HOOKS
+     ================================================================== */
+  function stepHooks(i){
+    var s = steps[i];
+    if(s.querySelector('.stat-grid')) runCounters(s);
+    if(s.id==='st-gallery') galEnter();
+    if(s.querySelector('#req-grid')) runReqSequence();
+    if(s.querySelector('#logo-wall')) revealGrid('#logo-wall .logo-cell', 26);
+    // manual-only now (2026-07-22) - the compare reveal starts only via the
+    // #mat-play button click, never automatically on step-entry
+    if(s.querySelector('.phil-pulse')) initPhilPulse();
+    if(s.id==='st-plan') planEnter();
+    if(s.id==='st-sitecheck') siteEnter();
+    var frame = s.querySelector('.evo-frame');
+    if(frame) restartKenBurns(frame);
+  }
+
+  /* traveling pulse along the Concept slide's real circuit path, replayed on every entry */
+  function initPhilPulse(){
+    var path = document.querySelector('.phil-pulse');
+    if(!path) return;
+    path.classList.remove('on');
+    var len = path.getTotalLength();
+    path.style.setProperty('--len', len);
+    void path.getBoundingClientRect();
+    path.classList.add('on');
+  }
+
+  /* restart the slow Ken Burns drift on the evolving-stage image each time its step becomes active */
+  function restartKenBurns(frame){
+    frame.classList.remove('kb');
+    void frame.offsetWidth;
+    frame.classList.add('kb');
+  }
+
+  function revealGrid(sel, stagger){
+    var cells = document.querySelectorAll(sel);
+    Array.prototype.forEach.call(cells, function(c,j){
+      c.classList.remove('on');
+      setTimeout(function(){ c.classList.add('on'); }, 300 + j*stagger);
+    });
+  }
+
+  function runCounters(scope){
+    var cells = scope.querySelectorAll('.stat-cell');
+    Array.prototype.forEach.call(cells, function(c){ c.classList.remove('on'); c.querySelector('.cnt').textContent = '0'; });
+    Array.prototype.forEach.call(cells, function(c, j){
+      setTimeout(function(){
+        c.classList.add('on');
+        var target = parseInt(c.getAttribute('data-count'),10);
+        var t0 = performance.now(), dur = 1000;
+        (function anim(t){
+          var k = Math.max(0, Math.min(1,(t-t0)/dur));
+          k = 1-Math.pow(1-k,3);
+          c.querySelector('.cnt').textContent = Math.round(target*k);
+          if(k<1) requestAnimationFrame(anim);
+        })(t0);
+      }, 450 + j*600);
+    });
+  }
+
+  /* ==================================================================
+     ABOUT — clients wall
+     ================================================================== */
+  (function(){
+    var wall = document.getElementById('logo-wall');
+    LOGOS.forEach(function(name){
+      var cell = document.createElement('div');
+      cell.className = 'logo-cell';
+      var img = document.createElement('img');
+      img.src = 'assets/images/'+name;
+      img.onerror = function(){ cell.style.display='none'; };
+      cell.appendChild(img);
+      wall.appendChild(cell);
+    });
+  })();
+
+  /* ==================================================================
+     CONCEPT — the circuit
+     ================================================================== */
+  // matches assets/pegman/axo.png's native resolution + the #axo-svg viewBox -
+  // must stay equal to the img's true aspect ratio so circle nodes (equal
+  // radius in both axes) don't get stretched into ovals by the non-uniform
+  // viewBox->container scale (preserveAspectRatio="none")
+  var AXW = 4645, AXH = 2614;
+  function nx(k){ return AXO_NODES[k].x/100*AXW; }
+  function ny(k){ return AXO_NODES[k].y/100*AXH; }
+
+  (function(){
+    var svg = document.getElementById('axo-svg');
+    // #axo-svg was removed from the markup (2026-07-22) - the pulsing node
+    // dots, hand-traced hotpoly shapes, and cir-list/cir-narr side-panel
+    // population this whole block builds are all superseded by the phm-
+    // hover-mask system now; guard rather than delete so it's easy to revert.
+    if(!svg) return;
+    var NS = 'http://www.w3.org/2000/svg';
+    var nodeGroups = {};
+
+    function spaceForNode(nodeKey){
+      var found = null;
+      Object.keys(AXO_SPACES).forEach(function(sk){
+        if(AXO_SPACES[sk].node===nodeKey) found = sk;
+      });
+      return found;
+    }
+
+    Object.keys(AXO_NODES).forEach(function(k){
+      var g = document.createElementNS(NS,'g');
+      g.setAttribute('class','node'); g.setAttribute('data-node',k);
+      var pulse = document.createElementNS(NS,'circle');
+      pulse.setAttribute('cx',nx(k)); pulse.setAttribute('cy',ny(k)); pulse.setAttribute('r','9');
+      pulse.setAttribute('class','pulse');
+      var an = document.createElementNS(NS,'animate');
+      an.setAttribute('attributeName','r'); an.setAttribute('values','9;20;9');
+      an.setAttribute('dur','3.4s'); an.setAttribute('repeatCount','indefinite');
+      var an2 = document.createElementNS(NS,'animate');
+      an2.setAttribute('attributeName','opacity'); an2.setAttribute('values','.6;0;.6');
+      an2.setAttribute('dur','3.4s'); an2.setAttribute('repeatCount','indefinite');
+      pulse.appendChild(an); pulse.appendChild(an2);
+      var core = document.createElementNS(NS,'circle');
+      core.setAttribute('cx',nx(k)); core.setAttribute('cy',ny(k)); core.setAttribute('r','7');
+      core.setAttribute('class','core');
+      var tx = document.createElementNS(NS,'text');
+      tx.setAttribute('x',nx(k)+16); tx.setAttribute('y',ny(k)-14);
+      tx.textContent = AXO_NODES[k].label;
+      g.appendChild(pulse); g.appendChild(core); g.appendChild(tx);
+      nodeGroups[k] = g;
+      svg.appendChild(g);
+    });
+
+    var narr = document.getElementById('cir-narr');
+    var list = document.getElementById('cir-list');
+
+    /* Hover a rendered space -> fill + its name label appear. Click -> straight to the render, no second click. */
+    Object.keys(AXO_SPACES).forEach(function(key){
+      var sp = AXO_SPACES[key];
+      if(!sp.points) return;
+      var poly = document.createElementNS(NS,'polygon');
+      var pts = sp.points.split(' ').map(function(pair){
+        var xy = pair.split(',');
+        return (parseFloat(xy[0])/100*AXW)+','+(parseFloat(xy[1])/100*AXH);
+      }).join(' ');
+      poly.setAttribute('points', pts);
+      poly.setAttribute('class','hotpoly');
+      poly.setAttribute('data-key', key);
+      var node = nodeGroups[sp.node];
+      function showHover(){
+        if(node) node.classList.add('sel');
+        var item = list.querySelector('[data-key="'+key+'"]');
+        if(item) item.classList.add('active');
+        narr.innerHTML = sp.narr;
+        narr.classList.add('on');
+      }
+      function hideHover(){
+        if(node) node.classList.remove('sel');
+        var item = list.querySelector('[data-key="'+key+'"]');
+        if(item) item.classList.remove('active');
+        narr.classList.remove('on');
+      }
+      poly.addEventListener('mouseenter', showHover);
+      poly.addEventListener('mouseleave', hideHover);
+      poly.addEventListener('click', function(e){ e.stopPropagation(); if(sp.images) openRM(key); });
+      if(node){
+        node.addEventListener('mouseenter', showHover);
+        node.addEventListener('mouseleave', hideHover);
+        node.addEventListener('click', function(e){ e.stopPropagation(); if(sp.images) openRM(key); });
+      }
+      svg.appendChild(poly);
+    });
+
+    Object.keys(AXO_SPACES).forEach(function(key){
+      var sp = AXO_SPACES[key];
+      var item = document.createElement('div');
+      item.className = 'cir-item'; item.setAttribute('data-key', key);
+      item.innerHTML = '<div class="sq"></div><div class="nm">'+sp.title+'</div>' +
+        (sp.images ? '<div class="go">Renders →</div>' : '');
+      item.addEventListener('mouseenter', function(){
+        var node = nodeGroups[sp.node]; if(node) node.classList.add('sel');
+        item.classList.add('active');
+        narr.innerHTML = sp.narr; narr.classList.add('on');
+      });
+      item.addEventListener('mouseleave', function(){
+        var node = nodeGroups[sp.node]; if(node) node.classList.remove('sel');
+        item.classList.remove('active');
+        narr.classList.remove('on');
+      });
+      item.addEventListener('click', function(){ if(sp.images) openRM(key); });
+      list.appendChild(item);
+    });
+  })();
+
+  /* ==================================================================
+     RENDER MODAL
+     ================================================================== */
+  var rmKey = null, rmIdx = 0;
+  var rmodal = document.getElementById('rmodal');
+  window.openRM = function(key){
+    rmKey = key;
+    var sp = AXO_SPACES[key];
+    if(!sp.images) return;
+    document.getElementById('rm-title-tx').textContent = sp.title;
+    var node = AXO_NODES[sp.node];
+    var stage = document.querySelector('.rm-stage');
+    stage.style.transformOrigin = node ? (node.x+'% '+node.y+'%') : 'center center';
+    var th = document.getElementById('rm-thumbs');
+    th.innerHTML = '';
+    sp.images.forEach(function(src, i){
+      var t = document.createElement('img');
+      t.src = src;
+      t.addEventListener('click', function(e){ e.stopPropagation(); rmShow(i); });
+      th.appendChild(t);
+    });
+    rmShow(0);
+    rmodal.classList.add('open');
+  };
+  window.rmShow = function(i){
+    var sp = AXO_SPACES[rmKey]; if(!sp) return;
+    rmIdx = (i + sp.images.length) % sp.images.length;
+    document.getElementById('rm-img').src = sp.images[rmIdx];
+    document.getElementById('rm-count').textContent = (rmIdx+1)+' / '+sp.images.length;
+    Array.prototype.forEach.call(document.getElementById('rm-thumbs').children, function(t,j){
+      t.classList.toggle('active', j===rmIdx);
+    });
+  };
+  window.closeRM = function(){ rmodal.classList.remove('open'); rmKey = null; };
+  document.getElementById('rm-close').addEventListener('click', closeRM);
+  rmodal.addEventListener('click', function(e){ if(e.target===rmodal) closeRM(); });
+
+  /* ==================================================================
+     PLANNING — brief grid
+     ================================================================== */
+  (function(){
+    var grid = document.getElementById('req-grid');
+    REQS.forEach(function(html){
+      var line = document.createElement('div');
+      line.className = 'req-line';
+      line.innerHTML = html;
+      grid.appendChild(line);
+    });
+  })();
+
+  function runBoldTour(){
+    var grid = document.getElementById('req-grid');
+    if(!grid) return;
+    var boldEls = grid.querySelectorAll('b');
+    grid.classList.add('touring');
+    var i = 0;
+    var HOLD = 1400, SETTLE = 950;
+    function step(){
+      if(i >= boldEls.length){ grid.classList.remove('touring'); return; }
+      var b = boldEls[i];
+      var line = b.closest('.req-line');
+      var rect = b.getBoundingClientRect();
+      var dx = window.innerWidth/2 - (rect.left + rect.width/2);
+      var dy = window.innerHeight/2 - (rect.top + rect.height/2);
+      b.style.setProperty('--tx', dx+'px');
+      b.style.setProperty('--ty', dy+'px');
+      if(line) line.classList.add('active-tour');
+      b.classList.add('zoom');
+      setTimeout(function(){
+        b.classList.remove('zoom');
+        if(line) line.classList.remove('active-tour');
+        setTimeout(function(){
+          i++;
+          step();
+        }, SETTLE);
+      }, HOLD);
+    }
+    step();
+  }
+
+  function runReqSequence(){
+    var grid = document.getElementById('req-grid');
+    if(!grid) return;
+    var lineEls = grid.querySelectorAll('.req-line');
+    var nofx = new URLSearchParams(location.search).get('nofx')==='1';
+    grid.classList.remove('touring');
+    Array.prototype.forEach.call(lineEls, function(el){ el.classList.remove('on', 'active-tour'); });
+    Array.prototype.forEach.call(grid.querySelectorAll('b'), function(b){ b.classList.remove('zoom'); });
+    if(nofx){
+      Array.prototype.forEach.call(lineEls, function(el){ el.classList.add('on'); });
+      return;
+    }
+    var idx = 0;
+    function next(){
+      if(idx >= lineEls.length){ setTimeout(runBoldTour, 1200); return; }
+      var el = lineEls[idx];
+      el.classList.add('on');
+      idx++;
+      setTimeout(next, 900);
+    }
+    next();
+  }
+
+  /* ==================================================================
+     PLANNING — Site Due Diligence: sequential callout reveal
+     ================================================================== */
+  var siteTimer = null, sitePlaying = false, siteBuilt = false;
+  function clearSiteCallouts(){
+    var stage = document.getElementById('site-stage');
+    Array.prototype.forEach.call(stage.querySelectorAll('.site-dot,.site-label'), function(el){ el.remove(); });
+    Array.prototype.forEach.call(document.querySelectorAll('.site-item'), function(el){ el.classList.remove('on'); });
+    document.getElementById('site-narr').classList.remove('on');
+  }
+  function siteEnter(){
+    if(sitePlaying) return;
+    sitePlaying = true;
+    clearTimeout(siteTimer);
+    clearSiteCallouts();
+    var stage = document.getElementById('site-stage');
+    var list = document.getElementById('site-list');
+    if(!siteBuilt){
+      siteBuilt = true;
+      SITE_CALLOUTS.forEach(function(g){
+        var item = document.createElement('div'); item.className='site-item'; item.setAttribute('data-key',g.key);
+        item.innerHTML = '<div class="sq"></div><div class="nm">'+g.label+'</div>';
+        list.appendChild(item);
+      });
+    }
+    stage.classList.remove('in');
+    var tag = document.getElementById('site-tag');
+    tag.textContent = 'Existing Shell — As Built'; tag.classList.remove('on');
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ stage.classList.add('in'); tag.classList.add('on'); }); });
+    var narr = document.getElementById('site-narr');
+    var i = 0;
+    function next(){
+      if(i>=SITE_CALLOUTS.length){ sitePlaying=false; return; } // manual nav only - no auto-advance (2026-07-22)
+      if(i===0){ tag.textContent='Site Due Diligence — Findings'; }
+      var g = SITE_CALLOUTS[i];
+      g.pts.forEach(function(p){
+        var dot = document.createElement('div'); dot.className='site-dot';
+        dot.style.left=p[0]+'%'; dot.style.top=p[1]+'%';
+        stage.appendChild(dot);
+        requestAnimationFrame(function(){ dot.classList.add('on'); });
+      });
+      var p0 = g.pts[0];
+      var lbl = document.createElement('div'); lbl.className='site-label';
+      lbl.style.left=p0[0]+'%'; lbl.style.top=(p0[1]-5)+'%';
+      lbl.innerHTML='<span class="ln"></span>'+g.label;
+      stage.appendChild(lbl);
+      requestAnimationFrame(function(){ lbl.classList.add('on'); });
+      var itemEl = list.querySelector('[data-key="'+g.key+'"]');
+      if(itemEl) itemEl.classList.add('on');
+      narr.textContent = g.note; narr.classList.add('on');
+      i++;
+      siteTimer = setTimeout(next, 620);
+    }
+    setTimeout(next, 500);
+  }
+  document.getElementById('site-replay').addEventListener('click', function(){ sitePlaying=false; siteEnter(); });
+
+  /* parsePtsStr/polyCentroidArea: used by the Finished Layout room-hotspot pulse-dot placement below. */
+  function parsePtsStr(str){
+    return str.trim().split(/\s+/).map(function(pair){ var xy=pair.split(','); return [parseFloat(xy[0]),parseFloat(xy[1])]; });
+  }
+  function polyCentroidArea(pts){
+    var a=0, cx=0, cy=0;
+    for(var i=0;i<pts.length;i++){
+      var p0=pts[i], p1=pts[(i+1)%pts.length];
+      var cr = p0[0]*p1[1]-p1[0]*p0[1];
+      a += cr; cx += (p0[0]+p1[0])*cr; cy += (p0[1]+p1[1])*cr;
+    }
+    a *= 0.5;
+    if(Math.abs(a)<1e-6) return { cx:pts[0][0], cy:pts[0][1], area:0.01 };
+    return { cx:cx/(6*a), cy:cy/(6*a), area:Math.abs(a) };
+  }
+
+  /* ==================================================================
+     PLANNING — Structure / Final Layout toggle, Plan<->Axo tab, room hotspots
+     ================================================================== */
+  /* Placeholder room hotspots on the Finished Layout (hover-highlight only, decorative) — traced
+     approximately from plan-color-v2.jpg pending the user's precise per-room reference folder. */
+  var LAYOUT_HOTSPOTS = [
+    { key:'public', label:'Reception', pts:ZN_TARGETS.welcome },
+    { key:'workhall', label:'Workstations', pts:ZN_TARGETS.work },
+    { key:'meeting', label:'Meeting Rooms', pts:ZN_TARGETS.meeting },
+    { key:'cabins', label:'Cabins', pts:ZN_TARGETS.leadership },
+    { key:'wellness', label:'Cafeteria & Recreation', pts:ZN_TARGETS.noise },
+    { key:'training', label:'Training Room', pts:'95,58.4 97.5,58.4 97.5,68.5 95,68.5' }
+  ];
+
+  var planBuilt = false;
+  function buildPlan(){
+    if(planBuilt) return; planBuilt = true;
+    var tabs = document.getElementById('layer-tabs');
+    PLAN_LAYERS.forEach(function(L,i){
+      var t = document.createElement('div');
+      t.className = 'ltab'+(i===0?' active':''); t.setAttribute('data-layer', L.key);
+      t.innerHTML = '<div class="nd"></div><div class="lb">'+L.label+'</div><div class="ct">'+L.count+'</div>';
+      t.addEventListener('click', function(){ setLayer(L.key); });
+      tabs.appendChild(t);
+    });
+
+    var hsvg = document.getElementById('plan-hotspot-svg');
+    var NS = 'http://www.w3.org/2000/svg';
+    LAYOUT_HOTSPOTS.forEach(function(h){
+      var poly = document.createElementNS(NS,'polygon');
+      poly.setAttribute('class','plan-hotspot');
+      poly.setAttribute('points', h.pts);
+      poly.setAttribute('data-key', h.key);
+      hsvg.appendChild(poly);
+      var pulse = document.createElementNS(NS,'circle');
+      var ca = polyCentroidArea(parsePtsStr(h.pts));
+      pulse.setAttribute('class','plan-hotspot-pulse');
+      pulse.setAttribute('cx', ca.cx); pulse.setAttribute('cy', ca.cy); pulse.setAttribute('r', '2');
+      var an = document.createElementNS(NS,'animate');
+      an.setAttribute('attributeName','r'); an.setAttribute('values','2;4.5;2'); an.setAttribute('dur','2.6s'); an.setAttribute('repeatCount','indefinite');
+      var an2 = document.createElementNS(NS,'animate');
+      an2.setAttribute('attributeName','opacity'); an2.setAttribute('values','.7;0;.7'); an2.setAttribute('dur','2.6s'); an2.setAttribute('repeatCount','indefinite');
+      pulse.appendChild(an); pulse.appendChild(an2);
+      hsvg.appendChild(pulse);
+    });
+
+    var ovToggle = document.getElementById('overlay-toggle');
+    ovToggle.addEventListener('click', function(){
+      document.getElementById('plan-overlay').classList.toggle('collapsed');
+    });
+  }
+
+  // Axonometric is now its own slide (was a tab inside st-plan) - just needs
+  // its own collapse-toggle wiring, no tab-switch/tilt logic anymore.
+  var axoOvToggle = document.getElementById('axo-overlay-toggle');
+  if(axoOvToggle){
+    axoOvToggle.addEventListener('click', function(){
+      document.getElementById('axo-overlay').classList.toggle('collapsed');
+    });
+  }
+  function setLayer(key){
+    Array.prototype.forEach.call(document.querySelectorAll('.ltab'), function(t){
+      t.classList.toggle('active', t.getAttribute('data-layer')===key);
+    });
+    var colorOn = key!=='structure';
+    document.getElementById('plan-structure').classList.toggle('on', !colorOn);
+    document.getElementById('plan-color').classList.toggle('on', colorOn);
+    var L = PLAN_LAYERS.filter(function(l){ return l.key===key; })[0];
+    var side = document.getElementById('plan-side');
+    var html = '<h5>'+L.side.title+'</h5>';
+    (L.side.rows||[]).forEach(function(r){ html += '<div class="pl-row"><span>'+r[0]+'</span><span class="v">'+r[1]+'</span></div>'; });
+    (L.side.notes||[]).forEach(function(n){ html += '<div class="pl-note">'+n+'</div>'; });
+    side.innerHTML = html;
+  }
+  function planEnter(){
+    buildPlan();
+    setLayer('structure');
+  }
+
+  /* ==================================================================
+     SPACES — gallery
+     ================================================================== */
+  var galBuilt = false, galIdx = 0;
+  function galEnter(){
+    if(!galBuilt){
+      galBuilt = true;
+      var stage = document.getElementById('gal-stage');
+      var nav = document.getElementById('gal-nav');
+      GALLERY.forEach(function(g, i){
+        var slide = document.createElement('div');
+        if(g.img){
+          slide.className = 'gal-slide';
+          slide.innerHTML = '<img src="'+g.img+'" alt="'+g.name+'">';
+        } else {
+          slide.className = 'gal-slide placeholder';
+          slide.innerHTML = '<div class="gal-ph"><div class="ic"><div class="dt"></div></div><div class="tx">Render in progress</div></div>';
+        }
+        stage.appendChild(slide);
+        var gi = document.createElement('div');
+        gi.className = 'gi'; gi.textContent = g.name;
+        gi.addEventListener('click', function(){ galShow(i); });
+        nav.appendChild(gi);
+        if(g.img2){
+          ['Option 1','Option 2'].forEach(function(label, oi){
+            var opt = document.createElement('div');
+            opt.className = 'gi-opt'; opt.textContent = label;
+            opt.setAttribute('data-space', i); opt.setAttribute('data-opt', oi);
+            opt.addEventListener('click', function(e){ e.stopPropagation(); galSetOption(i, oi); });
+            nav.appendChild(opt);
+          });
+        }
+      });
+    }
+    galShow(0);
+    galAudioPlay();
+  }
+  var galCurrentOpt = GALLERY.map(function(){ return 0; });
+  function galApplyOption(){
+    var g = GALLERY[galIdx];
+    var img = document.querySelector('.gal-slide.show img');
+    if(img && g.img2){ img.src = galCurrentOpt[galIdx]===1 ? g.img2 : g.img; }
+    var optsBox = document.getElementById('gal-opts');
+    optsBox.innerHTML = '';
+    if(g.img2){
+      optsBox.style.display = 'flex';
+      [g.img, g.img2].forEach(function(src, oi){
+        var t = document.createElement('img');
+        t.src = src; t.className = oi===galCurrentOpt[galIdx] ? 'active' : '';
+        t.addEventListener('click', function(){ galSetOption(galIdx, oi); });
+        optsBox.appendChild(t);
+      });
+    } else {
+      optsBox.style.display = 'none';
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('.gal-nav .gi-opt'), function(el){
+      var sIdx = parseInt(el.getAttribute('data-space'), 10);
+      var oIdx = parseInt(el.getAttribute('data-opt'), 10);
+      el.classList.toggle('show', sIdx===galIdx);
+      el.classList.toggle('active', sIdx===galIdx && oIdx===galCurrentOpt[galIdx]);
+    });
+  }
+  function galSetOption(spaceIdx, optIdx){
+    galCurrentOpt[spaceIdx] = optIdx;
+    if(spaceIdx===galIdx){ galApplyOption(); }
+    else { galShow(spaceIdx); }
+  }
+  function galShow(i){
+    galIdx = (i + GALLERY.length) % GALLERY.length;
+    var slides = document.querySelectorAll('.gal-slide');
+    Array.prototype.forEach.call(slides, function(s,j){
+      s.classList.toggle('show', j===galIdx);
+      var img = s.querySelector('img');
+      if(img){ img.style.setProperty('--px','0%'); img.style.setProperty('--py','0%'); }
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.gal-nav .gi'), function(g,j){ g.classList.toggle('active', j===galIdx); });
+    document.getElementById('gal-name').textContent = GALLERY[galIdx].name;
+    document.getElementById('gal-ix').textContent = ('0'+(galIdx+1)).slice(-2)+' / '+('0'+GALLERY.length).slice(-2);
+    updateKeyPlan(GALLERY[galIdx].name);
+    galApplyOption();
+  }
+
+  var KEYPLAN_IMG_W = 2520, KEYPLAN_IMG_H = 993, KEYPLAN_CARD_W = 140, KEYPLAN_CARD_H = 108;
+  var keyPlanOn = true;
+  function updateKeyPlan(name){
+    var card = document.getElementById('gal-keyplan');
+    var kp = KEY_PLAN[name];
+    if(!keyPlanOn || !kp){ card.style.display = 'none'; return; }
+    card.style.display = 'block';
+    var imgAspect = KEYPLAN_IMG_W / KEYPLAN_IMG_H, cardAspect = KEYPLAN_CARD_W / KEYPLAN_CARD_H;
+    var Zx = kp.zoom / 100;
+    var Zy = Zx * cardAspect / imgAspect; /* background-size:'X% auto' scales height to preserve the image's own aspect ratio, so the effective vertical zoom differs from Zx whenever the card and image aspect ratios differ */
+    var winW = 100 / Zx, winH = 100 / Zy; /* % of the plan image visible inside the crop window, per axis */
+    /* keep the window fully inside the image (0-100%) so a center near an edge doesn't reveal blank space */
+    var cx = Math.min(Math.max(kp.cx, winW/2), 100 - winW/2);
+    var cy = Math.min(Math.max(kp.cy, winH/2), 100 - winH/2);
+    function bgPos(target, Z){ return 100/(Z-1) * (Z*(target/100) - 0.5); }
+    var crop = document.getElementById('gkp-crop');
+    crop.style.backgroundImage = "url('assets/final/plan-color-v2.jpg')";
+    crop.style.backgroundSize = kp.zoom + '% auto';
+    crop.style.backgroundPosition = bgPos(cx, Zx) + '% ' + bgPos(cy, Zy) + '%';
+    var winLeft = cx - winW/2, winTop = cy - winH/2;
+    var mark = document.getElementById('gkp-mark');
+    mark.style.left = ((kp.rect.x - winLeft) / winW * 100) + '%';
+    mark.style.top = ((kp.rect.y - winTop) / winH * 100) + '%';
+    mark.style.width = (kp.rect.w / winW * 100) + '%';
+    mark.style.height = (kp.rect.h / winH * 100) + '%';
+  }
+
+  var galFadeTimer = null;
+  function galAudioFadeTo(target, ms, thenPause){
+    var audio = document.getElementById('gal-audio');
+    clearInterval(galFadeTimer);
+    var steps = 16, stepMs = ms/steps, start = audio.volume, i = 0;
+    galFadeTimer = setInterval(function(){
+      i++;
+      audio.volume = Math.max(0, Math.min(1, start + (target-start)*(i/steps)));
+      if(i>=steps){
+        clearInterval(galFadeTimer);
+        if(thenPause) audio.pause();
+      }
+    }, stepMs);
+  }
+  function galAudioPlay(){
+    var audio = document.getElementById('gal-audio');
+    if(audio.muted) return;
+    audio.volume = 0;
+    audio.play().then(function(){ galAudioFadeTo(0.35, 800, false); }).catch(function(){});
+  }
+  function galAudioStop(){
+    var audio = document.getElementById('gal-audio');
+    if(audio.paused) return;
+    galAudioFadeTo(0, 500, true);
+  }
+  var galMuteBtn = document.getElementById('gal-mute');
+  if(galMuteBtn){
+    galMuteBtn.addEventListener('click', function(){
+      var audio = document.getElementById('gal-audio');
+      audio.muted = !audio.muted;
+      galMuteBtn.classList.toggle('is-muted', audio.muted);
+      if(!audio.muted && document.getElementById('st-gallery').classList.contains('active')) galAudioPlay();
+    });
+  }
+  var galPanBtn = document.getElementById('gal-panmode');
+  var galDrag = null;
+  var GAL_PAN_MAX = 17.5; /* % — matches (1.35 scale - 1) / 2 * 100 */
+  function galPanStart(x, y){
+    if(galDrag) return;
+    var stage = document.getElementById('gal-stage');
+    if(!stage.classList.contains('pan-mode')) return;
+    var img = stage.querySelector('.gal-slide.show img');
+    if(!img) return;
+    var rect = stage.getBoundingClientRect();
+    galDrag = {
+      img: img, startX: x, startY: y,
+      startPx: parseFloat(img.style.getPropertyValue('--px')) || 0,
+      startPy: parseFloat(img.style.getPropertyValue('--py')) || 0,
+      w: rect.width, h: rect.height
+    };
+    img.classList.add('is-dragging');
+  }
+  function galPanMove(x, y){
+    if(!galDrag) return;
+    var dxPct = (x - galDrag.startX) / galDrag.w * 100;
+    var dyPct = (y - galDrag.startY) / galDrag.h * 100;
+    var px = Math.max(-GAL_PAN_MAX, Math.min(GAL_PAN_MAX, galDrag.startPx + dxPct));
+    var py = Math.max(-GAL_PAN_MAX, Math.min(GAL_PAN_MAX, galDrag.startPy + dyPct));
+    galDrag.img.style.setProperty('--px', px+'%');
+    galDrag.img.style.setProperty('--py', py+'%');
+  }
+  function galPanEnd(){
+    if(!galDrag) return;
+    galDrag.img.classList.remove('is-dragging');
+    galDrag = null;
+  }
+  var galStageEl = document.getElementById('gal-stage');
+  var galSectionEl = document.getElementById('st-gallery');
+  if(galSectionEl && galStageEl){
+    galSectionEl.addEventListener('mousedown', function(e){
+      if(!galStageEl.classList.contains('pan-mode')) return;
+      if(e.target.closest('.gal-mute')) return; /* let the mute/pan buttons handle their own click */
+      e.preventDefault();
+      galPanStart(e.clientX, e.clientY);
+    });
+    galSectionEl.addEventListener('touchstart', function(e){
+      if(!galStageEl.classList.contains('pan-mode')) return;
+      if(e.target.closest('.gal-mute')) return;
+      var t = e.touches[0];
+      galPanStart(t.clientX, t.clientY);
+    }, {passive:true});
+  }
+  document.addEventListener('mousemove', function(e){ galPanMove(e.clientX, e.clientY); });
+  document.addEventListener('mouseup', galPanEnd);
+  document.addEventListener('touchmove', function(e){
+    if(!galDrag) return;
+    var t = e.touches[0]; galPanMove(t.clientX, t.clientY);
+  });
+  document.addEventListener('touchend', galPanEnd);
+  if(galPanBtn){
+    galPanBtn.addEventListener('click', function(){
+      var stage = document.getElementById('gal-stage');
+      var on = stage.classList.toggle('pan-mode');
+      galPanBtn.classList.toggle('active', on);
+      if(!on){
+        galPanEnd();
+        var img = stage.querySelector('.gal-slide.show img');
+        if(img){ img.style.setProperty('--px','0%'); img.style.setProperty('--py','0%'); }
+      }
+    });
+  }
+  var galKeyPlanBtn = document.getElementById('gal-keyplan-toggle');
+  if(galKeyPlanBtn){
+    galKeyPlanBtn.addEventListener('click', function(){
+      keyPlanOn = !keyPlanOn;
+      galKeyPlanBtn.classList.toggle('active', keyPlanOn);
+      updateKeyPlan(GALLERY[galIdx].name);
+    });
+  }
+
+  /* ==================================================================
+     SPACES — material direction compare sweep (button-triggered, 2026-07-22:
+     manual drag removed, no longer auto-plays on step-entry - matStartSweep()
+     only ever runs now via the #mat-play button click)
+     ================================================================== */
+  var matSweepRAF = null, matSweepGen = 0;
+  function matStopSweep(){
+    matSweepGen++;
+    if(matSweepRAF) cancelAnimationFrame(matSweepRAF);
+    matSweepRAF = null;
+    var stage = document.getElementById('mat-compare');
+    var head = document.querySelector('.mc-head');
+    if(stage) stage.classList.remove('mat-sweeping');
+    if(head) head.classList.remove('mat-sweeping');
+  }
+  function matStartSweep(){
+    matStopSweep();
+    var gen = matSweepGen;
+    var stage = document.getElementById('mat-compare');
+    var head = document.querySelector('.mc-head');
+    if(!stage) return;
+    stage.classList.add('mat-sweeping');
+    stage.classList.remove('mat-done');
+    if(head) head.classList.add('mat-sweeping');
+    // starts from the mood-board grid's own left edge (44.5%), matching the
+    // resting --split above - both images' left ~44.5% is the "Space
+    // Inspiration" text panel, identical layout but different copy, so the
+    // sweep must never cross that zone or the two texts show through each
+    // other; only the material grid itself (44.5% -> 100%) is compared
+    var startPct = 44.5;
+    stage.style.setProperty('--split', startPct+'%');
+    var t0 = performance.now(), dur = 6500; // slowed from 3400ms per request
+    function ease(k){ return k < 0.5 ? 2*k*k : 1 - Math.pow(-2*k+2, 2)/2; }
+    function frame(t){
+      if(gen !== matSweepGen) return;
+      var k = Math.min(1, (t - t0) / dur);
+      // one continuous pass, startPct -> 100% - stops fully revealed on one
+      // side, not resting back in the middle like the old bounce
+      var split = startPct + ease(k) * (100 - startPct);
+      stage.style.setProperty('--split', split+'%');
+      if(k < 1){ matSweepRAF = requestAnimationFrame(frame); }
+      else { matSweepRAF = null; stage.classList.remove('mat-sweeping'); stage.classList.add('mat-done'); if(head) head.classList.remove('mat-sweeping'); }
+    }
+    matSweepRAF = requestAnimationFrame(frame);
+  }
+  var matPlayBtn = document.getElementById('mat-play');
+  if(matPlayBtn) matPlayBtn.addEventListener('click', matStartSweep);
+
+  /* ==================================================================
+     AXO HOVER-MASK (2026-07-22) — precise per-space hover regions extracted
+     from the client's real highlighted PDFs (see tools/extract_space_masks.py
+     + assets/pegman/spaces/manifest.json), replacing the old hand-traced
+     AXO_SPACES/hotpoly hover above. Clicking a space routes straight into the
+     existing gallery (#st-gallery/GALLERY/galShow) rather than the separate
+     #rmodal lightbox the old hotpoly system used — reuses goTo/GALLERY/steps/
+     galShow via closure (own nested IIFE, so none of this file's own locals
+     get clobbered and vice versa).
+     ================================================================== */
+  (function(){
+    var MANIFEST_URL = 'assets/pegman/spaces/manifest.json';
+    var SPACE_TO_GALLERY_NAME = {
+      'reception':'Reception', 'boardroom':'Board Room', 'md-cabin':'MD Cabin',
+      'workhall':'Workhall & Library', 'cafeteria':'Cafeteria', 'training':'Training Room'
+    };
+
+    var axoStage = document.querySelector('.axo-stage');
+    var axoImgEl = document.getElementById('axo-img');
+    if(!axoStage || !axoImgEl) return;
+
+    var phmSpaces = [];
+    var phmHitCanvas, phmHitCtx;
+    var phmHovered = null;
+    var phmOverlaysEl, phmTip;
+
+    function phmLoadImage(src){
+      return new Promise(function(resolve, reject){
+        var img = new Image();
+        img.onload = function(){ resolve(img); };
+        img.onerror = reject;
+        img.src = src;
+      });
+    }
+
+    function phmInit(){
+      phmOverlaysEl = document.createElement('div');
+      phmOverlaysEl.className = 'phm-overlays';
+      axoStage.appendChild(phmOverlaysEl);
+
+      phmTip = document.createElement('div');
+      phmTip.className = 'phm-tip';
+      document.body.appendChild(phmTip);
+
+      fetch(MANIFEST_URL).then(function(r){ return r.json(); }).then(function(manifest){
+        phmSpaces = manifest.spaces.map(function(s, i){ s.idIndex = i + 1; return s; });
+
+        phmHitCanvas = document.createElement('canvas');
+        phmHitCanvas.width = manifest.canvas.width;
+        phmHitCanvas.height = manifest.canvas.height;
+        phmHitCtx = phmHitCanvas.getContext('2d', { willReadFrequently:true });
+
+        // scratch canvas isolates each space's own mask+recolor step, same
+        // reason as pegman-hover.html: compositing straight onto the shared
+        // hit-canvas would let a later space's source-in fill recolor every
+        // already-opaque pixel, not just its own just-drawn region
+        var scratch = document.createElement('canvas');
+        scratch.width = phmHitCanvas.width;
+        scratch.height = phmHitCanvas.height;
+        var sctx = scratch.getContext('2d');
+
+        var dir = MANIFEST_URL.slice(0, MANIFEST_URL.lastIndexOf('/') + 1);
+        var loads = phmSpaces.map(function(space){
+          var img = document.createElement('img');
+          img.className = 'phm-overlay';
+          img.src = dir + space.overlay;
+          img.style.left = space.bbox.xPct + '%';
+          img.style.top = space.bbox.yPct + '%';
+          img.style.width = space.bbox.wPct + '%';
+          img.style.height = space.bbox.hPct + '%';
+          phmOverlaysEl.appendChild(img);
+          space.overlayEl = img;
+
+          return phmLoadImage(dir + space.hitMask).then(function(hitMaskImg){
+            sctx.clearRect(0, 0, scratch.width, scratch.height);
+            sctx.globalCompositeOperation = 'source-over';
+            sctx.drawImage(hitMaskImg, 0, 0, scratch.width, scratch.height);
+            sctx.globalCompositeOperation = 'source-in';
+            sctx.fillStyle = 'rgb(' + space.idIndex + ',0,0)';
+            sctx.fillRect(0, 0, scratch.width, scratch.height);
+            phmHitCtx.drawImage(scratch, 0, 0);
+          });
+        });
+
+        Promise.all(loads).then(function(){
+          axoStage.addEventListener('mousemove', phmOnMove);
+          axoStage.addEventListener('mouseleave', phmClearHover);
+          axoStage.addEventListener('click', phmOnClick);
+        }).catch(function(err){
+          console.error('[axo hover-mask] failed to load one or more space masks - hover will not work', err);
+        });
+      }).catch(function(err){
+        console.error('[axo hover-mask] failed to load manifest.json - hover will not work. ' +
+          'If you\'re opening this file directly (file://) instead of through a local server, ' +
+          'the fetch() call is blocked by the browser\'s CORS policy - serve it over http:// instead.', err);
+      });
+    }
+
+    var phmRafPending = false, phmLastEvent = null;
+    function phmOnMove(e){
+      phmLastEvent = e;
+      if(phmRafPending) return;
+      phmRafPending = true;
+      requestAnimationFrame(function(){ phmRafPending = false; phmHandleMove(phmLastEvent); });
+    }
+
+    // percent-based hit-testing (fraction of the image's own displayed rect ->
+    // fixed-resolution hit-canvas pixel) is resolution-independent, so this
+    // works regardless of .axo-stage's actual on-screen size - no resize
+    // recompute needed when the Axonometric tab becomes visible/hidden
+    function phmHandleMove(e){
+      if(!phmHitCanvas) return;
+      var rect = axoImgEl.getBoundingClientRect();
+      if(!rect.width || !rect.height){ phmClearHover(); return; }
+      var fx = (e.clientX - rect.left) / rect.width;
+      var fy = (e.clientY - rect.top) / rect.height;
+      if(fx < 0 || fx > 1 || fy < 0 || fy > 1){ phmClearHover(); return; }
+
+      var px = Math.min(phmHitCanvas.width - 1, Math.max(0, Math.floor(fx * phmHitCanvas.width)));
+      var py = Math.min(phmHitCanvas.height - 1, Math.max(0, Math.floor(fy * phmHitCanvas.height)));
+      var r = phmHitCtx.getImageData(px, py, 1, 1).data[0];
+
+      if(r === 0){ phmClearHover(); return; }
+      var space = phmSpaces[r - 1];
+      if(!space){ phmClearHover(); return; }
+
+      if(space !== phmHovered){
+        if(phmHovered) phmHovered.overlayEl.classList.remove('hovered');
+        phmHovered = space;
+        space.overlayEl.classList.add('hovered');
+        var galName = SPACE_TO_GALLERY_NAME[space.id];
+        var hasRender = galName && GALLERY.some(function(g){ return g.name === galName; });
+        phmTip.innerHTML = '<div class="phm-tip-name">' + space.name + '</div>';
+        phmTip.classList.add('show');
+        axoStage.style.cursor = hasRender ? 'pointer' : '';
+      }
+      phmTip.style.left = e.clientX + 'px';
+      phmTip.style.top = e.clientY + 'px';
+    }
+
+    function phmClearHover(){
+      if(phmHovered) phmHovered.overlayEl.classList.remove('hovered');
+      phmHovered = null;
+      phmTip.classList.remove('show');
+      axoStage.style.cursor = '';
+    }
+
+    function phmOnClick(){
+      if(!phmHovered) return;
+      var galName = SPACE_TO_GALLERY_NAME[phmHovered.id];
+      var galleryIdx = galName ? GALLERY.findIndex(function(g){ return g.name === galName; }) : -1;
+      if(galleryIdx === -1) return;
+
+      phmClearHover();
+      openGalleryOverlay(galleryIdx);
+    }
+
+    // Opens the existing #st-gallery section as a floating overlay ON TOP of
+    // the axo slide, instead of navigating the deck's own step/chapter state
+    // (goTo/render) to it. `cur` never changes, so closing the overlay lands
+    // you straight back on the Axonometric view - no need to walk back through
+    // the deck's normal step order. #st-gallery is already `position:absolute;
+    // inset:0` like every `.step` (see the shared `.step` rule) and sits later
+    // in the DOM than `#st-axo`, so simply making it opaque/visible is enough
+    // for it to paint over the axo slide - no z-index/position override needed.
+    var gallerySection = document.getElementById('st-gallery');
+    function openGalleryOverlay(galleryIdx){
+      if(!galBuilt) galEnter();
+      galShow(galleryIdx);
+      galAudioPlay();
+      gallerySection.classList.add('active', 'overlay-mode');
+    }
+    function closeGalleryOverlay(){
+      gallerySection.classList.remove('active', 'overlay-mode');
+      galAudioStop();
+    }
+    document.getElementById('gal-close').addEventListener('click', closeGalleryOverlay);
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && gallerySection.classList.contains('overlay-mode')) closeGalleryOverlay();
+    });
+
+    phmInit();
+  })();
+
+  /* ==================================================================
+     boot: preload heavies, deep links
+     ================================================================== */
+  ['assets/final/plan-structure-v2.jpg','assets/final/plan-color-v2.jpg',
+   'assets/final/axonometric-v2.jpg','assets/final/render-reception-v3.png',
+   'assets/final/render-boardroom-v3.png','assets/final/render-cafeteria-v3.png',
+   'assets/final/site-diligence-plan.png',
+   'assets/final/zoning-base-clean.jpg'].forEach(function(src){
+    var im = new Image(); im.src = src;
+  });
+
+  var params = new URLSearchParams(location.search);
+  if(params.get('nofx')==='1'){
+    var nofx = document.createElement('style');
+    nofx.textContent = '*{transition:none!important; animation:none!important;} .rv{opacity:1!important; transform:none!important;} .stat-cell,.req-line,.logo-cell,.need-chip{opacity:1!important; transform:none!important;} .cir-narr{opacity:1!important;}';
+    document.head.appendChild(nofx);
+  }
+  var startStep = parseInt(params.get('step'),10);
+  var startCh = params.get('chapter');
+  if(!isNaN(startStep)){ cur = Math.max(0, Math.min(steps.length-1, startStep)); }
+  else if(startCh && chIndex[startCh]){ cur = chIndex[startCh][0]; }
+  render();
+})();
+</script>
