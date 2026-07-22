@@ -16,6 +16,7 @@
     --charcoal:#000000;
     --navy:#0F162F;
     --maroon:#980000;
+    --sidvin-blue:#0089dc;
     --white:#FFFFFF;
     --paper:#F3F3F3;
     --gray-line:#e4e4e4;
@@ -46,7 +47,14 @@
   .step[data-evo="1"]{ transition:opacity 1s var(--ease), visibility 0s linear 1s; }
   .step[data-evo="1"].active{ transition:opacity 1s var(--ease), visibility 0s; }
   .step-inner{ width:100%; max-width:1680px; height:100%; position:relative; display:flex; flex-direction:column; justify-content:center; }
-  .step:has(.kicker) .step-inner{ justify-content:flex-start; }
+  /* consistent vertical rhythm across every content slide: the kicker eyebrow
+     is pinned to the same top-left spot (never jumps between slides) and its
+     height is reserved via padding-top; the content below is vertically
+     centered with `safe`, so lighter slides sit balanced in the middle while
+     content-heavy slides that would overflow fall back to filling top-down
+     (below the kicker) instead of colliding with it (2026-07-23) */
+  .step:has(.kicker) .step-inner{ justify-content:safe center; padding-top:60px; }
+  .step:has(.kicker) .step-inner > .kicker{ position:absolute; top:0; left:0; }
   .step.on-paper{ background:var(--paper); }
   .step.on-dark{ background:var(--charcoal); }
 
@@ -152,7 +160,7 @@
     opacity:0; transform:translateY(20px); transition:opacity .6s var(--ease), transform .6s var(--ease);
   }
   .int-title{
-    font-family:'Poppins',sans-serif; font-weight:700; font-size:38px; color:var(--maroon); margin-top:-30px;
+    font-family:'Poppins',sans-serif; font-weight:700; font-size:38px; color:var(--sidvin-blue); margin-top:-30px;
     opacity:0; transform:translateY(14px); transition:opacity .6s var(--ease) .12s, transform .6s var(--ease) .12s;
   }
   .int-line{ width:0; height:3px; background:var(--charcoal); margin:22px auto 0; transition:width .8s var(--ease) .2s; }
@@ -166,6 +174,9 @@
   .landing-scrim{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.32) 100%); }
   .enter-center{ position:relative; z-index:2; text-align:center; width:100%; }
   .enter-center{ position:absolute; left:75.5%; top:72.8%; width:auto; text-align:left; z-index:2; }
+  /* cover-slide hero CTA: kept as its own subtle glass button (reverted from
+     the solid-maroon pill) - the other CTAs stay unified, this one is a
+     deliberate hero-over-video treatment per request */
   #begin-btn{
     display:inline-flex; align-items:center; gap:12px;
     font-family:'Poppins',sans-serif; font-weight:500; font-size:12.5px; letter-spacing:.2em; text-indent:.2em; text-transform:uppercase;
@@ -188,7 +199,7 @@
   .pillars{ display:flex; gap:44px; margin-top:34px; }
   .pillars span{
     font-family:'Poppins',sans-serif; font-weight:800; font-size:24px; letter-spacing:.02em; text-transform:uppercase;
-    color:#0089dc;
+    color:var(--ink);
   }
 
   /* ---------- ABOUT: journey ---------- */
@@ -213,12 +224,12 @@
   .vm-content{ position:relative; z-index:2; width:100%; max-width:1720px; margin:0 auto; padding:60px 64px 60px 168px; display:grid; grid-template-columns:.62fr 1fr; gap:40px; align-items:center; }
   .vm-icons{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px 20px; }
   .vm-icon{ text-align:center; }
-  .vm-icon .circ{ width:84px; height:84px; border-radius:50%; background:var(--maroon); display:flex; align-items:center; justify-content:center; margin:0 auto 10px; }
+  .vm-icon .circ{ width:84px; height:84px; border-radius:50%; background:var(--sidvin-blue); display:flex; align-items:center; justify-content:center; margin:0 auto 10px; }
   .vm-icon .circ img{ width:40px; height:40px; object-fit:contain; }
   .vm-icon .lbl{ font-size:13px; font-weight:400; color:#fff; }
   .vm-icon .lbl b{ display:block; font-weight:700; }
   .vm-right{ border-left:1px dashed rgba(255,255,255,.5); padding-left:44px; }
-  .vm-right h2{ font-family:'Poppins',sans-serif; font-weight:800; font-size:34px; color:var(--maroon); margin-bottom:10px; }
+  .vm-right h2{ font-family:'Poppins',sans-serif; font-weight:800; font-size:34px; color:var(--sidvin-blue); margin-bottom:10px; }
   .vm-right p{ font-size:16px; color:#fff; line-height:1.55; max-width:640px; }
   .vm-right .block{ margin-bottom:32px; }
 
@@ -246,9 +257,9 @@
 
   /* ---------- BRAND: tagline ---------- */
   .tagline-step.on-dark{ background:#000; }
-  .tagline-step h1{ font-family:'Poppins',sans-serif; font-weight:400; font-size:44px; line-height:1.3; color:#fff; max-width:1300px; }
+  .tagline-step h1{ font-family:'Poppins',sans-serif; font-weight:400; font-size:44px; line-height:1.3; color:#fff; max-width:1300px; margin:0 auto; }
   .tagline-step h1 b{ font-weight:700; }
-  .tagline-step h1 .mr{ font-weight:700; color:var(--maroon); }
+  .tagline-step h1 .mr{ font-weight:700; color:var(--sidvin-blue); }
 
   /* ---------- USERS: The User (reuses .who-card, see BRAND) ---------- */
 
@@ -272,9 +283,9 @@
   @keyframes orbitSpin{ from{transform:rotate(0);} to{transform:rotate(360deg);} }
   @keyframes orbitCounter{ from{transform:rotate(0);} to{transform:rotate(-360deg);} }
   .phil-copy .big{ font-family:'Poppins',sans-serif; font-weight:700; font-size:30px; color:#fff; line-height:1.25; }
-  .phil-copy .big .mr{ color:var(--maroon); }
+  .phil-copy .big .mr{ color:var(--sidvin-blue); }
   .phil-copy p.lede{ color:#d8d8d8; margin-top:14px; }
-  .phil-rule{ width:44px; height:3px; background:var(--maroon); margin:18px 0; }
+  .phil-rule{ width:44px; height:3px; background:var(--sidvin-blue); margin:18px 0; }
 
   /* ---------- EVOLVING STAGE — one shared frame across Site Check -> Requirements -> Zoning -> Layout -> Occupancy -> Axo ---------- */
   .evo-frame{ position:relative; width:100%; aspect-ratio:1916/821; background:#EDEBE6; border:1px solid var(--gray-line); overflow:hidden; }
@@ -298,8 +309,6 @@
   @keyframes evoTiltIn{ from{ transform:rotateX(16deg); opacity:0; } to{ transform:rotateX(0deg); opacity:1; } }
 
   /* ---------- CONCEPT: circuit ---------- */
-  #st-circuit{ padding-right:64px; }
-  .circuit-wrap{ display:grid; grid-template-columns:1fr 320px; gap:40px; align-items:center; width:100%; max-width:1720px; perspective:1400px; }
   .axo-stage{ transform-style:preserve-3d; }
   #axo-svg{ position:absolute; inset:0; width:100%; height:100%; }
   /* superseded by the precise PDF-mask hover system (see the phm- rules/script
@@ -389,10 +398,25 @@
   .loc-right{ display:flex; justify-content:center; align-items:center; height:100%; }
   .loc-compass-frame{ position:relative; height:min(58vh, 620px); max-width:100%; aspect-ratio:2157/2130; }
   .loc-compass-frame img{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block; }
-  .loc-compass-sweep{ position:absolute; left:2%; top:2%; width:96%; height:96%; border-radius:50%; pointer-events:none; overflow:hidden;
-    background:conic-gradient(from 0deg, rgba(152,0,0,0) 0deg, rgba(152,0,0,.14) 16deg, rgba(152,0,0,0) 36deg);
-    animation:compassSweep 7s linear infinite; }
-  @keyframes compassSweep{ from{ transform:rotate(0deg); } to{ transform:rotate(360deg); } }
+  /* a glowing sun travels the compass's own sun-path arc: rises at East
+     (top-right, ~44deg from top), arcs clockwise down the right/bottom, and
+     sets at West (lower-left, ~237deg), visiting the static sun icons in the
+     diagram; fades in at rise and out at set, then loops. The orbit wrapper is
+     centered on the compass dial and the sun sits on its rim (radius ~46% of
+     the frame), so it stays aligned at any size. Replaces the old rotating
+     radar wedge that read like a lighthouse beam. */
+  .loc-compass-orbit{ position:absolute; left:49%; top:47%; width:92%; aspect-ratio:1;
+    transform:translate(-50%,-50%) rotate(44deg); transform-origin:center; pointer-events:none; z-index:2;
+    animation:sunOrbit 7s ease-in-out infinite; }
+  .loc-compass-orbit .sun{ position:absolute; top:-11px; left:50%; margin-left:-11px; width:22px; height:22px;
+    border-radius:50%; background:radial-gradient(circle at 38% 34%, #ffe08a, #f0a500 68%);
+    box-shadow:0 0 20px 7px rgba(240,165,0,.55); opacity:0; animation:sunRiseSet 7s ease-in-out infinite; }
+  @keyframes sunOrbit{ from{ transform:translate(-50%,-50%) rotate(44deg); } to{ transform:translate(-50%,-50%) rotate(237deg); } }
+  @keyframes sunRiseSet{ 0%{opacity:0} 12%{opacity:1} 88%{opacity:1} 100%{opacity:0} }
+  /* align the site-address line to the same 1150px grid as .loc-wrap so its
+     left edge lines up with the elevation photo (instead of spanning the full
+     step width and overhanging the grid on both sides) */
+  #st-siteloc .site-addr{ width:100%; max-width:1150px; margin-left:auto; margin-right:auto; }
 
   /* ---------- PLANNING: Site Due Diligence (modern card layout, 2026-07-23) ---------- */
   #st-sitecheck{ padding-right:64px; }
@@ -518,12 +542,16 @@
   /* head row: kicker + compare button on one line, so the button's vertical
      center lines up with the "Visual Direction" kicker text (2026-07-22) */
   .mc-head{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+  /* glass-utility pill (icon + label): shared shape/typography/icon across
+     .mat-play, .gal-close, .flip-back; only background opacity differs by
+     context (mat-play sits on white so stays opaque; the others over dark
+     imagery stay translucent) - see the shared spec on .gal-close/.flip-back */
   .mat-play{ position:relative; z-index:21; flex:0 0 auto;
-    display:flex; align-items:center; gap:10px; padding:12px 22px 12px 16px; border-radius:999px;
+    display:flex; align-items:center; gap:9px; padding:10px 20px 10px 15px; border-radius:999px;
     border:1px solid rgba(0,0,0,.15); background:rgba(20,20,20,.85); backdrop-filter:blur(8px);
-    color:#fff; font-family:'Poppins',sans-serif; font-weight:600; font-size:13px; letter-spacing:.03em;
+    color:#fff; font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px; letter-spacing:.025em;
     cursor:pointer; transition:background .25s, border-color .25s, opacity .3s; }
-  .mat-play:hover{ background:rgba(20,20,20,.75); border-color:rgba(255,255,255,.7); }
+  .mat-play:hover{ background:rgba(20,20,20,.72); border-color:rgba(255,255,255,.7); }
   .mat-play svg{ width:16px; height:16px; fill:#fff; stroke:none; }
   .mc-head.mat-sweeping .mat-play{ opacity:0; pointer-events:none; }
 
@@ -542,10 +570,10 @@
   }
   #gal-stage.pan-mode .gal-slide.show img.is-dragging{ cursor:grabbing; transition:none; }
   .gal-mute{ position:absolute; top:96px; right:192px; z-index:6; width:38px; height:38px; border-radius:50%;
-    border:1px solid rgba(255,255,255,.3); background:rgba(0,0,0,.35); backdrop-filter:blur(6px); cursor:pointer;
+    border:1px solid rgba(255,255,255,.3); background:rgba(0,0,0,.5); backdrop-filter:blur(6px); cursor:pointer;
     display:flex; align-items:center; justify-content:center; transition:background .25s, border-color .25s; }
-  .gal-mute:hover{ background:rgba(0,0,0,.55); border-color:rgba(255,255,255,.55); }
-  .gal-mute svg{ width:16px; height:16px; stroke:#fff; fill:none; stroke-width:1.6; }
+  .gal-mute:hover{ background:rgba(0,0,0,.7); border-color:rgba(255,255,255,.55); }
+  .gal-mute svg{ width:16px; height:16px; stroke:#fff; fill:none; stroke-width:2; }
   .gal-mute .muted-line{ display:none; }
   .gal-mute.is-muted .muted-line{ display:block; }
   .gal-panmode{ right:144px; }
@@ -565,11 +593,11 @@
      click (see #st-gallery.overlay-mode below) - lets you jump straight back
      to the Axonometric view without walking the deck's normal step order */
   .gal-close{ display:none; position:absolute; top:96px; left:96px; z-index:7;
-    align-items:center; gap:8px; padding:9px 16px 9px 12px; border-radius:999px;
-    border:1px solid rgba(255,255,255,.3); background:rgba(0,0,0,.35); backdrop-filter:blur(6px);
-    color:#fff; font-family:'Poppins',sans-serif; font-weight:600; font-size:12px; letter-spacing:.02em;
+    align-items:center; gap:9px; padding:10px 20px 10px 15px; border-radius:999px;
+    border:1px solid rgba(255,255,255,.3); background:rgba(0,0,0,.5); backdrop-filter:blur(6px);
+    color:#fff; font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px; letter-spacing:.025em;
     cursor:pointer; transition:background .25s, border-color .25s; }
-  .gal-close:hover{ background:rgba(0,0,0,.55); border-color:rgba(255,255,255,.55); }
+  .gal-close:hover{ background:rgba(0,0,0,.7); border-color:rgba(255,255,255,.55); }
   .gal-close svg{ width:16px; height:16px; stroke:#fff; fill:none; stroke-width:2; }
   #st-gallery.overlay-mode .gal-close{ display:flex; }
   .gal-name{ position:absolute; left:96px; bottom:64px; z-index:5; }
@@ -611,9 +639,9 @@
   .rm-title{ position:absolute; top:32px; left:64px; }
   .rm-title .ey{ font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:rgba(255,255,255,.55); margin-bottom:8px; }
   .rm-title .tx{ font-family:'Poppins',sans-serif; font-weight:700; font-size:23px; color:#fff; }
-  .rm-close{ position:absolute; top:28px; right:32px; width:44px; height:44px; border-radius:50%; background:transparent; border:1px solid rgba(255,255,255,.4); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .25s, border-color .25s; }
+  .rm-close{ position:absolute; top:32px; right:32px; width:44px; height:44px; border-radius:50%; background:transparent; border:1px solid rgba(255,255,255,.4); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .25s, border-color .25s; }
   .rm-close:hover{ background:var(--maroon); border-color:var(--maroon); }
-  .rm-close svg{ width:16px; height:16px; stroke:#fff; stroke-width:2.2; }
+  .rm-close svg{ width:16px; height:16px; stroke:#fff; stroke-width:2; }
   .rm-stage{ max-width:84vw; max-height:70vh; transform:scale(1); opacity:1; transition:transform .5s var(--ease), opacity .5s var(--ease); }
   .rmodal:not(.open) .rm-stage{ transform:scale(.18); opacity:0; }
   .rm-stage img{ max-width:84vw; max-height:70vh; object-fit:contain; display:block; box-shadow:0 20px 80px rgba(0,0,0,.6); }
@@ -624,7 +652,7 @@
 
   /* ---------- clients: view stories button + flip-book overlay ---------- */
   .client-flip-btn{ position:absolute; top:0; right:0; z-index:2; display:inline-flex; align-items:center; gap:10px;
-    padding:13px 24px 13px 20px; border-radius:999px; border:none; background:var(--maroon);
+    padding:13px 26px 13px 22px; border-radius:999px; border:none; background:var(--maroon);
     color:#fff; font-family:'Poppins',sans-serif; font-weight:600; font-size:13px; letter-spacing:.03em;
     cursor:pointer; transition:background .25s; }
   .client-flip-btn:hover{ background:var(--ink); }
@@ -633,19 +661,19 @@
   .flip-overlay{ position:fixed; inset:0; z-index:90; background:#000; opacity:0; visibility:hidden; transition:opacity .3s var(--ease), visibility 0s linear .3s; }
   .flip-overlay.open{ opacity:1; visibility:visible; transition:opacity .3s var(--ease), visibility 0s; }
   .flip-overlay iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
-  .flip-back{ position:absolute; top:24px; left:24px; z-index:2; display:flex; align-items:center; gap:8px;
-    padding:10px 20px 10px 14px; border-radius:999px; border:1px solid rgba(255,255,255,.3);
-    background:rgba(0,0,0,.55); backdrop-filter:blur(6px); color:#fff; font-family:'Poppins',sans-serif;
-    font-weight:600; font-size:12px; letter-spacing:.02em; cursor:pointer; transition:background .25s, border-color .25s; }
-  .flip-back:hover{ background:rgba(0,0,0,.8); border-color:rgba(255,255,255,.6); }
-  .flip-back svg{ width:18px; height:18px; stroke:#fff; fill:none; stroke-width:2.2; }
+  .flip-back{ position:absolute; top:32px; left:32px; z-index:2; display:flex; align-items:center; gap:9px;
+    padding:10px 20px 10px 15px; border-radius:999px; border:1px solid rgba(255,255,255,.3);
+    background:rgba(0,0,0,.5); backdrop-filter:blur(6px); color:#fff; font-family:'Poppins',sans-serif;
+    font-weight:600; font-size:12.5px; letter-spacing:.025em; cursor:pointer; transition:background .25s, border-color .25s; }
+  .flip-back:hover{ background:rgba(0,0,0,.7); border-color:rgba(255,255,255,.6); }
+  .flip-back svg{ width:16px; height:16px; stroke:#fff; fill:none; stroke-width:2; }
 
   @media (max-width:1180px){
     .step{ padding:56px 40px 80px 70px; }
     #rail{ width:36px; top:56px; }
     h1.hero{ font-size:30px; }
     .stat-grid{ grid-template-columns:repeat(2,1fr); }
-    .journey-wrap, .circuit-wrap, .plan-wrap, .site-grid, .loc-wrap{ grid-template-columns:1fr; gap:26px; }
+    .journey-wrap, .plan-wrap, .site-grid, .loc-wrap{ grid-template-columns:1fr; gap:26px; }
     .vm-content{ grid-template-columns:1fr; padding-left:40px; }
     .logo-wall{ grid-template-columns:repeat(5,1fr); }
     .who-cards{ flex-direction:column; height:auto; }
@@ -668,16 +696,16 @@
   </section>
 
   <!-- ================= 01 ABOUT ================= -->
-  <section class="step" data-chapter="about" data-title="A brief introduction">
+  <section class="step" id="st-intro" data-chapter="about" data-title="A brief introduction">
     <div class="step-inner">
       <div class="kicker rv"><div class="k1">Company Profile</div><div class="k2">Overview</div></div>
       <h1 class="hero rv d1">Environments engineered to help people<br><b>solve complex industrial challenges.</b></h1>
       <div class="accent-dash rv d2"></div>
-      <p class="lede rv d3">Officebanao — the design &amp; build partner behind this proposal.</p>
+      <p class="lede rv d3" style="color:var(--maroon);">Officebanao — the design &amp; build partner behind this proposal.</p>
     </div>
   </section>
 
-  <section class="step" data-chapter="about">
+  <section class="step" id="st-about" data-chapter="about">
     <div class="step-inner">
       <div class="kicker rv"><div class="k1">Company Profile</div><div class="k2">Overview</div></div>
       <h2 class="title rv d1" style="margin-top:10px;">About us</h2>
@@ -813,7 +841,7 @@
             <div class="orbit-ring" style="width:380px;height:380px;"></div>
             <div class="orbit-ring" style="width:490px;height:490px; opacity:.6;"></div>
             <div id="orbit-core">
-              <div class="t" id="core-t">Defining your <span style="color:var(--maroon)">New Workplace</span>…</div>
+              <div class="t" id="core-t">Defining your <span style="color:var(--sidvin-blue)">New Workplace</span>…</div>
               <div class="s" id="core-s">Hover a value to see how the workplace responds.</div>
             </div>
             <div id="orbit-rot">
@@ -857,11 +885,11 @@
         <div class="loc-right rv d2">
           <div class="loc-compass-frame">
             <img src="assets/final/site-compass.png" alt="Sun path and vastu orientation diagram">
-            <div class="loc-compass-sweep"></div>
+            <div class="loc-compass-orbit"><div class="sun"></div></div>
           </div>
         </div>
       </div>
-      <div class="site-addr rv d3" style="max-width:1150px; margin-left:auto; margin-right:auto;"><b>Site Address:</b> 10th Floor, DNR Altitude, Yeshwanthpur Industrial Area, Phase 1, Yeswanthpur, Bengaluru, Karnataka 560022</div>
+      <div class="site-addr rv d3"><b>Site Address:</b> 10th Floor, DNR Altitude, Yeshwanthpur Industrial Area, Phase 1, Yeswanthpur, Bengaluru, Karnataka 560022</div>
     </div>
   </section>
 
@@ -1058,8 +1086,8 @@
 </div>
 <div id="nav-hint">
   <span id="step-count"></span>
-  <div class="nav-btn" id="btn-prev"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></div>
-  <div class="nav-btn" id="btn-next"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
+  <div class="nav-btn" id="btn-prev" role="button" tabindex="0" aria-label="Previous slide"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></div>
+  <div class="nav-btn" id="btn-next" role="button" tabindex="0" aria-label="Next slide"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
 </div>
 
 <!-- render modal -->
@@ -1447,7 +1475,7 @@
       orb.addEventListener('mouseleave', function(){
         stage.classList.remove('paused');
         orb.classList.remove('hot');
-        coreT.innerHTML = 'Defining your <span style="color:var(--maroon)">New Workplace</span>…';
+        coreT.innerHTML = 'Defining your <span style="color:var(--sidvin-blue)">New Workplace</span>…';
         coreS.textContent = 'Hover a value to see how the workplace responds.';
       });
     });
